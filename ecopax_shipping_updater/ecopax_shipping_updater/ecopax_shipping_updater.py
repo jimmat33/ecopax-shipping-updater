@@ -1,15 +1,13 @@
 from http.server import executable
-import numpy
-import sys
-import pprint
 import time
 import pandas as pd
-from bs4 import BeautifulSoup
+from openpyxl import Workbook
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from openpyxl import Workbook
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import Select
+
 
 
 chrome_options = Options()
@@ -46,6 +44,13 @@ def cosco_search(container_num):
 
 def one_search(container_num):
     one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
+    driver.implicitly_wait(0.5)
+    driver.get(one_link)
+    time.sleep(15)
+
+    #cannot find dropdown, try again later
+    #dropdown = driver.find_element_by_class_name('select')
+    #dropdown.select_by_visible_text('Container No.')
 
 def hapag_search(container_num):
     hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
@@ -87,6 +92,7 @@ for index, row in restsheet_data.iterrows():
     rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
 #value = cosco_search('TCNU7749090')
+value = one_search('HLXU8136823')
 
 print("test")
 driver.close()
