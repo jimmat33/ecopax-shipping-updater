@@ -1,0 +1,6 @@
+
+*.vsidx
+
+*.lock
+
+ecopax_shipping_updater/.vs/ecopax_shipping_updater/v17/.suo
