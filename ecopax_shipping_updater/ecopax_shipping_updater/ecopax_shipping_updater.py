@@ -1,13 +1,34 @@
+from http.server import executable
 import numpy
 import sys
 import pprint
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from openpyxl import Workbook
+
+driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
 
 def cosco_search(container_num):
     cosco_link = 'https://elines.coscoshipping.com/ebusiness/'
+    driver.implicitly_wait(0.5)
+    driver.maximize_window()
+    driver.get(cosco_link)
+
+    driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[3]/div/button').click()
+
+    driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div/div/div[1]/div/div/ul/li[3]').click()
+    
+    textbox = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div/div/div[1]/div/div/div/div/div/div[1]/form/div/div/div[1]/input')
+    textbox.send_keys(container_num)
+    driver.implicitly_wait(1)
+
+    driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div/div/div[1]/div/div/div/div/div/div[1]/div/a').click()
+    driver.implicitly_wait(1)
+    print("got to page")
+
 
 def one_search(container_num):
     one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
@@ -51,6 +72,8 @@ for index,row in customsheet_data.iterrows():
 for index, row in restsheet_data.iterrows():
     rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
+cosco_search('SEGU5093860')
 
 
+driver.close()
 
