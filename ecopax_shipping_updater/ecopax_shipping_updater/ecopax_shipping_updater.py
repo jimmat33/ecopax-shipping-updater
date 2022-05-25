@@ -2,19 +2,26 @@ from http.server import executable
 import numpy
 import sys
 import pprint
+import time
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from openpyxl import Workbook
+from selenium.webdriver.chrome.options import Options
 
-driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
+
+chrome_options = Options()
+chrome_options.headless = True
+driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')#, options=chrome_options)
 
 def cosco_search(container_num):
+    '''
+    This function searches the cosco site for the estimated arrival date of a crate
+    '''
     cosco_link = 'https://elines.coscoshipping.com/ebusiness/'
     driver.implicitly_wait(0.5)
-    driver.maximize_window()
     driver.get(cosco_link)
 
     driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[3]/div/button').click()
@@ -23,11 +30,18 @@ def cosco_search(container_num):
     
     textbox = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div/div/div[1]/div/div/div/div/div/div[1]/form/div/div/div[1]/input')
     textbox.send_keys(container_num)
-    driver.implicitly_wait(1)
 
     driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div/div/div[1]/div/div/div/div/div/div[1]/div/a').click()
-    driver.implicitly_wait(1)
-    print("got to page")
+
+    web_date = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]')
+    time.sleep(0.5)
+    str_date = web_date.get_attribute('textContent')
+
+    year = str_date[0:4]
+    month = str_date[5:7]
+    day = str_date[8:10]
+
+    return [month, day, year]
 
 
 def one_search(container_num):
@@ -72,8 +86,8 @@ for index,row in customsheet_data.iterrows():
 for index, row in restsheet_data.iterrows():
     rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
-cosco_search('SEGU5093860')
+#value = cosco_search('TCNU7749090')
 
-
+print("test")
 driver.close()
 
