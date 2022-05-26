@@ -1,8 +1,8 @@
 from datetime import datetime
+from faulthandler import cancel_dump_traceback_later
 from http.server import executable
 import tarfile
 import numpy
-import sys
 import pprint
 import time
 import pandas as pd
@@ -15,10 +15,18 @@ from openpyxl import Workbook
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import strptime
+from time import sleep, strptime
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
+import os, sys
+import time,requests
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 chrome_options = Options()
+chrome_options.add_argument('--disable-notifications')
+chrome_options.add_argument("--mute-audio")
 #chrome_options.headless = True
 
 def get_month_num(month):
@@ -135,7 +143,6 @@ def maersk_search(container_num):
     driver.implicitly_wait(0.5)
     driver.get(maersk_link)
 
-
     try:
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
     except:
@@ -155,6 +162,45 @@ def maersk_search(container_num):
 
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
+    driver = uc.Chrome(options=chrome_options)
+    driver.get(cma_link)
+    #text_to_speech_driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    #text_to_speech_driver.implicitly_wait(0.5)
+    '''
+    ------------------ Audio Bypass -----------------------------------------------------------------------------------------------------------------------------
+    
+    delayTime = 2
+    audioToTextDelay = 10
+
+    filename = 'captcha-audio.mp3'
+    bypass_url = 'https://www.cma-cgm.com/ebusiness/tracking'
+    text_to_speech_url = 'https://speech-to-text-demo.ng.bluemix.net/'
+
+    driver.get(bypass_url)
+
+    time.sleep(7)
+    captcha_button = driver.find_element_by_class_name('geetest_logo')
+    action = webdriver.common.action_chains.ActionChains(driver)
+    action.move_to_element_with_offset(captcha_button, 5, 5)
+    action.click()
+    action.perform()
+
+
+
+    '''
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    try:
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+    except:
+        textbox = driver.find_elements_by_class_name('o-button primary')
+
+    textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+    textbox.send_keys(container_num)
+
+    driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+    time.sleep(10)
+
 
 def msc_search(container_num):
     msc_link = 'https://www.msc.com/en/track-a-shipment'
