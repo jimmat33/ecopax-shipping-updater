@@ -186,7 +186,7 @@ def evergreen_search(container_num):
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     driver.implicitly_wait(0.5)
     driver.get(oocl_link)
 
@@ -196,6 +196,7 @@ def oocl_search(container_num):
         driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
 
     time.sleep(10)
+    #human bypass needed
 
 
 def main():
