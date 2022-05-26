@@ -255,7 +255,9 @@ def main():
 
     #Setting up dictionary for row with format: {Container Number:(Carrier, Arrival Date)}
     for index,row in customsheet_data.iterrows():
-        custom_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
+       if row['Arrival Date'] != 'arrived':
+           if row['Carrier'] == 'Cosco':
+               #add to cosco_custom_list
 
     #Setting up dictionary for row with format: {Container Number:(Carrier, Arrival Date)}
     for index, row in restsheet_data.iterrows():
@@ -270,4 +272,3 @@ def main():
 
 if __name__ == '__main__': 
     main()
-
