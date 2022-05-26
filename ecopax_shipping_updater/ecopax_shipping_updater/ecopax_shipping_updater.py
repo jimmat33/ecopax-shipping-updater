@@ -186,6 +186,17 @@ def evergreen_search(container_num):
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(oocl_link)
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div[2]/form/button'))).click()
+    except:
+        driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
+
+    time.sleep(10)
+
 
 def main():
     custom_sheet_dict = dict()
@@ -208,7 +219,8 @@ def main():
     #value = cosco_search('TCNU7749090')
     #value = hapag_search('HLXU1143116')
     #value = maersk_search('MSKU9342870')
-    value = evergreen_search('TCNU3811162')
+    #value = evergreen_search('TCNU3811162')
+    value = oocl_search('OOCU7767335')
 
     print("test")
 
