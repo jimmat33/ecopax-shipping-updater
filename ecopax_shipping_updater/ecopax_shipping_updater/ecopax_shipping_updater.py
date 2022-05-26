@@ -22,27 +22,27 @@ chrome_options = Options()
 #chrome_options.headless = True
 
 def get_month_num(month):
-    if month == 'January':
+    if month == 'January' or month == 'JAN':
         return '01'
-    elif month == 'February':
+    elif month == 'February' or month == 'FEB':
         return '02'
-    elif month == 'March':
+    elif month == 'March' or month == 'MAR':
         return '03'
-    elif month == 'April':
+    elif month == 'April' or month == 'APR':
         return '04'
-    elif month == 'May':
+    elif month == 'May' or month == 'MAY':
         return '05'
-    elif month == 'June':
+    elif month == 'June' or month == 'JUN':
         return '06'
-    elif month == 'July':
+    elif month == 'July' or month == 'JUL':
         return '07'
-    elif month == 'August':
+    elif month == 'August' or month == 'AUG':
         return '08'
-    elif month == 'September':
+    elif month == 'September' or month == 'SEP':
         return '09'
-    elif month == 'October':
+    elif month == 'October' or month == 'OCT':
         return '10'
-    elif month == 'November':
+    elif month == 'November' or month == 'NOV':
         return '11'
     else:
         return '12'
@@ -161,6 +161,28 @@ def msc_search(container_num):
 
 def evergreen_search(container_num):
     evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(evergreen_link)
+
+    driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/input').click()
+
+    textbox = driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[1]')
+    textbox.send_keys(container_num)
+
+    driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[2]').click()
+
+    str_date = driver.find_element_by_xpath('/html/body/div[5]/center/table[2]/tbody/tr/td/table[2]/tbody/tr/td').get_attribute('textContent')
+
+    month = str_date[28:31]
+    day = str_date[32:34]
+    year = str_date[35:]
+
+    month_num = get_month_num(month)
+    
+    return[month_num, day, year]
+
+
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
@@ -186,6 +208,7 @@ def main():
     #value = cosco_search('TCNU7749090')
     #value = hapag_search('HLXU1143116')
     #value = maersk_search('MSKU9342870')
+    value = evergreen_search('TCNU3811162')
 
     print("test")
 
