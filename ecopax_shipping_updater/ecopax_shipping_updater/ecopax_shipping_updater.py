@@ -17,7 +17,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import strptime
 
-
 chrome_options = Options()
 #chrome_options.headless = True
 
@@ -76,17 +75,14 @@ def cosco_search(container_num):
     driver.close()
     return [month, day, year]
 
-
 def one_search(container_num):
     one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
     driver.implicitly_wait(0.5)
     driver.get(one_link)
     time.sleep(15)
-
     #cannot find dropdown, try again later
     #dropdown = driver.find_element_by_class_name('select')
     #dropdown.select_by_visible_text('Container No.')
-
 
 def hapag_search(container_num):
     '''
@@ -164,7 +160,6 @@ def maersk_search(container_num):
 
     return [month_num, day, year]
    
-
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
     driver = uc.Chrome(options=chrome_options)
@@ -232,8 +227,6 @@ def evergreen_search(container_num):
     
     return[month_num, day, year]
 
-
-
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
@@ -248,10 +241,12 @@ def oocl_search(container_num):
     time.sleep(10)
     #human bypass needed
 
+def hmm_search(container_num):
+    print('l')
+
 def main():
     custom_sheet_dict = dict()
     rest_sheet_dict = dict()
-
 
 
     #getting data to pull from for both sheets
