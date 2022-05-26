@@ -131,6 +131,7 @@ def main():
 
     #value = cosco_search('TCNU7749090')
     #value = hapag_search('HLXU1143116')
+    value = yangming_search('1')
 
     print("test")
 
