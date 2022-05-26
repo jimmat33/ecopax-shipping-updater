@@ -79,6 +79,13 @@ def cosco_search(container_num):
 
 def one_search(container_num):
     one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
+    driver.implicitly_wait(0.5)
+    driver.get(one_link)
+    time.sleep(15)
+
+    #cannot find dropdown, try again later
+    #dropdown = driver.find_element_by_class_name('select')
+    #dropdown.select_by_visible_text('Container No.')
 
 
 def hapag_search(container_num):
@@ -122,6 +129,11 @@ def hapag_search(container_num):
 
 def yangming_search(container_num):
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(yangming_link)
+
+    time.sleep(15)
 
 def maersk_search(container_num):
     '''
@@ -155,6 +167,44 @@ def maersk_search(container_num):
 
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
+    driver = uc.Chrome(options=chrome_options)
+    driver.get(cma_link)
+    #text_to_speech_driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    #text_to_speech_driver.implicitly_wait(0.5)
+    '''
+    ------------------ Audio Bypass -----------------------------------------------------------------------------------------------------------------------------
+    
+    delayTime = 2
+    audioToTextDelay = 10
+
+    filename = 'captcha-audio.mp3'
+    bypass_url = 'https://www.cma-cgm.com/ebusiness/tracking'
+    text_to_speech_url = 'https://speech-to-text-demo.ng.bluemix.net/'
+
+    driver.get(bypass_url)
+
+    time.sleep(7)
+    captcha_button = driver.find_element_by_class_name('geetest_logo')
+    action = webdriver.common.action_chains.ActionChains(driver)
+    action.move_to_element_with_offset(captcha_button, 5, 5)
+    action.click()
+    action.perform()
+
+
+
+    '''
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    try:
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+    except:
+        textbox = driver.find_elements_by_class_name('o-button primary')
+
+    textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+    textbox.send_keys(container_num)
+
+    driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+    time.sleep(10)
 
 def msc_search(container_num):
     msc_link = 'https://www.msc.com/en/track-a-shipment'
@@ -186,6 +236,17 @@ def evergreen_search(container_num):
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
+    driver.implicitly_wait(0.5)
+    driver.get(oocl_link)
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div[2]/form/button'))).click()
+    except:
+        driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
+
+    time.sleep(10)
+    #human bypass needed
 
 def main():
     custom_sheet_dict = dict()
