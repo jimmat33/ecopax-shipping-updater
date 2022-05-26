@@ -1,8 +1,4 @@
 from http.server import executable
-import tarfile
-import numpy
-import sys
-import pprint
 import time
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -94,6 +90,11 @@ def hapag_search(container_num):
 
 def yangming_search(container_num):
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(yangming_link)
+
+    time.sleep(15)
 
 def maersk_search(container_num):
     maersk_link = 'https://www.maersk.com/tracking/'
@@ -129,7 +130,7 @@ def main():
         rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
     #value = cosco_search('TCNU7749090')
-    value = hapag_search('HLXU1143116')
+    #value = hapag_search('HLXU1143116')
 
     print("test")
 
