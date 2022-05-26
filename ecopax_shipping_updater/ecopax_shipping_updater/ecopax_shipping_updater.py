@@ -97,6 +97,9 @@ def yangming_search(container_num):
 
 def maersk_search(container_num):
     maersk_link = 'https://www.maersk.com/tracking/'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(maersk_link)
 
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
