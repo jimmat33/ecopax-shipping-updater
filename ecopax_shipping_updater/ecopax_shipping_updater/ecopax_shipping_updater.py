@@ -186,6 +186,7 @@ def main():
     #value = cosco_search('TCNU7749090')
     #value = hapag_search('HLXU1143116')
     #value = maersk_search('MSKU9342870')
+    value = cma_search('CMAU1335620')
 
     print("test")
 
