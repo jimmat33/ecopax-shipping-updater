@@ -54,15 +54,17 @@ def one_search(container_num):
 
 
 def hapag_search(container_num):
+    '''
+    This function searches the hapag-lloyd site for the estimated arrival date of a crate (May be buggy)
+    '''
     driver = uc.Chrome(options=chrome_options)
     hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
     driver.implicitly_wait(0.5)
     driver.get(hapag_link)
     try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]')))
-        driver.find_element_by_xpath('/html/body/div[11]/div[2]/div[3]/div[1]/button[2]').click()
-    except : 
-        driver.find_element_by_xpath('/html/body/div[11]/div[2]/div[3]/div[1]/button[2]').click()
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+    except:
+        driver.find_element(By.ID, "accept-recommended-btn-handler").click()
 
     time.sleep(0.5)
 
@@ -83,8 +85,12 @@ def hapag_search(container_num):
     print(f'\n\n{date_text}')
     
 
-    time.sleep(10)
+    year = date_text[0:4]
+    month = date_text[5:7]
+    day = date_text[8:10]
+
     driver.close()
+    return [month, day, year]
 
 def yangming_search(container_num):
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
