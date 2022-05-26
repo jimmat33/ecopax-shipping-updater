@@ -1,3 +1,4 @@
+from datetime import datetime
 from http.server import executable
 import tarfile
 import numpy
@@ -14,10 +15,37 @@ from openpyxl import Workbook
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from time import strptime
 
 
 chrome_options = Options()
 #chrome_options.headless = True
+
+def get_month_num(month):
+    if month == 'January':
+        return '01'
+    elif month == 'February':
+        return '02'
+    elif month == 'March':
+        return '03'
+    elif month == 'April':
+        return '04'
+    elif month == 'May':
+        return '05'
+    elif month == 'June':
+        return '06'
+    elif month == 'July':
+        return '07'
+    elif month == 'August':
+        return '08'
+    elif month == 'September':
+        return '09'
+    elif month == 'October':
+        return '10'
+    elif month == 'November':
+        return '11'
+    else:
+        return '12'
 
 def cosco_search(container_num):
     '''
@@ -96,7 +124,34 @@ def yangming_search(container_num):
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
 
 def maersk_search(container_num):
+    '''
+    This function searches the maersk site for the estimated arrival date of a crate
+    '''
     maersk_link = 'https://www.maersk.com/tracking/'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+
+    maersk_link = maersk_link + container_num
+
+    driver.implicitly_wait(0.5)
+    driver.get(maersk_link)
+
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
+    except:
+        driver.find_elements_by_class_name('coi-banner__accept--fixed-margin').click()
+
+    str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
+
+    year = str_text[-4:]
+
+    month = str((str_text[3:-5]).strip())
+    month_num = get_month_num(month)
+
+    day = str_text[0:3]
+
+    return [month_num, day, year]
+   
 
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
@@ -129,7 +184,8 @@ def main():
         rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
     #value = cosco_search('TCNU7749090')
-    value = hapag_search('HLXU1143116')
+    #value = hapag_search('HLXU1143116')
+    #value = maersk_search('MSKU9342870')
 
     print("test")
 
