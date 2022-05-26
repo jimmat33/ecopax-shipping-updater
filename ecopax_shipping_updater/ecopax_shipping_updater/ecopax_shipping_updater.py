@@ -101,6 +101,21 @@ def maersk_search(container_num):
     driver.implicitly_wait(0.5)
     driver.get(maersk_link)
 
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
+    except:
+        driver.find_elements_by_class_name('coi-banner__accept--fixed-margin').click()
+
+    textbox = driver.find_element_by_xpath('/html/body/main/div/div/form/div/div/div[1]/div/input')
+    textbox.send_keys(container_num)
+
+    driver.find_element_by_xpath('/html/body/main/div/div/form/div/div/div[2]/button').click()
+
+    time.sleep(60)
+    print('y')
+
+    
+
 def cma_search(container_num):
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
 
@@ -132,7 +147,8 @@ def main():
         rest_sheet_dict[row['Container Number']] = (row['Carrier'], row['Arrival Date'])
 
     #value = cosco_search('TCNU7749090')
-    value = hapag_search('HLXU1143116')
+    #value = hapag_search('HLXU1143116')
+    value = maersk_search('MSKU9342870')
 
     print("test")
 
