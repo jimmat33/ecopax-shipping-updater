@@ -318,8 +318,11 @@ def cma_search(container_num):#Ask about verification here
     
     time.sleep(100)
 
-def msc_search(container_num):
+def msc_search(container_num):# no way to see eta
     msc_link = 'https://www.msc.com/en/track-a-shipment'
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver.implicitly_wait(0.5)
+    driver.get(msc_link)
 
 def evergreen_search(container_num):
     evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
@@ -463,6 +466,9 @@ def main():
 
     custom_cma_list.append('CMAU0459057')
     custom_cma_list.append('CMAU1999430')
+
+    custom_msc_list.append('MSCU6919130')
+    custom_msc_list.append('MSCU6919130')
     '''
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
     cosco_rest_dates_dict = cosco_search(rest_cosco_list)
@@ -485,13 +491,13 @@ def main():
 
     for container_num in rest_maersk_list:
          maersk_rest_dates_dict[container_num] = maersk_search(container_num)
-    '''
+    
     cma_custom_dates_dict = cma_search(custom_cma_list)
     #cma_rest_dates_dict = cma_search(rest_cma_list)
     '''
     msc_custom_dates_dict = msc_search(custom_msc_list)
-    msc_rest_dates_dict = msc_search(rest_msc_list)
-
+    #msc_rest_dates_dict = msc_search(rest_msc_list)
+    '''
     evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
     evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
 
