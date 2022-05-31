@@ -59,7 +59,7 @@ def get_month_num(month):
 
 def replace_values(date_dict,sheet_name, df):
     dict_keys = [*date_dict]
-    workbook = load_workbook(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+    #workbook = load_workbook(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
     sheet = sheet_name
 
 
@@ -105,7 +105,7 @@ def replace_values(date_dict,sheet_name, df):
                 modified_rest_cells_list.append(container_num)
 
 
-        workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+        #workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
 
 
@@ -152,7 +152,7 @@ def cosco_search(container_num_list):
     '''
     return_dict = dict()
 
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    #driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
     cosco_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number='
 
     if len(container_num_list)!= 0:
@@ -424,7 +424,7 @@ def main():
     custom_unadded_containers_list = list()
     rest_unadded_containers_list = list()
     
-    excel_filepath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx'
+    #excel_filepath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx'
 
     #getting data to pull from for both sheets
     customsheet_data = pd.read_excel(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx', sheet_name = 'custom')
