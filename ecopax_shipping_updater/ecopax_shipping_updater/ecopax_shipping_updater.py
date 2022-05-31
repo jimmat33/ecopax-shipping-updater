@@ -25,42 +25,22 @@ from openpyxl import load_workbook
 import xlwt
 import xlrd
 from xlutils.copy import copy
+from openpyxl.styles import Color, PatternFill, Font, Border, Alignment
+from openpyxl.cell import Cell
 
 chrome_options = Options()
 chrome_options.headless = True
 modified_custom_cells_list = list()
 modified_rest_cells_list = list()
 
-def get_month_num(month):
-    if month == 'January' or month == 'JAN':
-        return '01'
-    elif month == 'February' or month == 'FEB':
-        return '02'
-    elif month == 'March' or month == 'MAR':
-        return '03'
-    elif month == 'April' or month == 'APR':
-        return '04'
-    elif month == 'May' or month == 'MAY':
-        return '05'
-    elif month == 'June' or month == 'JUN':
-        return '06'
-    elif month == 'July' or month == 'JUL':
-        return '07'
-    elif month == 'August' or month == 'AUG':
-        return '08'
-    elif month == 'September' or month == 'SEP':
-        return '09'
-    elif month == 'October' or month == 'OCT':
-        return '10'
-    elif month == 'November' or month == 'NOV':
-        return '11'
-    else:
-        return '12'
-
-def replace_values(date_dict,sheet_name, df):
+def replace_values(date_dict,df, sheet_name):
     dict_keys = [*date_dict]
-    #workbook = load_workbook(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
-    sheet = sheet_name
+    workbook = load_workbook(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+    sheet = workbook.get_sheet_by_name(sheet_name)
+
+    greenFill = PatternFill(start_color='00FF00',
+                   end_color='00FF00',
+                   fill_type='solid')
 
 
     for key in dict_keys:
@@ -69,6 +49,7 @@ def replace_values(date_dict,sheet_name, df):
 
         formatted_date = container_arrival_date[2] + '-' + container_arrival_date[0] + '-' + container_arrival_date[1]
         index_list = df[df == container_num].stack().index.tolist()
+        excel_date = container_arrival_date[0] + '/' + container_arrival_date[1] + '/' + container_arrival_date[2]
 
         if sheet_name == 'custom':
             old_date = str(df.iat[index_list[0][0], 6])
@@ -78,13 +59,17 @@ def replace_values(date_dict,sheet_name, df):
             if old_date == 'arrived':
                 print('already arrived')
             elif old_formatted_date == formatted_date:
-                sheet_index = 'G' + str(index_list[0][0])
+                sheet_index = 'G' + str(index_list[0][0] + 2)
                 sheet[sheet_index] = 'arrived'
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
                 
                 modified_custom_cells_list.append(container_num)
             else:
-                sheet_index = 'G' + str(index_list[0][0])
-                sheet[sheet_index] = datetime(int(container_arrival_date[2]), int(container_arrival_date[0]), int(container_arrival_date[1]), 0 ,0)
+                sheet_index = 'G' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = excel_date
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
 
                 modified_custom_cells_list.append(container_num)
         else:
@@ -94,18 +79,22 @@ def replace_values(date_dict,sheet_name, df):
             if old_date == 'arrived':
                 print('already arrived')
             elif old_formatted_date == formatted_date:
-                sheet_index = 'H' + str(index_list[0][0])
+                sheet_index = 'H' + str(index_list[0][0] + 2)
                 sheet[sheet_index] = 'arrived'
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
 
                 modified_rest_cells_list.append(container_num)
             else:
-                sheet_index = 'G' + str(index_list[0][0])
-                sheet[sheet_index] = datetime(int(container_arrival_date[2]), int(container_arrival_date[0]), int(container_arrival_date[1]), 0 ,0)
+                sheet_index = 'H' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = excel_date
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
 
                 modified_rest_cells_list.append(container_num)
 
 
-        #workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+        workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
 def cosco_search(container_num_list):
     '''
@@ -178,16 +167,21 @@ def main():
     customsheet_data = pd.read_excel(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx', sheet_name = 'custom')
     restsheet_data = pd.read_excel(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx', sheet_name = 'Rest')
 
+    
     for index,row in customsheet_data.iterrows():
         if row['Carrier'] == 'Cosco':
             custom_cosco_list.append(row['Container Number'])
+    
     for index, row in restsheet_data.iterrows():
         if row['Carrier'] == 'Cosco':
             rest_cosco_list.append(row['Container Number'])
 
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
     cosco_rest_dates_dict = cosco_search(rest_cosco_list)
+
+    replace_values(cosco_rest_dates_dict, restsheet_data, 'Rest')
     replace_values(cosco_custom_dates_dict, customsheet_data, 'custom')
+    print('test')
 
 if __name__ == '__main__': 
     main()
