@@ -160,17 +160,18 @@ def one_search(container_num_list):
 
     driver.close()
     return return_dict
-
-    print('test')
     
-def hapag_search(container_num):
+def hapag_search(container_num_list):
     '''
     This function searches the hapag-lloyd site for the estimated arrival date of a crate (May be buggy)
     '''
+    return_dict = dict()
+
     driver = uc.Chrome(options=chrome_options)
     hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
     driver.implicitly_wait(0.5)
     driver.get(hapag_link)
+
     try:
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
     except:
@@ -180,7 +181,7 @@ def hapag_search(container_num):
 
     textbox = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
     textbox.clear()
-    textbox.send_keys(container_num)
+    textbox.send_keys(container_num_list[0])
 
     driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
     
@@ -192,15 +193,42 @@ def hapag_search(container_num):
 
     target_text = str_text[269:]
     date_text = target_text[(target_text.find("20")):]
-    print(f'\n\n{date_text}')
-    
 
     year = date_text[0:4]
     month = date_text[5:7]
     day = date_text[8:10]
 
+    return_dict[container_num_list[0]] = [month, day, year]
+
+    i = 1
+
+    while i < len(container_num_list):
+        textbox = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
+        textbox.clear()
+
+        textbox.send_keys(container_num_list[i])
+        driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
+        time.sleep(0.5)
+
+        time.sleep(0.5)
+    
+        table_text = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
+        str_text = table_text.get_attribute('textContent')
+        index = str_text.find("Vessel arrival")
+
+        target_text = str_text[269:]
+        date_text = target_text[(target_text.find("20")):]
+
+        year = date_text[0:4]
+        month = date_text[5:7]
+        day = date_text[8:10]
+
+        return_dict[container_num_list[i]] = [month, day, year]
+
+        i += 1
+
     driver.close()
-    return [month, day, year]
+    return return_dict
 
 def yangming_search(container_num):
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
@@ -414,10 +442,14 @@ def main():
             if isinstance(row['Container Number'], str) != False:
                 rest_unadded_containers_list.append(row['Container Number'])
         
+    custom_hapag_list.append('HLXU1143116')
+    custom_hapag_list.append('HLXU5257457')
+
+
     '''
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
     cosco_rest_dates_dict = cosco_search(rest_cosco_list)
-    '''
+    
     #one_custom_dates_dict = one_search(custom_one_list)
     #one_rest_dates_dict = one_search(rest_one_list)
     
@@ -426,7 +458,7 @@ def main():
     '''
     yangming_custom_dates_dict = yangming_search(custom_yangming_list)
     yangming_rest_dates_dict = yangming_search(rest_yangming_list)
-
+    '''
     maersk_custom_dates_dict = maersk_search(custom_maersk_list)
     maersk_rest_dates_dict = maersk_search(rest_maersk_list)
 
@@ -445,7 +477,6 @@ def main():
     hmm_custom_dates_dict = hmm_search(custom_hmm_list)
     hmm_rest_dates_dict = hmm_search(rest_hmm_list)
     '''
-    #value = hapag_search('HLXU1143116')
     #value = maersk_search('MSKU9342870')
     #value = evergreen_search('TCNU3811162')
 
