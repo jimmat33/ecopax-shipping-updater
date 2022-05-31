@@ -230,18 +230,22 @@ def hapag_search(container_num_list):
     driver.close()
     return return_dict
 
-def yangming_search(container_num):
+def yangming_search(container_num): #needs human verification, can do up to 12 containers at a time
+    '''
+    Can't find any estimated date on website, also needs manual verification
+    '''
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
     driver.implicitly_wait(0.5)
-    driver.get(yangming_link)
-
-    time.sleep(15)
+    #driver.get(yangming_link)
+    return
 
 def maersk_search(container_num):
     '''
     This function searches the maersk site for the estimated arrival date of a crate
     '''
+    return_dict = dict()
+
     maersk_link = 'https://www.maersk.com/tracking/'
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
 
@@ -250,7 +254,6 @@ def maersk_search(container_num):
     driver.implicitly_wait(0.5)
     driver.get(maersk_link)
 
-
     try:
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
     except:
@@ -258,7 +261,7 @@ def maersk_search(container_num):
 
     str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
 
-    year = str_text[-4:]
+    year = str_text[-5:-1]
 
     month = str((str_text[3:-5]).strip())
     month_num = get_month_num(month)
@@ -445,6 +448,11 @@ def main():
     custom_hapag_list.append('HLXU1143116')
     custom_hapag_list.append('HLXU5257457')
 
+    custom_yangming_list.append('YMLU8268863')
+    custom_yangming_list.append('YMLU5426986')
+
+    custom_maersk_list.append('MSKU9342870')
+    custom_maersk_list.append('MRKU8485175')
 
     '''
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
@@ -455,16 +463,23 @@ def main():
     
     hapag_custom_dates_dict = hapag_search(custom_hapag_list)
     hapag_rest_dates_dict = hapag_search(rest_hapag_list)
-    '''
+    
     yangming_custom_dates_dict = yangming_search(custom_yangming_list)
-    yangming_rest_dates_dict = yangming_search(rest_yangming_list)
-    '''
-    maersk_custom_dates_dict = maersk_search(custom_maersk_list)
-    maersk_rest_dates_dict = maersk_search(rest_maersk_list)
+    #yangming_rest_dates_dict = yangming_search(rest_yangming_list)
+    
+    maersk_custom_dates_dict = dict()
+    maersk_rest_dates_dict = dict()
 
+
+    for container_num in custom_maersk_list:
+        maersk_custom_dates_dict[container_num] = maersk_search(container_num)
+
+    for container_num in rest_maersk_list:
+         maersk_rest_dates_dict[container_num] = maersk_search(container_num)
+    '''
     cma_custom_dates_dict = cma_search(custom_cma_list)
     cma_rest_dates_dict = cma_search(rest_cma_list)
-
+    '''
     msc_custom_dates_dict = msc_search(custom_msc_list)
     msc_rest_dates_dict = msc_search(rest_msc_list)
 
