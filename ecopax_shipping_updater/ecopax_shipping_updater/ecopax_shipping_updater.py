@@ -1,6 +1,7 @@
 from datetime import datetime
 from http.server import executable
 import tarfile
+from unittest import registerResult
 import numpy
 import sys
 import pprint
@@ -17,6 +18,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import strptime
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
+import os, sys
+import time,requests
+from bs4 import BeautifulSoup
+import random
 
 
 chrome_options = Options()
@@ -270,36 +281,31 @@ def maersk_search(container_num):
 
     return [month_num, day, year]
    
-def cma_search(container_num):
+def cma_search(container_num):#Ask about verification here
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
-    driver = uc.Chrome(options=chrome_options)
+    options = webdriver.ChromeOptions()
+    options.add_argument("--window-size=1100,1000")
+
+    driver = uc.Chrome(options=options)
+
+    time_to_sleep = random.randint(2,5)
+    time.sleep(time_to_sleep)
+
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
+
+    time_to_sleep = random.randint(2,5)
+    time.sleep(time_to_sleep)
+
     driver.get(cma_link)
-    #text_to_speech_driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
-    #text_to_speech_driver.implicitly_wait(0.5)
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
     '''
     ------------------ Audio Bypass -----------------------------------------------------------------------------------------------------------------------------
     
-    delayTime = 2
-    audioToTextDelay = 10
-
-    filename = 'captcha-audio.mp3'
-    bypass_url = 'https://www.cma-cgm.com/ebusiness/tracking'
-    text_to_speech_url = 'https://speech-to-text-demo.ng.bluemix.net/'
-
-    driver.get(bypass_url)
-
-    time.sleep(7)
-    captcha_button = driver.find_element_by_class_name('geetest_logo')
-    action = webdriver.common.action_chains.ActionChains(driver)
-    action.move_to_element_with_offset(captcha_button, 5, 5)
-    action.click()
-    action.perform()
-
-
-
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------
     '''
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    
+    time_to_sleep = random.randint(2,5)
+    time.sleep(time_to_sleep) # sleep b/w 5 to 10 seconds
+
     try:
         WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
     except:
@@ -309,7 +315,8 @@ def cma_search(container_num):
     textbox.send_keys(container_num)
 
     driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
-    time.sleep(10)
+    
+    time.sleep(100)
 
 def msc_search(container_num):
     msc_link = 'https://www.msc.com/en/track-a-shipment'
@@ -454,23 +461,25 @@ def main():
     custom_maersk_list.append('MSKU9342870')
     custom_maersk_list.append('MRKU8485175')
 
+    custom_cma_list.append('CMAU0459057')
+    custom_cma_list.append('CMAU1999430')
     '''
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
     cosco_rest_dates_dict = cosco_search(rest_cosco_list)
     
-    #one_custom_dates_dict = one_search(custom_one_list)
-    #one_rest_dates_dict = one_search(rest_one_list)
+    one_custom_dates_dict = one_search(custom_one_list)
+    one_rest_dates_dict = one_search(rest_one_list)
     
     hapag_custom_dates_dict = hapag_search(custom_hapag_list)
     hapag_rest_dates_dict = hapag_search(rest_hapag_list)
     
     yangming_custom_dates_dict = yangming_search(custom_yangming_list)
-    #yangming_rest_dates_dict = yangming_search(rest_yangming_list)
+    yangming_rest_dates_dict = yangming_search(rest_yangming_list)
     
     maersk_custom_dates_dict = dict()
     maersk_rest_dates_dict = dict()
 
-
+    
     for container_num in custom_maersk_list:
         maersk_custom_dates_dict[container_num] = maersk_search(container_num)
 
@@ -478,7 +487,7 @@ def main():
          maersk_rest_dates_dict[container_num] = maersk_search(container_num)
     '''
     cma_custom_dates_dict = cma_search(custom_cma_list)
-    cma_rest_dates_dict = cma_search(rest_cma_list)
+    #cma_rest_dates_dict = cma_search(rest_cma_list)
     '''
     msc_custom_dates_dict = msc_search(custom_msc_list)
     msc_rest_dates_dict = msc_search(rest_msc_list)
@@ -492,7 +501,6 @@ def main():
     hmm_custom_dates_dict = hmm_search(custom_hmm_list)
     hmm_rest_dates_dict = hmm_search(rest_hmm_list)
     '''
-    #value = maersk_search('MSKU9342870')
     #value = evergreen_search('TCNU3811162')
 
     #replace_values(cosco_custom_dates_dict, customsheet_data, 'custom')
