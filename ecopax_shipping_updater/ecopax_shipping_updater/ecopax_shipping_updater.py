@@ -38,8 +38,29 @@ chrome_options = Options()
 def get_date_from_cma(given_str):
     start_index = 0
 
+    if given_str.find("Sunday") != -1:
+        start_index = given_str.find("Sunday") + len("Sunday") + 1
+    elif given_str.find("Monday") != -1:
+        start_index = given_str.find("Monday") + len("Monday") + 1
+    elif given_str.find("Tuesday") != -1:
+        start_index = given_str.find("Tuesday") + len("Tuesday") + 1 
+    elif given_str.find("Wednesday") != -1:
+        start_index = given_str.find("Wednesday") + len("Wednesday") + 1
+    elif given_str.find("Thursday") != -1:
+        start_index = given_str.find("Thursday") + len("Thursday") + 1
+    elif given_str.find("Friday") != -1:
+        start_index = given_str.find("Friday") + len("Friday") + 1
+    elif given_str.find("Saturday") != -1:
+        start_index = given_str.find("Saturday") + len("Saturday") + 1
+    elif given_str.find("Sunday") != -1:
+        start_index = given_str.find("Sunday") + len("Sunday") + 1
+    else:
+        return 'ERROR'
 
+    actual_date = given_str[start_index:(start_index + 11)]
 
+    return actual_date
+    
 def get_month_num(month):
     if month == 'January' or month == 'JAN' or month == 'Jan':
         return '01'
@@ -297,6 +318,7 @@ def maersk_search(container_num):
 #maersk(good)
    
 def cma_search(container_num_list):
+    return_dict = dict()
 
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
     speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
@@ -392,9 +414,44 @@ def cma_search(container_num_list):
     time.sleep(0.5)
 
     str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+    useable_date = get_date_from_cma(str_date)
+
+    month = get_month_num(useable_date[3:6])
+    day = useable_date[0:2]
+    year = useable_date[7:]
+
+    return_dict[container_num_list[0]] = [month, day, year]
+
+    i = 1
+
+    while i < len(container_num_list):
+        try:
+            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+        except Exception:
+            print('error')
     
-    print('y')
-#cma(Will need a manual verification, although sometimes it works)
+        textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+        textbox.clear()
+        textbox.send_keys(container_num_list[i])
+
+        driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+
+        time.sleep(0.5)
+
+        str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+        useable_date = get_date_from_cma(str_date)
+
+        month = get_month_num(useable_date[3:6])
+        day = useable_date[0:2]
+        year = useable_date[7:]
+
+        return_dict[container_num_list[i]] = [month, day, year]
+
+        i += 1
+
+    driver.close()
+    return return_dict
+#cma(good, bypasses a captcha)
 
 def msc_search(container_num):# no way to see eta
     msc_link = 'https://www.msc.com/en/track-a-shipment'
