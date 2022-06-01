@@ -523,7 +523,7 @@ def oocl_search(container_num):
         driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
 
     time.sleep(10)
-#oocl(Will need manual verification)
+#oocl(Will need manual verification, may need to be entirely manual as it temp bans ip for too quick of searches)
 
 def hmm_search(container_num):
     return_dict = dict()
