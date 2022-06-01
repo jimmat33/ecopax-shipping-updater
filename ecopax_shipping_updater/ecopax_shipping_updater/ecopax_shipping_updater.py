@@ -764,15 +764,23 @@ def main():
 
     #custom_msc_list.append('MSCU6919130')
     #custom_msc_list.append('MSCU6919130')
+    if len(cosco_custom_dates_dict) != 0:
+        cosco_custom_dates_dict = cosco_search(custom_cosco_list)
+
+    if len(cosco_rest_dates_dict) != 0:
+        cosco_rest_dates_dict = cosco_search(rest_cosco_list)
+
+    if len(one_custom_dates_dict) != 0:
+        one_custom_dates_dict = one_search(custom_one_list)
+
+    if len(one_rest_dates_dict) != 0:
+        one_rest_dates_dict = one_search(rest_one_list)
     
-    cosco_custom_dates_dict = cosco_search(custom_cosco_list)
-    cosco_rest_dates_dict = cosco_search(rest_cosco_list)
-    
-    one_custom_dates_dict = one_search(custom_one_list)
-    one_rest_dates_dict = one_search(rest_one_list)
-    
-    hapag_custom_dates_dict = hapag_search(custom_hapag_list)
-    hapag_rest_dates_dict = hapag_search(rest_hapag_list)
+    if len(hapag_custom_dates_dict) != 0:
+        hapag_custom_dates_dict = hapag_search(custom_hapag_list)
+
+    if len(hapag_rest_dates_dict) != 0:
+        hapag_rest_dates_dict = hapag_search(rest_hapag_list)
     
     yangming_custom_dates_dict = dict()
     yangming_rest_dates_dict = dict()
@@ -789,16 +797,22 @@ def main():
     for container_num in rest_maersk_list:
          maersk_rest_dates_dict[container_num] = maersk_search(container_num)
     
-    cma_custom_dates_dict = cma_search(custom_cma_list)
-    cma_rest_dates_dict = cma_search(rest_cma_list)
+    if len(cma_custom_dates_dict) != 0:    
+        cma_custom_dates_dict = cma_search(custom_cma_list)
+
+    if len(cma_rest_dates_dict) != 0:
+        cma_rest_dates_dict = cma_search(rest_cma_list)
     
     msc_custom_dates_dict = dict()
     msc_rest_dates_dict = dict()
     #msc_custom_dates_dict = msc_search(custom_msc_list)
     #msc_rest_dates_dict = msc_search(rest_msc_list)
     
-    evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
-    evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
+    if len(evergreen_custom_dates_dict) != 0:
+        evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
+
+    if len(evergreen_rest_dates_dict) != 0:
+        evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
     
     oocl_custom_dates_dict = dict()
     oocl_rest_dates_dict = dict()
