@@ -139,7 +139,6 @@ def get_month_num(month):
     else:
         #return error
         return '11'
-#month_num(good)
 
 def cosco_search(container_num_list):
     '''
@@ -199,7 +198,6 @@ def cosco_search(container_num_list):
 
     driver.close()
     return return_dict
-#cosco(good)
 
 def one_search(container_num_list):
     return_dict = dict()
@@ -258,8 +256,7 @@ def one_search(container_num_list):
 
 
     driver.close()
-    return return_dict
-#one(good)    
+    return return_dict 
 
 def hapag_search(container_num_list):
     '''
@@ -329,18 +326,6 @@ def hapag_search(container_num_list):
 
     driver.close()
     return return_dict
-#hapag-lloyd(good)
-
-def yangming_search(container_num): #needs human verification, can do up to 12 containers at a time
-    '''
-    Can't find any estimated date on website, also needs manual verification
-    '''
-    yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-    driver.implicitly_wait(0.5)
-    #driver.get(yangming_link)
-    return
-#yangming(No good date to look for, also needs manual verification)
 
 def maersk_search(container_num):
     '''
@@ -369,7 +354,6 @@ def maersk_search(container_num):
     day = str(str_text[0:3].strip())
 
     return [month_num, day, year]
-#maersk(good)
    
 def cma_search(container_num_list):
     return_dict = dict()
@@ -509,14 +493,6 @@ def cma_search(container_num_list):
 
     driver.close()
     return return_dict
-#cma(good, bypasses a captcha)
-
-def msc_search(container_num):# no way to see eta
-    msc_link = 'https://www.msc.com/en/track-a-shipment'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-    driver.implicitly_wait(0.5)
-    driver.get(msc_link)
-#msc(no good way to see eta)
 
 def evergreen_search(container_num_list):
     return_dict = dict()
@@ -567,19 +543,6 @@ def evergreen_search(container_num_list):
 
     driver.close()
     return return_dict
-#evergreen(good)
-
-def oocl_search(container_num):
-    oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-    driver.implicitly_wait(0.5)
-    driver.get(oocl_link)
-
-    try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div[2]/form/button'))).click()
-    except:
-        driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
-#oocl(Will need manual verification, may need to be entirely manual as it temp bans ip for too quick of searches)
 
 def hmm_search(container_num):
     return_dict = dict()
@@ -634,7 +597,6 @@ def hmm_search(container_num):
     
     driver.close()
     return [month_num, day, year]
-#hmm(good)
 
 def main():
     #put chrome driver version check and chrome version check, prompt to update if necessary
@@ -650,36 +612,23 @@ def main():
     custom_hapag_list = list()
     rest_hapag_list = list()
 
-    custom_yangming_list = list()
-    rest_yangming_list = list()
-
     custom_maersk_list = list()
     rest_maersk_list = list()
 
     custom_cma_list = list()
     rest_cma_list = list()
-
-    custom_msc_list = list()
-    rest_msc_list = list()
     
     custom_evergreen_list = list()
     rest_evergreen_list = list()
 
-    custom_oocl_list = list()
-    rest_oocl_list = list()
-
     custom_hmm_list = list()
     rest_hmm_list = list()
-
-    custom_unadded_containers_list = list()
-    rest_unadded_containers_list = list()
-    
-    #excel_filepath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx'
 
     #getting data to pull from for both sheets
     customsheet_data = pd.read_excel(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx', sheet_name = 'custom')
     restsheet_data = pd.read_excel(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx', sheet_name = 'Rest')
 
+    #populating lists for the custom sheet
     for index,row in customsheet_data.iterrows():
         if row['Carrier'] == 'Cosco':
             custom_cosco_list.append(row['Container Number'])
@@ -687,24 +636,19 @@ def main():
             custom_one_list.append(row['Container Number'])
         elif row['Carrier'] == 'Hapag-Lloyd':
             custom_hapag_list.append(row['Container Number'])
-        elif row['Carrier'] == 'Yangming':
-            custom_yangming_list.append(row['Container Number'])
         elif row['Carrier'] == 'Maersk':
             custom_maersk_list.append(row['Container Number'])
         elif row['Carrier'] == 'CMA CGM':
             custom_cma_list.append(row['Container Number'])
-        elif row['Carrier'] == 'MSC':
-            custom_msc_list.append(row['Container Number'])
         elif row['Carrier'] == 'Evergreen':
             custom_evergreen_list.append(row['Container Number'])
-        elif row['Carrier'] == 'OOCL':
-            custom_oocl_list.append(row['Container Number'])
         elif row['Carrier'] == 'HMM':
             custom_hmm_list.append(row['Container Number'])
         else:
-            if isinstance(row['Container Number'], str) != False:
-                custom_unadded_containers_list.append(row['Container Number'])
+            print()
+            #highlight red for not looked at
 
+    #populating lists for the rest sheet
     for index, row in restsheet_data.iterrows():
         if row['Carrier'] == 'Cosco':
             rest_cosco_list.append(row['Container Number'])
@@ -712,60 +656,37 @@ def main():
             rest_one_list.append(row['Container Number'])
         elif row['Carrier'] == 'Hapag-Lloyd':
             rest_hapag_list.append(row['Container Number'])
-        elif row['Carrier'] == 'Yangming':
-            rest_yangming_list.append(row['Container Number'])
         elif row['Carrier'] == 'Maersk':
             rest_maersk_list.append(row['Container Number'])
         elif row['Carrier'] == 'CMA CGM':
             rest_cma_list.append(row['Container Number'])
-        elif row['Carrier'] == 'MSC':
-            rest_msc_list.append(row['Container Number'])
         elif row['Carrier'] == 'Evergreen':
             rest_evergreen_list.append(row['Container Number'])
-        elif row['Carrier'] == 'OOCL':
-            rest_oocl_list.append(row['Container Number'])
         elif row['Carrier'] == 'HMM':
             rest_hmm_list.append(row['Container Number'])
         else:
-            if isinstance(row['Container Number'], str) != False:
-                rest_unadded_containers_list.append(row['Container Number'])
+            print()
+            #highlight red for not looked at
         
-    #custom_hapag_list.append('HLXU1143116')
-    #custom_hapag_list.append('HLXU5257457')
-
-    #custom_yangming_list.append('YMLU8268863')
-    #custom_yangming_list.append('YMLU5426986')
-
-    #custom_maersk_list.append('MSKU9342870')
-    #custom_maersk_list.append('MRKU8485175')
-
-    #custom_cma_list.append('CMAU0459057')
-    #custom_cma_list.append('CMAU1999430')
-
-    #custom_msc_list.append('MSCU6919130')
-    #custom_msc_list.append('MSCU6919130')
+    #dictionary creation to hold all dates pulled for custom sheet containers
     cosco_custom_dates_dict = dict()
     one_custom_dates_dict = dict()
     hapag_custom_dates_dict = dict()
-    yangming_custom_dates_dict = dict()
     maersk_custom_dates_dict = dict()
-    cma_custom_dates_dict = dict() 
-    msc_custom_dates_dict = dict() 
-    evergreen_custom_dates_dict = dict() 
-    oocl_custom_dates_dict = dict() 
+    cma_custom_dates_dict = dict()  
+    evergreen_custom_dates_dict = dict()  
     hmm_custom_dates_dict = dict()
+
+    #dictionary creation to hold all dates pulled for rest sheet containers
     cosco_rest_dates_dict = dict()
     one_rest_dates_dict = dict()
     hapag_rest_dates_dict = dict()
-    yangming_rest_dates_dict = dict()
     maersk_rest_dates_dict = dict()
     cma_rest_dates_dict = dict()
-    msc_rest_dates_dict = dict()
     evergreen_rest_dates_dict = dict() 
-    oocl_rest_dates_dict = dict()
     hmm_rest_dates_dict = dict()
 
-
+    #---------------------------------------- All searches for each website--------------------------------------
     if len(custom_cosco_list) != 0:
         cosco_custom_dates_dict = cosco_search(custom_cosco_list)
 
@@ -784,9 +705,6 @@ def main():
     if len(rest_hapag_list) != 0:
         hapag_rest_dates_dict = hapag_search(rest_hapag_list)
     
-    #yangming_custom_dates_dict = yangming_search(custom_yangming_list)
-    #yangming_rest_dates_dict = yangming_search(rest_yangming_list)
-    
     for container_num in custom_maersk_list:
         maersk_custom_dates_dict[container_num] = maersk_search(container_num)
 
@@ -799,34 +717,68 @@ def main():
     if len(rest_cma_list) != 0:
         cma_rest_dates_dict = cma_search(rest_cma_list)
     
-    msc_custom_dates_dict = dict()
-    msc_rest_dates_dict = dict()
-    #msc_custom_dates_dict = msc_search(custom_msc_list)
-    #msc_rest_dates_dict = msc_search(rest_msc_list)
-    
     if len(custom_evergreen_list) != 0:
         evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
 
     if len(rest_evergreen_list) != 0:
         evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
-    
-    #oocl_custom_dates_dict = oocl_search(custom_oocl_list)
-    #oocl_rest_dates_dict = oocl_search(rest_oocl_list)
 
     for container_num in custom_hmm_list:
         hmm_custom_dates_dict[container_num] = hmm_search(container_num)
 
     for container_num in rest_hmm_list:
          hmm_rest_dates_dict[container_num] = hmm_search(container_num)
-    
-    rest_total_dict = cosco_rest_dates_dict | one_rest_dates_dict | hapag_rest_dates_dict | yangming_rest_dates_dict | maersk_rest_dates_dict | cma_rest_dates_dict | msc_rest_dates_dict | evergreen_rest_dates_dict | oocl_rest_dates_dict | hmm_rest_dates_dict
+    #------------------------------------------------------------------------------------------------------------
 
-    custom_total_dict =  cosco_custom_dates_dict | one_custom_dates_dict | hapag_custom_dates_dict | yangming_custom_dates_dict | maersk_custom_dates_dict | cma_custom_dates_dict | msc_custom_dates_dict | evergreen_custom_dates_dict | oocl_custom_dates_dict | hmm_custom_dates_dict
+    #Creates dictionaries to hold all dates found from searches, separated by sheet
+    rest_total_dict = cosco_rest_dates_dict | one_rest_dates_dict | hapag_rest_dates_dict | maersk_rest_dates_dict | cma_rest_dates_dict | evergreen_rest_dates_dict | hmm_rest_dates_dict
+    custom_total_dict =  cosco_custom_dates_dict | one_custom_dates_dict | hapag_custom_dates_dict | maersk_custom_dates_dict | cma_custom_dates_dict | evergreen_custom_dates_dict | hmm_custom_dates_dict
 
+    #Calls function to check and replace all values on each sheet
     replace_values(rest_total_dict, restsheet_data, 'Rest')
     replace_values(custom_total_dict, customsheet_data, 'custom')
 
-    print("test")
-
 if __name__ == '__main__': 
     main()
+
+
+'''
+Storage for possibly future used variables
+
+custom_yangming_list = list()
+rest_yangming_list = list()
+custom_msc_list = list()
+rest_msc_list = list()
+custom_oocl_list = list()
+rest_oocl_list = list()
+oocl_rest_dates_dict = dict()
+msc_rest_dates_dict = dict()
+yangming_rest_dates_dict = dict()
+oocl_custom_dates_dict = dict()
+msc_custom_dates_dict = dict()
+yangming_custom_dates_dict = dict(
+
+custom_hapag_list.append('HLXU1143116')
+custom_hapag_list.append('HLXU5257457')
+custom_yangming_list.append('YMLU8268863')
+custom_yangming_list.append('YMLU5426986')
+custom_maersk_list.append('MSKU9342870')
+custom_maersk_list.append('MRKU8485175')
+custom_cma_list.append('CMAU0459057')
+custom_cma_list.append('CMAU1999430')
+custom_msc_list.append('MSCU6919130')
+custom_msc_list.append('MSCU6919130')
+
+custom_unadded_containers_list = list()
+rest_unadded_containers_list = list()
+
+def yangming_search(container_num): #has an api
+    print('No yangming')
+
+def msc_search(container_num): #has an api
+    print('no msc')
+
+def oocl_search(container_num): #has an api
+    print('no oocl')
+
+'''
