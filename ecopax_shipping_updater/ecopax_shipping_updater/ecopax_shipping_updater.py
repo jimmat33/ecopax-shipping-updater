@@ -293,39 +293,40 @@ def cma_search(container_num):#Ask about verification here
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
     options = webdriver.ChromeOptions()
     options.add_argument("--window-size=1100,1000")
-
-    driver = uc.Chrome(options=options)
-
-    time_to_sleep = random.randint(2,5)
-    time.sleep(time_to_sleep)
-
-    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
-
-    time_to_sleep = random.randint(2,5)
-    time.sleep(time_to_sleep)
-
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=options)
     driver.get(cma_link)
-    driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36'})
-    '''
-    ------------------ Audio Bypass -----------------------------------------------------------------------------------------------------------------------------
-    
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------
-    '''
-    time_to_sleep = random.randint(2,5)
-    time.sleep(time_to_sleep) # sleep b/w 5 to 10 seconds
+
+    frame = driver.find_element_by_css_selector('body > iframe')
+    driver.switch_to.frame(frame)
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
+    except Exception:
+        print('error')
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
+    except Exception:
+        print('error')
+
+
+    time.sleep(500)
+
+
 
     try:
         WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
-    except:
-        textbox = driver.find_elements_by_class_name('o-button primary')
-
+    except Exception:
+        print('error')
+    
+    time.sleep(500)
     textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
     textbox.send_keys(container_num)
 
     driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
     
     time.sleep(100)
-#cma(Will need a manual verification)
+#cma(Will need a manual verification, although sometimes it works)
 
 def msc_search(container_num):# no way to see eta
     msc_link = 'https://www.msc.com/en/track-a-shipment'
@@ -397,7 +398,7 @@ def oocl_search(container_num):
         driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
 
     time.sleep(10)
-#oocl(manual bypass needed periodically)
+#oocl(Will need manual verification)
 
 def hmm_search(container_num):
     return_dict = dict()
@@ -585,10 +586,10 @@ def main():
 
     for container_num in rest_maersk_list:
          maersk_rest_dates_dict[container_num] = maersk_search(container_num)
-    
+    '''
     cma_custom_dates_dict = cma_search(custom_cma_list)
     #cma_rest_dates_dict = cma_search(rest_cma_list)
-    
+    '''
     msc_custom_dates_dict = msc_search(custom_msc_list)
     #msc_rest_dates_dict = msc_search(rest_msc_list)
     
@@ -597,7 +598,7 @@ def main():
     
     oocl_custom_dates_dict = oocl_search(custom_oocl_list)
     oocl_rest_dates_dict = oocl_search(rest_oocl_list)
-    '''
+    
     hmm_custom_dates_dict = dict()
     hmm_rest_dates_dict = dict()
 
@@ -608,7 +609,7 @@ def main():
          hmm_rest_dates_dict[container_num] = hmm_search(container_num)
     
     #value = evergreen_search('TCNU3811162')
-
+    '''
     #replace_values(cosco_custom_dates_dict, customsheet_data, 'custom')
     rest_total_dict = cosco_rest_dates_dict + one_rest_dates_dict + hapag_rest_dates_dict + yangming_rest_dates_dict + maersk_rest_dates_dict + cma_rest_dates_dict + msc_rest_dates_dict + evergreen_rest_dates_dict + oocl_rest_dates_dict + hmm_rest_dates_dict
 
