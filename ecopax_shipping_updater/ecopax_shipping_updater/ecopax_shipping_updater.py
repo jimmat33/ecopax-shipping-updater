@@ -15,9 +15,73 @@ from os.path import isfile, join
 from openpyxl.styles import PatternFill, Alignment 
 from openpyxl import load_workbook
 
+#Global lists of all modified cells in each sheet
 modified_custom_cells_list = list()
 modified_rest_cells_list = list()
-#chrome_options.headless = True
+
+def get_date_from_cma(given_str):
+    '''
+    This function is specifically used for CMA CGM, it takes the raw data from their website and
+    returns a string that can be used to create the proper date for adding to the container's
+    dictionary entry
+    '''
+    start_index = 0
+
+    #This if block is checking for the days of the week and then using that as a basis for the starting index of the date
+    if given_str.find("Sunday") != -1:
+        start_index = given_str.find("Sunday") + len("Sunday") + 1
+    elif given_str.find("Monday") != -1:
+        start_index = given_str.find("Monday") + len("Monday") + 1
+    elif given_str.find("Tuesday") != -1:
+        start_index = given_str.find("Tuesday") + len("Tuesday") + 1 
+    elif given_str.find("Wednesday") != -1:
+        start_index = given_str.find("Wednesday") + len("Wednesday") + 1
+    elif given_str.find("Thursday") != -1:
+        start_index = given_str.find("Thursday") + len("Thursday") + 1
+    elif given_str.find("Friday") != -1:
+        start_index = given_str.find("Friday") + len("Friday") + 1
+    elif given_str.find("Saturday") != -1:
+        start_index = given_str.find("Saturday") + len("Saturday") + 1
+    elif given_str.find("Sunday") != -1:
+        start_index = given_str.find("Sunday") + len("Sunday") + 1
+    else:
+        return 'ERROR'
+
+    actual_date = given_str[start_index:(start_index + 11)]
+
+    return actual_date
+    
+def get_month_num(month):
+    '''
+    This function takes a month as a word and returns it as the respective number of the month for
+    proper date formatting
+    '''
+    if month == 'January' or month == 'JAN' or month == 'Jan':
+        return '01'
+    elif month == 'February' or month == 'FEB' or month == 'Feb':
+        return '02'
+    elif month == 'March' or month == 'MAR' or month == 'Mar':
+        return '03'
+    elif month == 'April' or month == 'APR' or month == 'Apr':
+        return '04'
+    elif month == 'May' or month == 'MAY' or month == 'May':
+        return '05'
+    elif month == 'June' or month == 'JUN' or month == 'Jun':
+        return '06'
+    elif month == 'July' or month == 'JUL' or month == 'Jul':
+        return '07'
+    elif month == 'August' or month == 'AUG' or month == 'Aug':
+        return '08'
+    elif month == 'September' or month == 'SEP' or month == 'Sep':
+        return '09'
+    elif month == 'October' or month == 'OCT' or month == 'Oct':
+        return '10'
+    elif month == 'November' or month == 'NOV' or month == 'Nov':
+        return '11'
+    elif month == 'December' or month == 'DEC' or month == 'Dec':
+        return '12'
+    else:
+        return 'ERROR'
 
 def replace_values(date_dict,df, sheet_name):
     dict_keys = [*date_dict]
@@ -85,127 +149,89 @@ def replace_values(date_dict,df, sheet_name):
 
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
-def get_date_from_cma(given_str):
-    '''
-    This function is specifically used for CMA CGM, it takes the raw data from their website and
-    returns a string that can be used to create the proper date for adding to the container's
-    dictionary entry
-    '''
-    start_index = 0
-
-    #This if block is checking for the days of the week and then using that as a basis for the starting index of the date
-    if given_str.find("Sunday") != -1:
-        start_index = given_str.find("Sunday") + len("Sunday") + 1
-    elif given_str.find("Monday") != -1:
-        start_index = given_str.find("Monday") + len("Monday") + 1
-    elif given_str.find("Tuesday") != -1:
-        start_index = given_str.find("Tuesday") + len("Tuesday") + 1 
-    elif given_str.find("Wednesday") != -1:
-        start_index = given_str.find("Wednesday") + len("Wednesday") + 1
-    elif given_str.find("Thursday") != -1:
-        start_index = given_str.find("Thursday") + len("Thursday") + 1
-    elif given_str.find("Friday") != -1:
-        start_index = given_str.find("Friday") + len("Friday") + 1
-    elif given_str.find("Saturday") != -1:
-        start_index = given_str.find("Saturday") + len("Saturday") + 1
-    elif given_str.find("Sunday") != -1:
-        start_index = given_str.find("Sunday") + len("Sunday") + 1
-    else:
-        return 'ERROR'
-
-    actual_date = given_str[start_index:(start_index + 11)]
-
-    return actual_date
-    
-def get_month_num(month):
-    '''
-    This function takes a month as a word and returns it as the respective number of the month for
-    proper date formatting
-    '''
-    if month == 'January' or month == 'JAN' or month == 'Jan':
-        return '01'
-    elif month == 'February' or month == 'FEB' or month == 'Feb':
-        return '02'
-    elif month == 'March' or month == 'MAR' or month == 'Mar':
-        return '03'
-    elif month == 'April' or month == 'APR' or month == 'Apr':
-        return '04'
-    elif month == 'May' or month == 'MAY' or month == 'May':
-        return '05'
-    elif month == 'June' or month == 'JUN' or month == 'Jun':
-        return '06'
-    elif month == 'July' or month == 'JUL' or month == 'Jul':
-        return '07'
-    elif month == 'August' or month == 'AUG' or month == 'Aug':
-        return '08'
-    elif month == 'September' or month == 'SEP' or month == 'Sep':
-        return '09'
-    elif month == 'October' or month == 'OCT' or month == 'Oct':
-        return '10'
-    elif month == 'November' or month == 'NOV' or month == 'Nov':
-        return '11'
-    elif month == 'December' or month == 'DEC' or month == 'Dec':
-        return '12'
-    else:
-        return 'ERROR'
-
 def cosco_search(container_num_list):
     '''
     This function searches the cosco site for the estimated arrival date of a crate
     '''
-    return_dict = dict()
-
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-    cosco_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number='
-
-    if len(container_num_list)!= 0:
-        cosco_link = cosco_link + container_num_list[0]
-    else:
-        return
-
-    driver.implicitly_wait(0.5)
-    driver.get(cosco_link)
-
-    #clicking past the TOS popup
-    driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[3]/div/button').click()
-
-    #finding estimated arrival date in website table
-    web_date = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]')
-
-    #waiting to get date from page and pulling data
-    time.sleep(0.5) 
-    str_date = web_date.get_attribute('textContent')
-
-    #formatting date properly
-    year = str_date[0:4]
-    month = str_date[5:7]
-    day = str_date[8:10]
-
-    return_dict[container_num_list[0]] = [month, day, year]
-
-    i = 1
-
-    while i < len(container_num_list):
-        textbox = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div/div[2]/form/div/div[1]/div/div/div/input')
-        textbox.clear()
-
-        textbox.send_keys(container_num_list[i])
-        driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div/div[2]/form/div/div[2]/button').click()
-        time.sleep(1)
-
-        str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]'))).get_attribute('textContent')
-
-        #formatting date properly
-        year = str_date[0:4]
-        month = str_date[5:7]
-        day = str_date[8:10]
-
-        return_dict[container_num_list[i]] = [month, day, year]
-
-        i += 1
+    return_dict = dict() 
+    try:
+        #This is setting up the initial driver connection
+        try:
+            driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
+            cosco_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number='
+            driver.implicitly_wait(0.5)
+            driver.get(cosco_link)
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------------- Cosco Site Connection Failed --------------------------------')
+            print('----------------------------------------------------------------------------------------------')
 
 
-    driver.close()
+        #clicking past the TOS popup
+        try:
+            driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[3]/div/button').click()
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('------------------------------- Failed to click past Cosco TOS -------------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+
+        #finding estimated arrival date in website table
+        try:
+            web_date = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]')
+        
+            #waiting to get date from page and pulling data
+            time.sleep(1.5) 
+            str_date = web_date.get_attribute('textContent')
+
+            #properly formatting date of first index in list
+            year = str_date[0:4]
+            month = str_date[5:7]
+            day = str_date[8:10]
+
+            return_dict[container_num_list[0]] = [month, day, year]
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('----------------------------- Failed to find/process date Cosco ------------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+        return_dict[container_num_list[0]] = [month, day, year]
+
+        i = 1
+
+        while i < len(container_num_list):
+            try:
+                #clearning textbox, entering in new container, and clicking search button
+                textbox = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div/div[2]/form/div/div[1]/div/div/div/input')
+                textbox.clear()
+                textbox.send_keys(container_num_list[i])
+                driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div/div[2]/form/div/div[2]/button').click()
+
+                time.sleep(1)
+
+                #pulling date from cosco table
+                str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]'))).get_attribute('textContent')
+
+                #formatting date properly
+                year = str_date[0:4]
+                month = str_date[5:7]
+                day = str_date[8:10]
+
+                return_dict[container_num_list[i]] = [month, day, year]
+            except Exception:
+                print('----------------------------------------------------------------------------------------------')
+                print('----------------------------- Failed to find/process date Cosco ------------------------------')
+                print('----------------------------------------------------------------------------------------------')
+
+            i += 1
+
+
+        driver.close()
+    except Exception:
+        print('----------------------------------------------------------------------------------------------')
+        print('-------------------------------- Cosco Search Major Failure ----------------------------------')
+        print('----------------------------------------------------------------------------------------------')
+
     return return_dict
 
 def one_search(container_num_list):
