@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from http.server import executable
 import tarfile
 from unittest import registerResult
@@ -30,10 +30,85 @@ from bs4 import BeautifulSoup
 import random
 from os import listdir
 from os.path import isfile, join
+from openpyxl.styles import Color, PatternFill, Font, Border, Alignment 
+from openpyxl.cell import cell
+from openpyxl import load_workbook
+import xlwt
+import xlrd
+from xlutils.copy import copy
+from openpyxl.styles import Color, PatternFill, Font, Border, Alignment
+from openpyxl.cell import Cell
 
-
+modified_custom_cells_list = list()
+modified_rest_cells_list = list()
 chrome_options = Options()
 #chrome_options.headless = True
+
+def replace_values(date_dict,df, sheet_name):
+    dict_keys = [*date_dict]
+    workbook = load_workbook(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+    sheet = workbook.get_sheet_by_name(sheet_name)
+
+    greenFill = PatternFill(start_color='00FF00',
+                   end_color='00FF00',
+                   fill_type='solid')
+
+
+    for key in dict_keys:
+        container_num = key
+        container_arrival_date = date_dict[key]
+
+        formatted_date = container_arrival_date[2] + '-' + container_arrival_date[0] + '-' + container_arrival_date[1]
+        index_list = df[df == container_num].stack().index.tolist()
+        excel_date = container_arrival_date[0] + '/' + container_arrival_date[1] + '/' + container_arrival_date[2]
+
+        if sheet_name == 'custom':
+            old_date = str(df.iat[index_list[0][0], 6])
+
+            old_formatted_date = old_date[0:10]
+
+            new_date_datetime = datetime.strptime(formatted_date, "%y-%m-%d")
+            today_date = date.today()
+
+            if old_date == 'arrived':
+                print('already arrived')
+            elif old_formatted_date == formatted_date or new_date_datetime < today_date:
+                sheet_index = 'G' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = 'arrived'
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
+                
+                modified_custom_cells_list.append(container_num)
+            else:
+                sheet_index = 'G' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = excel_date
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
+
+                modified_custom_cells_list.append(container_num)
+        else:
+            old_date = str(df.iat[index_list[0][0], 7])
+            old_formatted_date = old_date[0:10]
+
+            if old_date == 'arrived':
+                print('already arrived')
+            elif old_formatted_date == formatted_date:
+                sheet_index = 'H' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = 'arrived'
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
+
+                modified_rest_cells_list.append(container_num)
+            else:
+                sheet_index = 'H' + str(index_list[0][0] + 2)
+                sheet[sheet_index] = excel_date
+                sheet[sheet_index].fill = greenFill
+                sheet[sheet_index].alignment = Alignment(horizontal='right')
+
+                modified_rest_cells_list.append(container_num)
+
+
+        workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
 def get_date_from_cma(given_str):
     start_index = 0
@@ -675,21 +750,21 @@ def main():
             if isinstance(row['Container Number'], str) != False:
                 rest_unadded_containers_list.append(row['Container Number'])
         
-    custom_hapag_list.append('HLXU1143116')
-    custom_hapag_list.append('HLXU5257457')
+    #custom_hapag_list.append('HLXU1143116')
+    #custom_hapag_list.append('HLXU5257457')
 
-    custom_yangming_list.append('YMLU8268863')
-    custom_yangming_list.append('YMLU5426986')
+    #custom_yangming_list.append('YMLU8268863')
+    #custom_yangming_list.append('YMLU5426986')
 
-    custom_maersk_list.append('MSKU9342870')
-    custom_maersk_list.append('MRKU8485175')
+    #custom_maersk_list.append('MSKU9342870')
+    #custom_maersk_list.append('MRKU8485175')
 
-    custom_cma_list.append('CMAU0459057')
-    custom_cma_list.append('CMAU1999430')
+    #custom_cma_list.append('CMAU0459057')
+    #custom_cma_list.append('CMAU1999430')
 
-    custom_msc_list.append('MSCU6919130')
-    custom_msc_list.append('MSCU6919130')
-    '''
+    #custom_msc_list.append('MSCU6919130')
+    #custom_msc_list.append('MSCU6919130')
+    
     cosco_custom_dates_dict = cosco_search(custom_cosco_list)
     cosco_rest_dates_dict = cosco_search(rest_cosco_list)
     
@@ -699,8 +774,10 @@ def main():
     hapag_custom_dates_dict = hapag_search(custom_hapag_list)
     hapag_rest_dates_dict = hapag_search(rest_hapag_list)
     
-    yangming_custom_dates_dict = yangming_search(custom_yangming_list)
-    yangming_rest_dates_dict = yangming_search(rest_yangming_list)
+    yangming_custom_dates_dict = dict()
+    yangming_rest_dates_dict = dict()
+    #yangming_custom_dates_dict = yangming_search(custom_yangming_list)
+    #yangming_rest_dates_dict = yangming_search(rest_yangming_list)
     
     maersk_custom_dates_dict = dict()
     maersk_rest_dates_dict = dict()
@@ -711,18 +788,22 @@ def main():
 
     for container_num in rest_maersk_list:
          maersk_rest_dates_dict[container_num] = maersk_search(container_num)
-    '''
+    
     cma_custom_dates_dict = cma_search(custom_cma_list)
-    #cma_rest_dates_dict = cma_search(rest_cma_list)
-    '''
-    msc_custom_dates_dict = msc_search(custom_msc_list)
+    cma_rest_dates_dict = cma_search(rest_cma_list)
+    
+    msc_custom_dates_dict = dict()
+    msc_rest_dates_dict = dict()
+    #msc_custom_dates_dict = msc_search(custom_msc_list)
     #msc_rest_dates_dict = msc_search(rest_msc_list)
     
-    #evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
+    evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
     evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
     
-    oocl_custom_dates_dict = oocl_search(custom_oocl_list)
-    oocl_rest_dates_dict = oocl_search(rest_oocl_list)
+    oocl_custom_dates_dict = dict()
+    oocl_rest_dates_dict = dict()
+    #oocl_custom_dates_dict = oocl_search(custom_oocl_list)
+    #oocl_rest_dates_dict = oocl_search(rest_oocl_list)
     
     hmm_custom_dates_dict = dict()
     hmm_rest_dates_dict = dict()
@@ -733,12 +814,12 @@ def main():
     for container_num in rest_hmm_list:
          hmm_rest_dates_dict[container_num] = hmm_search(container_num)
     
-    #value = evergreen_search('TCNU3811162')
-    '''
-    #replace_values(cosco_custom_dates_dict, customsheet_data, 'custom')
     rest_total_dict = cosco_rest_dates_dict + one_rest_dates_dict + hapag_rest_dates_dict + yangming_rest_dates_dict + maersk_rest_dates_dict + cma_rest_dates_dict + msc_rest_dates_dict + evergreen_rest_dates_dict + oocl_rest_dates_dict + hmm_rest_dates_dict
 
     custom_total_dict =  cosco_custom_dates_dict + one_custom_dates_dict + hapag_custom_dates_dict + yangming_custom_dates_dict + maersk_custom_dates_dict + cma_custom_dates_dict + msc_custom_dates_dict + evergreen_custom_dates_dict + oocl_custom_dates_dict + hmm_custom_dates_dict
+
+    replace_values(rest_total_dict, restsheet_data, 'Rest')
+    replace_values(custom_total_dict, customsheet_data, 'custom')
 
     print("test")
 
