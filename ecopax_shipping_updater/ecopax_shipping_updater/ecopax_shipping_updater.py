@@ -28,10 +28,17 @@ import os, sys
 import time,requests
 from bs4 import BeautifulSoup
 import random
+from os import listdir
+from os.path import isfile, join
 
 
 chrome_options = Options()
 #chrome_options.headless = True
+
+def get_date_from_cma(given_str):
+    start_index = 0
+
+
 
 def get_month_num(month):
     if month == 'January' or month == 'JAN' or month == 'Jan':
@@ -289,13 +296,22 @@ def maersk_search(container_num):
     return [month_num, day, year]
 #maersk(good)
    
-def cma_search(container_num):#Ask about verification here
+def cma_search(container_num_list):
+
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
+    speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
     options = webdriver.ChromeOptions()
-    options.add_argument("--window-size=1100,1000")
+    options.add_argument('--window-size=1100,1000')
+    
+    prefs = {"profile.default_content_settings.popups": 0, "download.default_directory": r"C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files\\", "directory_upgrade": True}
+    options.add_experimental_option("prefs", prefs)
+
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=options)
     driver.get(cma_link)
 
+    #---------------------------------------------------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------------------------------------------------------------
+    #------------------------------------Audio Bypass---------------------------------------------------------------------------------------------------
     frame = driver.find_element_by_css_selector('body > iframe')
     driver.switch_to.frame(frame)
 
@@ -309,23 +325,75 @@ def cma_search(container_num):#Ask about verification here
     except Exception:
         print('error')
 
+    time.sleep(1)
+    audio_src_link = WebDriverWait(driver, 10).until(EC.invisibility_of_element((By.TAG_NAME, 'audio'))).get_attribute('currentSrc')
 
-    time.sleep(500)
+    driver.execute_script("window.open('');")
+  
+    # Switch to the new window and open new URL
+    driver.switch_to.window(driver.window_handles[1])
+    driver.get(audio_src_link)
+
+    driver.execute_script('''let aLink = document.createElement("a");let videoSrc = document.querySelector("video").firstChild.src;aLink.href = videoSrc;aLink.download = "";aLink.click();aLink.remove();''')
 
 
+    driver.execute_script("window.open('');")
+  
+    # Switch to the new window and open new URL
+    driver.switch_to.window(driver.window_handles[2])
+    driver.get(speech_to_text_link)
+    
+    mypath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files'
+
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+
+    root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
+    btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
+
+    file_str = onlyfiles[-1]
+    send_keys_str = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files' + '\\' + file_str
+
+    time.sleep(5)
+    btn.send_keys(send_keys_str)
+
+    time.sleep(15)
+    #btn.send_keys(path)
+
+    # Audio to text is processing
+    text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+
+    result = " ".join( [ each.text for each in text ] )
+    key_str = result[33:-1]
+
+    driver.switch_to.window(driver.window_handles[0])
+    frame = driver.find_element_by_css_selector('body > iframe')
+    driver.switch_to.frame(frame)
+
+    textbox = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
+    textbox.send_keys(key_str)
+
+    driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]').click()
+
+    os.remove(send_keys_str)
+    #------------------------------------Audio Bypass---------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------------------------------------------------------------
 
     try:
         WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
     except Exception:
         print('error')
     
-    time.sleep(500)
     textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
-    textbox.send_keys(container_num)
+    textbox.send_keys(container_num_list[0])
 
     driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+
+    time.sleep(0.5)
+
+    str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
     
-    time.sleep(100)
+    print('y')
 #cma(Will need a manual verification, although sometimes it works)
 
 def msc_search(container_num):# no way to see eta
