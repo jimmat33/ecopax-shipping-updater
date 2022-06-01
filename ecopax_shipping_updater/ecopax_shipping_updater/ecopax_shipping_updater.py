@@ -86,8 +86,14 @@ def replace_values(date_dict,df, sheet_name):
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
 def get_date_from_cma(given_str):
+    '''
+    This function is specifically used for CMA CGM, it takes the raw data from their website and
+    returns a string that can be used to create the proper date for adding to the container's
+    dictionary entry
+    '''
     start_index = 0
 
+    #This if block is checking for the days of the week and then using that as a basis for the starting index of the date
     if given_str.find("Sunday") != -1:
         start_index = given_str.find("Sunday") + len("Sunday") + 1
     elif given_str.find("Monday") != -1:
@@ -112,6 +118,10 @@ def get_date_from_cma(given_str):
     return actual_date
     
 def get_month_num(month):
+    '''
+    This function takes a month as a word and returns it as the respective number of the month for
+    proper date formatting
+    '''
     if month == 'January' or month == 'JAN' or month == 'Jan':
         return '01'
     elif month == 'February' or month == 'FEB' or month == 'Feb':
@@ -137,8 +147,7 @@ def get_month_num(month):
     elif month == 'December' or month == 'DEC' or month == 'Dec':
         return '12'
     else:
-        #return error
-        return '11'
+        return 'ERROR'
 
 def cosco_search(container_num_list):
     '''
