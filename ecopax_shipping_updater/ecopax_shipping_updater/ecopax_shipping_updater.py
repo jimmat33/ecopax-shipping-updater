@@ -1,47 +1,22 @@
-from datetime import date, datetime
-from http.server import executable
-import tarfile
-from unittest import registerResult
-import numpy
-import sys
-import pprint
+from datetime import datetime
 import time
 import pandas as pd
-from bs4 import BeautifulSoup
 import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from openpyxl import Workbook
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import strptime
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
-import os, sys
-import time,requests
-from bs4 import BeautifulSoup
-import random
+import os
 from os import listdir
 from os.path import isfile, join
-from openpyxl.styles import Color, PatternFill, Font, Border, Alignment 
-from openpyxl.cell import cell
+from openpyxl.styles import PatternFill, Alignment 
 from openpyxl import load_workbook
-import xlwt
-import xlrd
-from xlutils.copy import copy
-from openpyxl.styles import Color, PatternFill, Font, Border, Alignment
-from openpyxl.cell import Cell
 
 modified_custom_cells_list = list()
 modified_rest_cells_list = list()
-chrome_options = Options()
 #chrome_options.headless = True
 
 def replace_values(date_dict,df, sheet_name):
@@ -67,8 +42,8 @@ def replace_values(date_dict,df, sheet_name):
 
             old_formatted_date = old_date[0:10]
 
-            new_date_datetime = datetime.strptime(formatted_date, "%y-%m-%d")
-            today_date = date.today()
+            new_date_datetime = datetime.strptime(formatted_date, "%Y-%m-%d")
+            today_date = datetime.today()
 
             if old_date == 'arrived':
                 print('already arrived')
@@ -162,7 +137,8 @@ def get_month_num(month):
     elif month == 'December' or month == 'DEC' or month == 'Dec':
         return '12'
     else:
-        return '-------ERROR-------'
+        #return error
+        return '11'
 #month_num(good)
 
 def cosco_search(container_num_list):
@@ -171,7 +147,7 @@ def cosco_search(container_num_list):
     '''
     return_dict = dict()
 
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     cosco_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number='
 
     if len(container_num_list)!= 0:
@@ -229,7 +205,7 @@ def one_search(container_num_list):
     return_dict = dict()
 
     one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     driver.implicitly_wait(0.5)
     driver.get(one_link)
 
@@ -246,13 +222,16 @@ def one_search(container_num_list):
 
     time.sleep(0.5)
 
-    arrival_text = driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
+    try:
+        arrival_text = driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
 
-    month = arrival_text[-11:-9]
-    day = arrival_text[-8:-6]
-    year = arrival_text[-16:-12]
+        month = arrival_text[-11:-9]
+        day = arrival_text[-8:-6]
+        year = arrival_text[-16:-12]
 
-    return_dict[container_num_list[0]] = [month, day, year]
+        return_dict[container_num_list[0]] = [month, day, year]
+    except Exception:
+        print('error')
 
     i = 1
 
@@ -264,14 +243,16 @@ def one_search(container_num_list):
         driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/form/div[1]/div[1]/button/span').click()
         time.sleep(0.5)
 
-        arrival_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]'))).get_attribute('textContent')
+        try:
+            arrival_text = driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
 
-        #formatting date properly
-        month = arrival_text[-11:-9]
-        day = arrival_text[-8:-6]
-        year = arrival_text[-16:-12]
+            month = arrival_text[-11:-9]
+            day = arrival_text[-8:-6]
+            year = arrival_text[-16:-12]
 
-        return_dict[container_num_list[i]] = [month, day, year]
+            return_dict[container_num_list[i]] = [month, day, year]
+        except Exception:
+            print('error')
 
         i += 1
 
@@ -286,7 +267,7 @@ def hapag_search(container_num_list):
     '''
     return_dict = dict()
 
-    driver = uc.Chrome(options=chrome_options)
+    driver = uc.Chrome()
     hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
     driver.implicitly_wait(0.5)
     driver.get(hapag_link)
@@ -355,7 +336,7 @@ def yangming_search(container_num): #needs human verification, can do up to 12 c
     Can't find any estimated date on website, also needs manual verification
     '''
     yangming_link = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     driver.implicitly_wait(0.5)
     #driver.get(yangming_link)
     return
@@ -365,10 +346,8 @@ def maersk_search(container_num):
     '''
     This function searches the maersk site for the estimated arrival date of a crate
     '''
-    return_dict = dict()
-
     maersk_link = 'https://www.maersk.com/tracking/'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
 
     maersk_link = maersk_link + container_num
 
@@ -382,12 +361,12 @@ def maersk_search(container_num):
 
     str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
 
-    year = str_text[-5:-1]
+    year = str(str_text[-5:-1].strip())
 
     month = str((str_text[3:-5]).strip())
     month_num = get_month_num(month)
 
-    day = str_text[0:3]
+    day = str(str_text[0:3].strip())
 
     return [month_num, day, year]
 #maersk(good)
@@ -487,15 +466,19 @@ def cma_search(container_num_list):
     driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
 
     time.sleep(0.5)
+    try:
+        str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+        useable_date = get_date_from_cma(str_date)
 
-    str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
-    useable_date = get_date_from_cma(str_date)
+        month = get_month_num(useable_date[3:6])
+        day = useable_date[0:2]
+        year = useable_date[7:]
 
-    month = get_month_num(useable_date[3:6])
-    day = useable_date[0:2]
-    year = useable_date[7:]
+        return_dict[container_num_list[0]] = [month, day, year]
+    except Exception:
+        print('error')
 
-    return_dict[container_num_list[0]] = [month, day, year]
+    
 
     i = 1
 
@@ -530,7 +513,7 @@ def cma_search(container_num_list):
 
 def msc_search(container_num):# no way to see eta
     msc_link = 'https://www.msc.com/en/track-a-shipment'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     driver.implicitly_wait(0.5)
     driver.get(msc_link)
 #msc(no good way to see eta)
@@ -539,7 +522,7 @@ def evergreen_search(container_num_list):
     return_dict = dict()
 
     evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
+    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
     driver.implicitly_wait(0.5)
     driver.get(evergreen_link)
 
@@ -596,8 +579,6 @@ def oocl_search(container_num):
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div/div[2]/form/button'))).click()
     except:
         driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
-
-    time.sleep(10)
 #oocl(Will need manual verification, may need to be entirely manual as it temp bans ip for too quick of searches)
 
 def hmm_search(container_num):
@@ -652,7 +633,6 @@ def hmm_search(container_num):
     month_num = get_month_num(month)
     
     driver.close()
-
     return [month_num, day, year]
 #hmm(good)
 
@@ -764,6 +744,26 @@ def main():
 
     #custom_msc_list.append('MSCU6919130')
     #custom_msc_list.append('MSCU6919130')
+    cosco_custom_dates_dict = dict()
+    one_custom_dates_dict = dict()
+    hapag_custom_dates_dict = dict()
+    yangming_custom_dates_dict = dict()
+    maersk_custom_dates_dict = dict()
+    cma_custom_dates_dict = dict() 
+    msc_custom_dates_dict = dict() 
+    evergreen_custom_dates_dict = dict() 
+    oocl_custom_dates_dict = dict() 
+    hmm_custom_dates_dict = dict()
+    cosco_rest_dates_dict = dict()
+    one_rest_dates_dict = dict()
+    hapag_rest_dates_dict = dict()
+    yangming_rest_dates_dict = dict()
+    maersk_rest_dates_dict = dict()
+    cma_rest_dates_dict = dict()
+    msc_rest_dates_dict = dict()
+    evergreen_rest_dates_dict = dict() 
+    oocl_rest_dates_dict = dict()
+    hmm_rest_dates_dict = dict()
 
 
     if len(custom_cosco_list) != 0:
@@ -784,14 +784,8 @@ def main():
     if len(rest_hapag_list) != 0:
         hapag_rest_dates_dict = hapag_search(rest_hapag_list)
     
-    yangming_custom_dates_dict = dict()
-    yangming_rest_dates_dict = dict()
     #yangming_custom_dates_dict = yangming_search(custom_yangming_list)
     #yangming_rest_dates_dict = yangming_search(rest_yangming_list)
-    
-    maersk_custom_dates_dict = dict()
-    maersk_rest_dates_dict = dict()
-
     
     for container_num in custom_maersk_list:
         maersk_custom_dates_dict[container_num] = maersk_search(container_num)
@@ -816,13 +810,8 @@ def main():
     if len(rest_evergreen_list) != 0:
         evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
     
-    oocl_custom_dates_dict = dict()
-    oocl_rest_dates_dict = dict()
     #oocl_custom_dates_dict = oocl_search(custom_oocl_list)
     #oocl_rest_dates_dict = oocl_search(rest_oocl_list)
-    
-    hmm_custom_dates_dict = dict()
-    hmm_rest_dates_dict = dict()
 
     for container_num in custom_hmm_list:
         hmm_custom_dates_dict[container_num] = hmm_search(container_num)
@@ -830,9 +819,9 @@ def main():
     for container_num in rest_hmm_list:
          hmm_rest_dates_dict[container_num] = hmm_search(container_num)
     
-    rest_total_dict = cosco_rest_dates_dict + one_rest_dates_dict + hapag_rest_dates_dict + yangming_rest_dates_dict + maersk_rest_dates_dict + cma_rest_dates_dict + msc_rest_dates_dict + evergreen_rest_dates_dict + oocl_rest_dates_dict + hmm_rest_dates_dict
+    rest_total_dict = cosco_rest_dates_dict | one_rest_dates_dict | hapag_rest_dates_dict | yangming_rest_dates_dict | maersk_rest_dates_dict | cma_rest_dates_dict | msc_rest_dates_dict | evergreen_rest_dates_dict | oocl_rest_dates_dict | hmm_rest_dates_dict
 
-    custom_total_dict =  cosco_custom_dates_dict + one_custom_dates_dict + hapag_custom_dates_dict + yangming_custom_dates_dict + maersk_custom_dates_dict + cma_custom_dates_dict + msc_custom_dates_dict + evergreen_custom_dates_dict + oocl_custom_dates_dict + hmm_custom_dates_dict
+    custom_total_dict =  cosco_custom_dates_dict | one_custom_dates_dict | hapag_custom_dates_dict | yangming_custom_dates_dict | maersk_custom_dates_dict | cma_custom_dates_dict | msc_custom_dates_dict | evergreen_custom_dates_dict | oocl_custom_dates_dict | hmm_custom_dates_dict
 
     replace_values(rest_total_dict, restsheet_data, 'Rest')
     replace_values(custom_total_dict, customsheet_data, 'custom')
