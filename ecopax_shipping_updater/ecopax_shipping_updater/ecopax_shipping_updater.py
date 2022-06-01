@@ -60,6 +60,7 @@ def get_month_num(month):
         return '12'
     else:
         return '-------ERROR-------'
+#month_num(good)
 
 def cosco_search(container_num_list):
     '''
@@ -119,6 +120,7 @@ def cosco_search(container_num_list):
 
     driver.close()
     return return_dict
+#cosco(good)
 
 def one_search(container_num_list):
     return_dict = dict()
@@ -173,7 +175,8 @@ def one_search(container_num_list):
 
     driver.close()
     return return_dict
-    
+#one(good)    
+
 def hapag_search(container_num_list):
     '''
     This function searches the hapag-lloyd site for the estimated arrival date of a crate (May be buggy)
@@ -242,6 +245,7 @@ def hapag_search(container_num_list):
 
     driver.close()
     return return_dict
+#hapag-lloyd(good)
 
 def yangming_search(container_num): #needs human verification, can do up to 12 containers at a time
     '''
@@ -252,6 +256,7 @@ def yangming_search(container_num): #needs human verification, can do up to 12 c
     driver.implicitly_wait(0.5)
     #driver.get(yangming_link)
     return
+#yangming(No good date to look for, also needs manual verification)
 
 def maersk_search(container_num):
     '''
@@ -282,6 +287,7 @@ def maersk_search(container_num):
     day = str_text[0:3]
 
     return [month_num, day, year]
+#maersk(good)
    
 def cma_search(container_num):#Ask about verification here
     cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
@@ -319,12 +325,14 @@ def cma_search(container_num):#Ask about verification here
     driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
     
     time.sleep(100)
+#cma(Will need a manual verification)
 
 def msc_search(container_num):# no way to see eta
     msc_link = 'https://www.msc.com/en/track-a-shipment'
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
     driver.implicitly_wait(0.5)
     driver.get(msc_link)
+#msc(no good way to see eta)
 
 def evergreen_search(container_num_list):
     return_dict = dict()
@@ -375,6 +383,7 @@ def evergreen_search(container_num_list):
 
     driver.close()
     return return_dict
+#evergreen(good)
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
@@ -388,7 +397,7 @@ def oocl_search(container_num):
         driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/form/button').click()
 
     time.sleep(10)
-    #human bypass needed
+#oocl(manual bypass needed periodically)
 
 def hmm_search(container_num):
     return_dict = dict()
@@ -444,6 +453,7 @@ def hmm_search(container_num):
     driver.close()
 
     return [month_num, day, year]
+#hmm(good)
 
 def main():
     #put chrome driver version check and chrome version check, prompt to update if necessary
