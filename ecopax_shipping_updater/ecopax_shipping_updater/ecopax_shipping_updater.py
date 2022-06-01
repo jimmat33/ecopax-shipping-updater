@@ -324,7 +324,9 @@ def msc_search(container_num):# no way to see eta
     driver.implicitly_wait(0.5)
     driver.get(msc_link)
 
-def evergreen_search(container_num):
+def evergreen_search(container_num_list):
+    return_dict = dict()
+
     evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
     driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=chrome_options)
     driver.implicitly_wait(0.5)
@@ -333,7 +335,7 @@ def evergreen_search(container_num):
     driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/input').click()
 
     textbox = driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[1]')
-    textbox.send_keys(container_num)
+    textbox.send_keys(container_num_list[0])
 
     driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[2]').click()
 
@@ -345,7 +347,32 @@ def evergreen_search(container_num):
 
     month_num = get_month_num(month)
     
-    return[month_num, day, year]
+    return_dict[container_num_list[0]] = [month_num, day, year]
+
+    i = 1
+
+    while i < len(container_num_list):
+        textbox = driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[1]')
+        textbox.clear()
+        textbox.send_keys(container_num_list[i])
+
+        driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[2]').click()
+
+        time.sleep(0.5)
+        str_date = driver.find_element_by_xpath('/html/body/div[5]/center/table[2]/tbody/tr/td/table[2]/tbody/tr/td').get_attribute('textContent')
+
+        month = str_date[28:31]
+        day = str_date[32:34]
+        year = str_date[35:]
+
+        month_num = get_month_num(month)
+    
+        return_dict[container_num_list[i]] = [month_num, day, year]
+
+        i += 1
+
+    driver.close()
+    return return_dict
 
 def oocl_search(container_num):
     oocl_link = 'https://www.oocl.com/eng/ourservices/eservices/cargotracking/Pages/cargotracking.aspx'
@@ -365,6 +392,9 @@ def hmm_search(container_num):
     print('l')
 
 def main():
+    #put chrome driver version check and chrome version check, prompt to update if necessary
+
+
     #Setting up all the lists for each 
     custom_cosco_list = list()
     rest_cosco_list = list()
@@ -494,19 +524,19 @@ def main():
     
     cma_custom_dates_dict = cma_search(custom_cma_list)
     #cma_rest_dates_dict = cma_search(rest_cma_list)
-    '''
+    
     msc_custom_dates_dict = msc_search(custom_msc_list)
     #msc_rest_dates_dict = msc_search(rest_msc_list)
-    '''
-    evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
+    
+    #evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
     evergreen_rest_dates_dict = evergreen_search(rest_evergreen_list)
-
+    
     oocl_custom_dates_dict = oocl_search(custom_oocl_list)
     oocl_rest_dates_dict = oocl_search(rest_oocl_list)
-
-    hmm_custom_dates_dict = hmm_search(custom_hmm_list)
-    hmm_rest_dates_dict = hmm_search(rest_hmm_list)
     '''
+    hmm_custom_dates_dict = hmm_search(custom_hmm_list)
+    #hmm_rest_dates_dict = hmm_search(rest_hmm_list)
+    
     #value = evergreen_search('TCNU3811162')
 
     #replace_values(cosco_custom_dates_dict, customsheet_data, 'custom')
