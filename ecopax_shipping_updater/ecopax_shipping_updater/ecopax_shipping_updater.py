@@ -34,30 +34,32 @@ chrome_options = Options()
 #chrome_options.headless = True
 
 def get_month_num(month):
-    if month == 'January' or month == 'JAN':
+    if month == 'January' or month == 'JAN' or month == 'Jan':
         return '01'
-    elif month == 'February' or month == 'FEB':
+    elif month == 'February' or month == 'FEB' or month == 'Feb':
         return '02'
-    elif month == 'March' or month == 'MAR':
+    elif month == 'March' or month == 'MAR' or month == 'Mar':
         return '03'
-    elif month == 'April' or month == 'APR':
+    elif month == 'April' or month == 'APR' or month == 'Apr':
         return '04'
-    elif month == 'May' or month == 'MAY':
+    elif month == 'May' or month == 'MAY' or month == 'May':
         return '05'
-    elif month == 'June' or month == 'JUN':
+    elif month == 'June' or month == 'JUN' or month == 'Jun':
         return '06'
-    elif month == 'July' or month == 'JUL':
+    elif month == 'July' or month == 'JUL' or month == 'Jul':
         return '07'
-    elif month == 'August' or month == 'AUG':
+    elif month == 'August' or month == 'AUG' or month == 'Aug':
         return '08'
-    elif month == 'September' or month == 'SEP':
+    elif month == 'September' or month == 'SEP' or month == 'Sep':
         return '09'
-    elif month == 'October' or month == 'OCT':
+    elif month == 'October' or month == 'OCT' or month == 'Oct':
         return '10'
-    elif month == 'November' or month == 'NOV':
+    elif month == 'November' or month == 'NOV' or month == 'Nov':
         return '11'
-    else:
+    elif month == 'December' or month == 'DEC' or month == 'Dec':
         return '12'
+    else:
+        return '-------ERROR-------'
 
 def cosco_search(container_num_list):
     '''
@@ -389,7 +391,59 @@ def oocl_search(container_num):
     #human bypass needed
 
 def hmm_search(container_num):
-    print('l')
+    return_dict = dict()
+
+    hmm_link_part_1 = 'https://www.hmm21.com/cms/company/engn/index.jsp?type=2&number='
+    hmm_link_part_2 = '&is_quick=Y&quick_params='
+    driver = uc.Chrome()
+    driver.implicitly_wait(0.5)
+
+    hmm_search_link = hmm_link_part_1 + container_num + hmm_link_part_2
+
+    driver.get(hmm_search_link)
+
+    selector = Select(driver.find_element_by_xpath('/html/body/div[2]/div[1]/div/div[2]/form/fieldset/p/span[1]/select'))
+    selector.select_by_visible_text('Container No.')
+
+    driver.find_element_by_xpath('/html/body/div[2]/div[1]/div/div[2]/form/fieldset/p/span[3]/a').click()
+
+    # Store the ID of the original window
+    original_window = driver.current_window_handle
+
+    wait = WebDriverWait(driver, 3)
+
+    wait.until(EC.number_of_windows_to_be(2))
+
+    # Loop through until we find a new window handle
+    for window_handle in driver.window_handles:
+        if window_handle != original_window:
+            driver.switch_to.window(window_handle)
+            break
+
+    # Wait for the new tab to finish loading content
+    wait.until(EC.title_is("HMM Customer Plus"))
+
+    try:
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[3]/button[2]'))).click()
+    except Exception:
+        print('exception thrown')
+
+    time.sleep(0.5)
+
+    frame = driver.find_element_by_css_selector('#_frame1')
+    driver.switch_to.frame(frame)
+
+    str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[4]/form[1]/div/div[6]/table/tbody/tr[3]/td[5]/span'))).get_attribute('textContent')
+
+    month = str_date[3:6]
+    day = str_date[0:2]
+    year = str_date[7:11:]
+
+    month_num = get_month_num(month)
+    
+    driver.close()
+
+    return [month_num, day, year]
 
 def main():
     #put chrome driver version check and chrome version check, prompt to update if necessary
@@ -534,8 +588,14 @@ def main():
     oocl_custom_dates_dict = oocl_search(custom_oocl_list)
     oocl_rest_dates_dict = oocl_search(rest_oocl_list)
     '''
-    hmm_custom_dates_dict = hmm_search(custom_hmm_list)
-    #hmm_rest_dates_dict = hmm_search(rest_hmm_list)
+    hmm_custom_dates_dict = dict()
+    hmm_rest_dates_dict = dict()
+
+    for container_num in custom_hmm_list:
+        hmm_custom_dates_dict[container_num] = hmm_search(container_num)
+
+    for container_num in rest_hmm_list:
+         hmm_rest_dates_dict[container_num] = hmm_search(container_num)
     
     #value = evergreen_search('TCNU3811162')
 
