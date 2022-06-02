@@ -52,6 +52,7 @@ def get_date_from_cma(given_str):
 
     return actual_date
     
+
 def get_month_num(month):
     '''
     This function takes a month as a word and returns it as the respective number of the month for
@@ -83,6 +84,7 @@ def get_month_num(month):
         return '12'
     else:
         return 'ERROR'
+
 
 def replace_values(date_dict,df, sheet_name):
     dict_keys = [*date_dict]
@@ -150,6 +152,7 @@ def replace_values(date_dict,df, sheet_name):
 
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
+
 def cosco_search(container_num_list):
     '''
     This function searches the cosco site for the estimated arrival date of a list of crate numbers
@@ -170,13 +173,12 @@ def cosco_search(container_num_list):
             driver.implicitly_wait(0.5)
             driver.get(cosco_search_link)
 
+            print('\n[Connection Alert] Driver Connection to Cosco Site Successful\n')
+
         except Exception:
             print('----------------------------------------------------------------------------------------------')
             print('-------------------------------- Cosco Site Connection Failed --------------------------------')
             print('----------------------------------------------------------------------------------------------')
-
-
-        print('\n[Connection Alert] Driver Connection to Cosco Site Successful\n')
 
 
         try:
@@ -271,13 +273,12 @@ def one_search(container_num_list):
             driver.implicitly_wait(0.5)
             driver.get(one_link)
 
+            print('\n[Connection Alert] Driver Connection to ONE Site Successful\n')
+
         except Exception:
             print('----------------------------------------------------------------------------------------------')
             print('--------------------------------- ONE Site Connection Failed ---------------------------------')
             print('----------------------------------------------------------------------------------------------')
-
-
-        print('\n[Connection Alert] Driver Connection to ONE Site Successful\n')
 
 
         try:
@@ -368,272 +369,448 @@ def hapag_search(container_num_list):
     This function searches the hapag-lloyd site for the estimated arrival date of a crate
     '''
     return_dict = dict()
-
-    driver = uc.Chrome()
-    hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
-    driver.implicitly_wait(0.5)
-    driver.get(hapag_link)
-
     try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
-    except:
-        driver.find_element(By.ID, "accept-recommended-btn-handler").click()
+        try:
+            #Setting up driver options
+            options = webdriver.ChromeOptions()
 
-    time.sleep(0.5)
+            #connecting to website
+            driver = uc.Chrome(options=options)
+            hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
+            driver.implicitly_wait(0.5)
+            driver.get(hapag_link)
 
-    textbox = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
-    textbox.clear()
-    textbox.send_keys(container_num_list[0])
+            print('\n[Connection Alert] Driver Connection to Hapag-Lloyd Site Successful\n')
 
-    driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('----------------------------- Hapag-Lloyd Site Connection Failed -----------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+        try:
+            try:
+                WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+
+                driver.minimize_window()
+            except:
+                driver.find_element(By.ID, "accept-recommended-btn-handler").click()
+
+                driver.minimize_window()
+
+            time.sleep(0.5)
     
-    time.sleep(0.5)
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('------------------------------- Hapag-Lloyd TOS Bypass Failed --------------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+
+        try:
+            textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
+            textbox.clear()
+            textbox.send_keys(container_num_list[0])
+
+            driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
     
-    table_text = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
-    str_text = table_text.get_attribute('textContent')
-    index = str_text.find("Vessel arrival")
+            time.sleep(0.5)
 
-    target_text = str_text[269:]
-    date_text = target_text[(target_text.find("20")):]
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------- Failed to use Hapag-Lloyd Site Search -----------------------------')
+            print('----------------------------------------------------------------------------------------------')
 
-    year = date_text[0:4]
-    month = date_text[5:7]
-    day = date_text[8:10]
 
-    return_dict[container_num_list[0]] = [month, day, year]
+        try:
+            table_text = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
+            str_text = table_text.get_attribute('textContent')
+            index = str_text.find("Vessel arrival")
 
-    i = 1
+            target_text = str_text[269:]
+            date_text = target_text[(target_text.find("20")):]
 
-    while i < len(container_num_list):
-        textbox = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
-        textbox.clear()
+            year = date_text[0:4]
+            month = date_text[5:7]
+            day = date_text[8:10]
 
-        textbox.send_keys(container_num_list[i])
-        driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
-        time.sleep(0.5)
-
-        time.sleep(0.5)
+            return_dict[container_num_list[0]] = [month, day, year]
     
-        table_text = driver.find_element_by_xpath('/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
-        str_text = table_text.get_attribute('textContent')
-        index = str_text.find("Vessel arrival")
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------- Failed to find/process date Hapag-Lloyd ---------------------------')
+            print('----------------------------------------------------------------------------------------------')
 
-        target_text = str_text[269:]
-        date_text = target_text[(target_text.find("20")):]
 
-        year = date_text[0:4]
-        month = date_text[5:7]
-        day = date_text[8:10]
+        i = 1
 
-        return_dict[container_num_list[i]] = [month, day, year]
+        while i < len(container_num_list):
+            try:
+                textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
+                textbox.clear()
 
-        i += 1
+                textbox.send_keys(container_num_list[i])
+                driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
+                time.sleep(0.5)
 
-    driver.close()
+                time.sleep(0.5)
+    
+                table_text = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
+                str_text = table_text.get_attribute('textContent')
+                index = str_text.find("Vessel arrival")
+
+                target_text = str_text[269:]
+                date_text = target_text[(target_text.find("20")):]
+
+                year = date_text[0:4]
+                month = date_text[5:7]
+                day = date_text[8:10]
+
+                return_dict[container_num_list[i]] = [month, day, year]
+
+            except:
+                print('----------------------------------------------------------------------------------------------')
+                print('-------------------------- Failed to find/process date Hapag-Lloyd ---------------------------')
+                print('----------------------------------------------------------------------------------------------')
+
+            i += 1
+
+        driver.close()
+    
+    except Exception:
+        print('----------------------------------------------------------------------------------------------')
+        print('----------------------------- Hapag-LLoyd Search Major Failure -------------------------------')
+        print('----------------------------------------------------------------------------------------------')
+
     return return_dict
+
 
 def maersk_search(container_num):
     '''
     This function searches the maersk site for the estimated arrival date of a crate
     '''
-    maersk_link = 'https://www.maersk.com/tracking/'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-
-    maersk_link = maersk_link + container_num
-
-    driver.implicitly_wait(0.5)
-    driver.get(maersk_link)
-
     try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
-    except:
-        driver.find_elements_by_class_name('coi-banner__accept--fixed-margin').click()
-
-    str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
-
-    year = str(str_text[-5:-1].strip())
-
-    month = str((str_text[3:-5]).strip())
-    month_num = get_month_num(month)
-
-    day = str(str_text[0:3].strip())
-
-    return [month_num, day, year]
-   
-def cma_search(container_num_list):
-    return_dict = dict()
-
-    cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
-    speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
-    options = webdriver.ChromeOptions()
-    options.add_argument('--window-size=1100,1000')
-    
-    prefs = {"profile.default_content_settings.popups": 0, "download.default_directory": r"C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files\\", "directory_upgrade": True}
-    options.add_experimental_option("prefs", prefs)
-
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe', options=options)
-    driver.get(cma_link)
-
-    #---------------------------------------------------------------------------------------------------------------------------------------------------
-    #---------------------------------------------------------------------------------------------------------------------------------------------------
-    #------------------------------------Audio Bypass---------------------------------------------------------------------------------------------------
-    frame = driver.find_element_by_css_selector('body > iframe')
-    driver.switch_to.frame(frame)
-
-    try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
-    except Exception:
-        print('error')
-
-    try:
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
-    except Exception:
-        print('error')
-
-    time.sleep(1)
-    audio_src_link = WebDriverWait(driver, 10).until(EC.invisibility_of_element((By.TAG_NAME, 'audio'))).get_attribute('currentSrc')
-
-    driver.execute_script("window.open('');")
-  
-    # Switch to the new window and open new URL
-    driver.switch_to.window(driver.window_handles[1])
-    driver.get(audio_src_link)
-
-    driver.execute_script('''let aLink = document.createElement("a");let videoSrc = document.querySelector("video").firstChild.src;aLink.href = videoSrc;aLink.download = "";aLink.click();aLink.remove();''')
-
-
-    driver.execute_script("window.open('');")
-  
-    # Switch to the new window and open new URL
-    driver.switch_to.window(driver.window_handles[2])
-    driver.get(speech_to_text_link)
-    
-    mypath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files'
-
-    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-
-    root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
-    btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
-
-    file_str = onlyfiles[-1]
-    send_keys_str = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files' + '\\' + file_str
-
-    time.sleep(5)
-    btn.send_keys(send_keys_str)
-
-    time.sleep(15)
-    #btn.send_keys(path)
-
-    # Audio to text is processing
-    text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
-
-    result = " ".join( [ each.text for each in text ] )
-    key_str = result[33:-1]
-
-    driver.switch_to.window(driver.window_handles[0])
-    frame = driver.find_element_by_css_selector('body > iframe')
-    driver.switch_to.frame(frame)
-
-    textbox = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
-    textbox.send_keys(key_str)
-
-    driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]').click()
-
-    os.remove(send_keys_str)
-    #------------------------------------Audio Bypass---------------------------------------------------------------------------------------------------
-    #---------------------------------------------------------------------------------------------------------------------------------------------------
-    #---------------------------------------------------------------------------------------------------------------------------------------------------
-
-    try:
-        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
-    except Exception:
-        print('error')
-    
-    textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
-    textbox.send_keys(container_num_list[0])
-
-    driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
-
-    time.sleep(0.5)
-    try:
-        str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
-        useable_date = get_date_from_cma(str_date)
-
-        month = get_month_num(useable_date[3:6])
-        day = useable_date[0:2]
-        year = useable_date[7:]
-
-        return_dict[container_num_list[0]] = [month, day, year]
-    except Exception:
-        print('error')
-
-    
-
-    i = 1
-
-    while i < len(container_num_list):
         try:
-            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+            #setting up driver options
+            options = webdriver.ChromeOptions()
+            options.add_experimental_option('excludeSwitches', ['enable-logging'])
+            options.add_argument('--disable-gpu')
+            options.add_argument('--no-startup-window')
+
+            #This is setting up the initial driver connection
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+            maersk_link = 'https://www.maersk.com/tracking/'
+            maersk_link = maersk_link + container_num
+
+            driver.implicitly_wait(0.5)
+            driver.get(maersk_link)
+
+            print('\n[Connection Alert] Driver Connection to Maersk Site Successful\n')
+
+            time.sleep(0.5)
+            driver.minimize_window()
+
         except Exception:
-            print('error')
-    
-        textbox = driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
-        textbox.clear()
-        textbox.send_keys(container_num_list[i])
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------------- Maersk Site Connection Failed -------------------------------')
+            print('----------------------------------------------------------------------------------------------')
 
-        driver.find_element_by_xpath('/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
 
-        time.sleep(0.5)
+        #attempting to click past TOS
+        try:
+            try:
+                WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
+            except:
+                driver.find_element(By.CLASS_NAME, 'coi-banner__accept--fixed-margin').click()
 
-        str_date = driver.find_element_by_css_selector('#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
-        useable_date = get_date_from_cma(str_date)
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('--------------------------------- Maersk TOS Bypass Failed -----------------------------------')
+            print('----------------------------------------------------------------------------------------------')
+        
 
-        month = get_month_num(useable_date[3:6])
-        day = useable_date[0:2]
-        year = useable_date[7:]
+        try:
+            str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
 
-        return_dict[container_num_list[i]] = [month, day, year]
+            year = str(str_text[-5:-1].strip())
 
-        i += 1
+            month = str((str_text[3:-5]).strip())
+            month_num = get_month_num(month)
 
-    driver.close()
-    return return_dict
+            day = str(str_text[0:3].strip())
 
-def evergreen_search(container_num_list):
+            return [month_num, day, year]
+
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('----------------------------- Failed to find/process date Maersk -----------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+    except Exception:
+        print('----------------------------------------------------------------------------------------------')
+        print('-------------------------------- Maersk Search Major Failure ---------------------------------')
+        print('----------------------------------------------------------------------------------------------')
+
+    return []
+   
+
+def cma_search(container_num_list):
+    '''
+    This function searches the CMA CGM site for the estimated arrival date of a crate
+    '''
     return_dict = dict()
 
-    evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
-    driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
-    driver.implicitly_wait(0.5)
-    driver.get(evergreen_link)
+    try:
+        try:
+            #setting up chrome options and prefrences
+            options = webdriver.ChromeOptions()
+            options.add_argument('--window-size=1100,1000')
 
-    driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/input').click()
+            abs_path = os.path.abspath('Audio Captcha Files') + '\\'
 
-    textbox = driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[1]')
-    textbox.send_keys(container_num_list[0])
+            prefs = {"profile.default_content_settings.popups": 0, "download.default_directory": abs_path, "directory_upgrade": True}
+            options.add_experimental_option("prefs", prefs)
 
-    driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[2]').click()
+            #Connecting to site
+            cma_link = 'https://www.cma-cgm.com/ebusiness/tracking'
+            speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+            driver.get(cma_link)
 
-    str_date = driver.find_element_by_xpath('/html/body/div[5]/center/table[2]/tbody/tr/td/table[2]/tbody/tr/td').get_attribute('textContent')
+            print('\n[Connection Alert] Driver Connection to CMA CGM Site Successful\n')
 
-    month = str_date[28:31]
-    day = str_date[32:34]
-    year = str_date[35:]
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------------- CMA CGM Site Connection Failed ------------------------------')
+            print('----------------------------------------------------------------------------------------------')
 
-    month_num = get_month_num(month)
+
+        try:
+            #Finding textbox and entering container number without captcha, then clicking search
+            try:
+                WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+
+                textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+                textbox.send_keys(container_num_list[0])
+                driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+
+                time.sleep(0.5)
+
+            except Exception:
+                print('----------------------------------------------------------------------------------------------')
+                print('--------------------------- CMA CGM Site Failed to Wait for Textbox --------------------------')
+                print('----------------------------------------------------------------------------------------------')
+
+
+            #getting and properly formatting date
+            try:
+                str_date = driver.find_element(By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+                useable_date = get_date_from_cma(str_date)
+
+                month = get_month_num(useable_date[3:6])
+
+                if month == 'ERROR':
+                    return_dict[container_num_list[0]] = 'ERROR'
+                else:
+                    day = useable_date[0:2]
+                    year = useable_date[7:]
+
+                    #adding date to storage structure
+                    return_dict[container_num_list[0]] = [month, day, year]
+
+            except Exception:
+                print('----------------------------------------------------------------------------------------------')
+                print('----------------------------- Failed to find/process date CMA CGM ----------------------------')
+                print('----------------------------------------------------------------------------------------------')
+
+
+        except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('--------------- CMA CGM Site Failed to find Textbox, Trying Audio Captcha Bypass -------------')
+            print('----------------------------------------------------------------------------------------------')
+
+            #If need to bypass site captcha
+            try:
+
+                #-------------------------------------------------------
+                #-------------------------------------------------------
+                #------------------------------------Audio Bypass-------
+
+                #Selecting captcha frame
+                frame = driver.find_element_by_css_selector('body > iframe')
+                driver.switch_to.frame(frame)
+
+                #finding Buttons in captcha
+                try:
+                    WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
+                except Exception:
+                    print('error')
+
+                try:
+                    WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
+                except Exception:
+                    print('error')
+
+                time.sleep(1)
+
+                #waiting until audio is available
+                audio_src_link = WebDriverWait(driver, 10).until(EC.invisibility_of_element((By.TAG_NAME, 'audio'))).get_attribute('currentSrc')
+
+                #open new window
+                driver.execute_script("window.open('');")
+  
+                #Switch to the new window and open new URL
+                driver.switch_to.window(driver.window_handles[1])
+                driver.get(audio_src_link)
+
+                #gets video from source and downloads it
+                driver.execute_script('''let aLink = document.createElement("a");let videoSrc = document.querySelector("video").firstChild.src;aLink.href = videoSrc;aLink.download = "";aLink.click();aLink.remove();''')
+
+                #open new window
+                driver.execute_script("window.open('');")
+  
+                #Switch to the new window and open new URL
+                driver.switch_to.window(driver.window_handles[2])
+                driver.get(speech_to_text_link)
     
-    return_dict[container_num_list[0]] = [month_num, day, year]
+                mypath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files'
+                onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
-    i = 1
+                #dropping files into new site
+                root = driver.find_element(By.ID, 'root').find_element(By.CLASS_NAME, 'dropzone _container _container_large')
+                btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
+                file_str = onlyfiles[0]
+                send_keys_str = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files' + '\\' + file_str
 
-    while i < len(container_num_list):
-        textbox = driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[1]')
-        textbox.clear()
-        textbox.send_keys(container_num_list[i])
+                time.sleep(0.5)
 
-        driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[2]').click()
+                #sending new file to site
+                btn.send_keys(send_keys_str)
 
-        time.sleep(0.5)
+                time.sleep(12)
+
+                #Audio to text is processing
+                text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+
+                #getting number from textbox
+                result = " ".join( [ each.text for each in text ] )
+                key_str = result[33:-1]
+
+                #switch back to captcha window
+                driver.switch_to.window(driver.window_handles[0])
+                frame = driver.find_element(By.CSS_SELECTOR, 'body > iframe')
+                driver.switch_to.frame(frame)
+
+                #adding text into captcha box and submitting it
+                textbox = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
+                textbox.send_keys(key_str)
+                driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]').click()
+
+                #deleting file
+                os.remove(send_keys_str)
+                #------------------------------------Audio Bypass--------------
+                #--------------------------------------------------------------
+                #--------------------------------------------------------------
+
+                try:
+                    #getting and formatting date
+                    str_date = driver.find_element(By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+
+                    #getting workable date
+                    useable_date = get_date_from_cma(str_date)
+
+                    #if usable no usable date
+                    if useable_date == 'ERROR':
+
+                        #adding date to storage structure
+                        return_dict[container_num_list[0]] = 'ERROR'
+                    else:
+                        #getting month as a number
+                        month = get_month_num(useable_date[3:6])
+
+                        #if getting month causes error
+                        if month == 'ERROR':
+                            return_dict[container_num_list[0]] = 'ERROR'
+                        else:
+                            day = useable_date[0:2]
+                            year = useable_date[7:]
+
+                            #adding date to storage structure
+                            return_dict[container_num_list[0]] = [month, day, year]
+
+                except Exception:
+                    print('----------------------------------------------------------------------------------------------')
+                    print('----------------------------- Failed to find/process date CMA CGM ----------------------------')
+                    print('----------------------------------------------------------------------------------------------')
+
+
+            except Exception:
+                print('----------------------------------------------------------------------------------------------')
+                print('----------------------------- CMA CGM Audio Captcha Bypass Failed ----------------------------')
+                print('----------------------------------------------------------------------------------------------')
+
+
+            i = 1
+
+            while i < len(container_num_list):
+                #Finding textbox and entering container number, then clicking search
+                try:
+                    WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+                except Exception:
+                    print('----------------------------------------------------------------------------------------------')
+                    print('--------------------------- CMA CGM Site Failed to Wait for Textbox --------------------------')
+                    print('----------------------------------------------------------------------------------------------')
+
+                textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+                textbox.send_keys(container_num_list[0])
+                driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+
+                time.sleep(0.5)
+
+                #getting and properly formatting date
+                try:
+                    str_date = driver.find_element(By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
+                    useable_date = get_date_from_cma(str_date)
+
+                    month = get_month_num(useable_date[3:6])
+
+                    if month == 'ERROR':
+                        return_dict[container_num_list[0]] = 'ERROR'
+                    else:
+                        day = useable_date[0:2]
+                        year = useable_date[7:]
+
+                        return_dict[container_num_list[0]] = [month, day, year]
+
+                except Exception:
+                    print('----------------------------------------------------------------------------------------------')
+                    print('----------------------------- Failed to find/process date CMA CGM ----------------------------')
+                    print('----------------------------------------------------------------------------------------------')
+
+                i += 1
+                driver.close()
+
+    except Exception:
+            print('----------------------------------------------------------------------------------------------')
+            print('-------------------------------- CMA CGM Search Major Failure --------------------------------')
+            print('----------------------------------------------------------------------------------------------')
+
+            return return_dict
+
+    def evergreen_search(container_num_list):
+        return_dict = dict()
+
+        evergreen_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
+        driver = webdriver.Chrome(executable_path=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\chromedriver.exe')
+        driver.implicitly_wait(0.5)
+        driver.get(evergreen_link)
+
+        driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/input').click()
+
+        textbox = driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[1]')
+        textbox.send_keys(container_num_list[0])
+
+        driver.find_element_by_xpath('/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[2]').click()
+
         str_date = driver.find_element_by_xpath('/html/body/div[5]/center/table[2]/tbody/tr/td/table[2]/tbody/tr/td').get_attribute('textContent')
 
         month = str_date[28:31]
@@ -642,11 +819,31 @@ def evergreen_search(container_num_list):
 
         month_num = get_month_num(month)
     
-        return_dict[container_num_list[i]] = [month_num, day, year]
+        return_dict[container_num_list[0]] = [month_num, day, year]
 
-        i += 1
+        i = 1
 
-    driver.close()
+        while i < len(container_num_list):
+            textbox = driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[1]')
+            textbox.clear()
+            textbox.send_keys(container_num_list[i])
+
+            driver.find_element_by_xpath('/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[2]').click()
+
+            time.sleep(0.5)
+            str_date = driver.find_element_by_xpath('/html/body/div[5]/center/table[2]/tbody/tr/td/table[2]/tbody/tr/td').get_attribute('textContent')
+
+            month = str_date[28:31]
+            day = str_date[32:34]
+            year = str_date[35:]
+
+            month_num = get_month_num(month)
+    
+            return_dict[container_num_list[i]] = [month_num, day, year]
+
+            i += 1
+
+        driver.close()
     return return_dict
 
 def hmm_search(container_num):
@@ -704,7 +901,7 @@ def hmm_search(container_num):
     return [month_num, day, year]
 
 def main():
-    #put chrome driver version check and chrome version check, prompt to update if necessary
+    #prompt to update uc chrome and regular chrome if needed, maybe do manually?
 
 
     #Setting up all the lists for each 
@@ -753,6 +950,8 @@ def main():
             print()
             #highlight red for not looked at
 
+    print('\n[Driver Alert] Custom sheet processed\n')
+
     #populating lists for the rest sheet
     for index, row in restsheet_data.iterrows():
         if row['Carrier'] == 'Cosco':
@@ -772,6 +971,8 @@ def main():
         else:
             print()
             #highlight red for not looked at
+
+    print('\n[Driver Alert] Rest sheet processed\n')
         
     #dictionary creation to hold all dates pulled for custom sheet containers
     cosco_custom_dates_dict = dict()
@@ -800,7 +1001,7 @@ def main():
             for i in [1,2,3]:
                 print('\n[Driver Alert] Trying Costco Search Again (Custom Sheet)\n')
                 cosco_custom_dates_dict = cosco_search(custom_cosco_list)
-                if len(cosco_custom_dates_dict) == 0:
+                if len(cosco_custom_dates_dict) != 0:
                     break
         if len(cosco_custom_dates_dict) == 0:
             print('\n[Driver Alert] Cosco Search Fatal Error (Custom Sheet)\n')
@@ -814,12 +1015,12 @@ def main():
             for i in [1,2,3]:
                 print('\n[Driver Alert] Trying Costco Search Again (Rest Sheet)\n')
                 cosco_rest_dates_dict = cosco_search(rest_cosco_list)
-                if len(cosco_rest_dates_dict) == 0:
+                if len(cosco_rest_dates_dict) != 0:
                     break
         if len(cosco_rest_dates_dict) == 0:
             print('\n[Driver Alert] Cosco Search Fatal Error (Rest Sheet)\n')
             #highlight all cosco rest sheet items red
-    '''
+    
 
     #Searching for all ONE containers from the custom sheet
     if len(custom_one_list) != 0:
@@ -828,7 +1029,7 @@ def main():
             for i in [1,2,3]:
                 print('\n[Driver Alert] Trying ONE Search Again (Custom Sheet)\n')
                 one_custom_dates_dict = one_search(custom_one_list)
-                if len(one_custom_dates_dict) == 0:
+                if len(one_custom_dates_dict) != 0:
                     break
         if len(one_custom_dates_dict) == 0:
             print('\n[Driver Alert] ONE Search Fatal Error (Custom Sheet)\n')
@@ -842,25 +1043,72 @@ def main():
             for i in [1,2,3]:
                 print('\n[Driver Alert] Trying ONE Search Again (rest Sheet)\n')
                 one_rest_dates_dict = one_search(rest_one_list)
-                if len(one_rest_dates_dict) == 0:
+                if len(one_rest_dates_dict) != 0:
                     break
         if len(one_rest_dates_dict) == 0:
             print('\n[Driver Alert] ONE Search Fatal Error (rest Sheet)\n')
             #highlight all ONE rest sheet items red
 
     
+    #Searching for all Hapag-Loyd containers from the custom sheet
     if len(custom_hapag_list) != 0:
         hapag_custom_dates_dict = hapag_search(custom_hapag_list)
+        if len(hapag_custom_dates_dict) == 0:
+            for i in [1,2,3]:
+                print('\n[Driver Alert] Trying Hapag-Loyd Search Again (Custom Sheet)\n')
+                hapag_custom_dates_dict = hapag_search(custom_hapag_list)
+                if len(hapag_custom_dates_dict) != 0:
+                    break
+        if len(hapag_custom_dates_dict) == 0:
+            print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Custom Sheet)\n')
+            #highlight all hapag custom sheet items red
 
+
+    #Searching for all Hapag-Loyd containers from the rest sheet
     if len(rest_hapag_list) != 0:
         hapag_rest_dates_dict = hapag_search(rest_hapag_list)
+        if len(hapag_rest_dates_dict) == 0:
+            for i in [1,2,3]:
+                print('\n[Driver Alert] Trying Hapag-Loyd Search Again (Rest Sheet)\n')
+                hapag_rest_dates_dict = hapag_search(rest_hapag_list)
+                if len(hapag_rest_dates_dict) != 0:
+                    break
+        if len(hapag_rest_dates_dict) == 0:
+            print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Rest Sheet)\n')
+            #highlight all hapag rest sheet items red
     
-    for container_num in custom_maersk_list:
-        maersk_custom_dates_dict[container_num] = maersk_search(container_num)
 
-    for container_num in rest_maersk_list:
-         maersk_rest_dates_dict[container_num] = maersk_search(container_num)
-    
+    #Searching for all Maersk containers from the Custom sheet
+    if len(custom_maersk_list) != 0:
+        for container_num in custom_maersk_list:
+            maersk_custom_dates_dict[container_num] = maersk_search(container_num)
+        if len(custom_maersk_list) == 0:
+            for i in [1,2,3]:
+                print('\n[Driver Alert] Trying Maersk Search Again (Custom Sheet)\n')
+                for container_num in custom_maersk_list:
+                    maersk_custom_dates_dict[container_num] = maersk_search(container_num)
+                if len(hapag_rest_dates_dict) != 0:
+                    break
+        if len(maersk_custom_dates_dict) == 0:
+            print('\n[Driver Alert] Maersk Search Fatal Error (Custom Sheet)\n')
+            #highlight all maersk Custom sheet items red
+
+
+    #Searching for all Maersk containers from the rest sheet
+    if len(rest_maersk_list) != 0:
+        for container_num in rest_maersk_list:
+            maersk_rest_dates_dict[container_num] = maersk_search(container_num)
+        if len(rest_maersk_list) == 0:
+            for i in [1,2,3]:
+                print('\n[Driver Alert] Trying Maersk Search Again (Rest Sheet)\n')
+                for container_num in rest_maersk_list:
+                    maersk_rest_dates_dict[container_num] = maersk_search(container_num)
+                if len(hapag_rest_dates_dict) != 0:
+                    break
+        if len(maersk_rest_dates_dict) == 0:
+            print('\n[Driver Alert] Maersk Search Fatal Error (Rest Sheet)\n')
+            #highlight all maersk rest sheet items red
+    '''
     if len(custom_cma_list) != 0:    
         cma_custom_dates_dict = cma_search(custom_cma_list)
 
