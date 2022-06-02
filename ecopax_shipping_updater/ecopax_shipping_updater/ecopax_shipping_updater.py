@@ -151,7 +151,7 @@ def replace_values(date_dict,df, sheet_name):
 
 def cosco_search(container_num_list):
     '''
-    This function searches the cosco site for the estimated arrival date of a crate
+    This function searches the cosco site for the estimated arrival date of a list of crate numbers
     '''
     return_dict = dict() 
     try:
@@ -181,7 +181,7 @@ def cosco_search(container_num_list):
             web_date = driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]')
         
             #waiting to get date from page and pulling data
-            time.sleep(1.5) 
+            time.sleep(2) 
             str_date = web_date.get_attribute('textContent')
 
             #properly formatting date of first index in list
@@ -207,7 +207,7 @@ def cosco_search(container_num_list):
                 textbox.send_keys(container_num_list[i])
                 driver.find_element_by_xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div/div[2]/form/div/div[2]/button').click()
 
-                time.sleep(1)
+                time.sleep(2)
 
                 #pulling date from cosco table
                 str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[4]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]'))).get_attribute('textContent')
