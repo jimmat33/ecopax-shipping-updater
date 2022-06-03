@@ -178,6 +178,7 @@ def cosco_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('-------------------------------- Cosco Site Connection Failed --------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return
 
 
     try:
@@ -188,6 +189,7 @@ def cosco_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('------------------------------- Failed to click past Cosco TOS -------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return 
 
 
     try:
@@ -236,8 +238,6 @@ def cosco_search(container_num_list):
             #adding date to storage data structure
             return_dict[container_num_list[i]] = [month, day, year]
 
-            driver.close()
-
         except Exception:
             print('\n----------------------------------------------------------------------------------------------')
             print('----------------------------- Failed to find/process date Cosco ------------------------------')
@@ -245,6 +245,8 @@ def cosco_search(container_num_list):
             print('----------------------------------------------------------------------------------------------\n')
 
         i += 1
+
+    driver.close()
 
     return return_dict
 
@@ -274,6 +276,7 @@ def one_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('--------------------------------- ONE Site Connection Failed ---------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return
 
 
     try:
@@ -341,8 +344,6 @@ def one_search(container_num_list):
             #adding date to storage data structure
             return_dict[container_num_list[i]] = [month, day, year]
 
-            driver.close()
-
         except Exception:
             print('\n----------------------------------------------------------------------------------------------')
             print('------------------------------ Failed to find/process date ONE -------------------------------')
@@ -351,6 +352,8 @@ def one_search(container_num_list):
 
 
         i += 1
+
+    driver.close()
 
     return return_dict 
 
@@ -377,10 +380,11 @@ def hapag_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('----------------------------- Hapag-Lloyd Site Connection Failed -----------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return
 
     try:
         try:
-            WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+            WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
 
             driver.minimize_window()
         except:
@@ -394,6 +398,7 @@ def hapag_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('------------------------------- Hapag-Lloyd TOS Bypass Failed --------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return 
 
 
     try:
@@ -458,8 +463,6 @@ def hapag_search(container_num_list):
 
             return_dict[container_num_list[i]] = [month, day, year]
 
-            driver.close()
-
         except:
             print('\n----------------------------------------------------------------------------------------------')
             print('-------------------------- Failed to find/process date Hapag-Lloyd ---------------------------')
@@ -467,6 +470,8 @@ def hapag_search(container_num_list):
             print('----------------------------------------------------------------------------------------------\n')
 
         i += 1
+
+    driver.close()
 
     return return_dict
 
@@ -536,7 +541,9 @@ def maersk_search(container_num):
         print('-------------------------------- Maersk Search Major Failure ---------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
 
-    return []
+    driver.close()
+
+    return 
    
 
 def cma_search(container_num_list):
@@ -552,9 +559,10 @@ def cma_search(container_num_list):
         #options.add_argument('--headless')
         options.add_argument('--disable-gpu')
 
-        abs_path = os.path.abspath('Audio Captcha Files') + '\\'
+        abs_path = os.path.abspath('ecopax-shipping-updater')
+        use_path = abs_path + '\\' + 'Audio Captcha Files'
 
-        prefs = {"profile.default_content_settings.popups": 0, "download.default_directory": abs_path, "directory_upgrade": True}
+        prefs = {"profile.default_content_settings.popups": 0, "download.default_directory": use_path, "directory_upgrade": True}
         options.add_experimental_option("prefs", prefs)
 
         #Connecting to site
@@ -569,44 +577,21 @@ def cma_search(container_num_list):
         print('\n----------------------------------------------------------------------------------------------')
         print('-------------------------------- CMA CGM Site Connection Failed ------------------------------')
         print('----------------------------------------------------------------------------------------------\n')
+        return
 
 
     try:
         #Finding textbox and entering container number without captcha, then clicking search
-        try:
-            WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+        WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
 
-            textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
-            textbox.send_keys(container_num_list[0])
-            driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+        textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
+        textbox.send_keys(container_num_list[0])
+        driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
 
-            time.sleep(0.5)
-
-        except Exception:
-            #getting and properly formatting date
-            try:
-                str_date = driver.find_element(By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div').get_attribute('textContent')
-                useable_date = get_date_from_cma(str_date)
-
-                month = get_month_num(useable_date[3:6])
-
-                if month == 'ERROR':
-                    return_dict[container_num_list[0]] = 'ERROR'
-                else:
-                    day = useable_date[0:2]
-                    year = useable_date[7:]
-
-                    #adding date to storage structure
-                    return_dict[container_num_list[0]] = [month, day, year]
-
-            except Exception:
-                print('\n----------------------------------------------------------------------------------------------')
-                print('----------------------------- Failed to find/process date CMA CGM ----------------------------')
-                print(f'--------------------------- Container Num {container_num_list[0]}----------------------------')
-                print('----------------------------------------------------------------------------------------------\n')
-
+        time.sleep(0.5)
 
     except Exception:
+         
         print('\n----------------------------------------------------------------------------------------------')
         print('--------------- CMA CGM Site Failed to find Textbox, Trying Audio Captcha Bypass -------------')
         print('----------------------------------------------------------------------------------------------\n')
@@ -655,14 +640,13 @@ def cma_search(container_num_list):
             driver.switch_to.window(driver.window_handles[2])
             driver.get(speech_to_text_link)
     
-            mypath = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files'
-            onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+            onlyfiles = [f for f in listdir(use_path) if isfile(join(use_path, f))]
 
             #dropping files into new site
             root = driver.find_element(By.ID, 'root').find_element(By.CLASS_NAME, 'dropzone _container _container_large')
             btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
             file_str = onlyfiles[0]
-            send_keys_str = r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Audio Captcha Files' + '\\' + file_str
+            send_keys_str = use_path + '\\' + file_str
 
             time.sleep(0.5)
 
@@ -672,7 +656,7 @@ def cma_search(container_num_list):
             time.sleep(12)
 
             #Audio to text is processing
-            text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+            text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_element(By.TAG_NAME, 'span')
 
             #getting number from textbox
             result = " ".join( [ each.text for each in text ] )
@@ -697,7 +681,7 @@ def cma_search(container_num_list):
             print('\n----------------------------------------------------------------------------------------------')
             print('----------------------------- CMA CGM Audio Captcha Bypass Failed ----------------------------')
             print('----------------------------------------------------------------------------------------------\n')
-            return {}
+            return 
 
 
     try:
@@ -759,8 +743,6 @@ def cma_search(container_num_list):
 
                 return_dict[container_num_list[0]] = [month, day, year]
 
-                driver.close()
-
         except Exception:
             print('\n----------------------------------------------------------------------------------------------')
             print('----------------------------- Failed to find/process date CMA CGM ----------------------------')
@@ -768,6 +750,8 @@ def cma_search(container_num_list):
             print('----------------------------------------------------------------------------------------------\n')
 
         i += 1
+
+    driver.close()
 
     return return_dict
 
@@ -968,7 +952,7 @@ def main():
     hmm_rest_dates_dict = dict()
 
     #---------------------------------------- All searches for each website----------------------------------------
-    
+    '''
     #Searching for all cosco containers from the custom sheet
     if len(custom_cosco_list) != 0:
         cosco_custom_dates_dict = cosco_search(custom_cosco_list)
@@ -978,9 +962,9 @@ def main():
                 cosco_custom_dates_dict = cosco_search(custom_cosco_list)
                 if len(cosco_custom_dates_dict) != 0:
                     break
-        if len(cosco_custom_dates_dict) == 0:
-            print('\n[Driver Alert] Cosco Search Fatal Error (Custom Sheet)\n')
-            #highlight all cosco custom sheet items red
+            if len(cosco_custom_dates_dict) == 0:
+                print('\n[Driver Alert] Cosco Search Fatal Error (Custom Sheet)\n')
+                #highlight all cosco custom sheet items red
 
 
     #Searching for all cosco containers from the rest sheet
@@ -992,9 +976,9 @@ def main():
                 cosco_rest_dates_dict = cosco_search(rest_cosco_list)
                 if len(cosco_rest_dates_dict) != 0:
                     break
-        if len(cosco_rest_dates_dict) == 0:
-            print('\n[Driver Alert] Cosco Search Fatal Error (Rest Sheet)\n')
-            #highlight all cosco rest sheet items red
+            if len(cosco_rest_dates_dict) == 0:
+                print('\n[Driver Alert] Cosco Search Fatal Error (Rest Sheet)\n')
+                #highlight all cosco rest sheet items red
     
 
     #Searching for all ONE containers from the custom sheet
@@ -1006,9 +990,9 @@ def main():
                 one_custom_dates_dict = one_search(custom_one_list)
                 if len(one_custom_dates_dict) != 0:
                     break
-        if len(one_custom_dates_dict) == 0:
-            print('\n[Driver Alert] ONE Search Fatal Error (Custom Sheet)\n')
-            #highlight all ONE custom sheet items red
+            if len(one_custom_dates_dict) == 0:
+                print('\n[Driver Alert] ONE Search Fatal Error (Custom Sheet)\n')
+                #highlight all ONE custom sheet items red
 
 
     #Searching for all ONE containers from the rest sheet
@@ -1020,9 +1004,9 @@ def main():
                 one_rest_dates_dict = one_search(rest_one_list)
                 if len(one_rest_dates_dict) != 0:
                     break
-        if len(one_rest_dates_dict) == 0:
-            print('\n[Driver Alert] ONE Search Fatal Error (rest Sheet)\n')
-            #highlight all ONE rest sheet items red
+            if len(one_rest_dates_dict) == 0:
+                print('\n[Driver Alert] ONE Search Fatal Error (rest Sheet)\n')
+                #highlight all ONE rest sheet items red
 
     
     #Searching for all Hapag-Loyd containers from the custom sheet
@@ -1034,9 +1018,9 @@ def main():
                 hapag_custom_dates_dict = hapag_search(custom_hapag_list)
                 if len(hapag_custom_dates_dict) != 0:
                     break
-        if len(hapag_custom_dates_dict) == 0:
-            print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Custom Sheet)\n')
-            #highlight all hapag custom sheet items red
+            if len(hapag_custom_dates_dict) == 0:
+                print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Custom Sheet)\n')
+                #highlight all hapag custom sheet items red
 
 
     #Searching for all Hapag-Loyd containers from the rest sheet
@@ -1048,9 +1032,9 @@ def main():
                 hapag_rest_dates_dict = hapag_search(rest_hapag_list)
                 if len(hapag_rest_dates_dict) != 0:
                     break
-        if len(hapag_rest_dates_dict) == 0:
-            print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Rest Sheet)\n')
-            #highlight all hapag rest sheet items red
+            if len(hapag_rest_dates_dict) == 0:
+                print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Rest Sheet)\n')
+                #highlight all hapag rest sheet items red
     
 
     #Searching for all Maersk containers from the Custom sheet
@@ -1064,9 +1048,9 @@ def main():
                     maersk_custom_dates_dict[container_num] = maersk_search(container_num)
                 if len(maersk_rest_dates_dict) != 0:
                     break
-        if len(maersk_custom_dates_dict) == 0:
-            print('\n[Driver Alert] Maersk Search Fatal Error (Custom Sheet)\n')
-            #highlight all maersk Custom sheet items red
+            if len(maersk_custom_dates_dict) == 0:
+                print('\n[Driver Alert] Maersk Search Fatal Error (Custom Sheet)\n')
+                #highlight all maersk Custom sheet items red
 
 
     #Searching for all Maersk containers from the rest sheet
@@ -1080,11 +1064,11 @@ def main():
                     maersk_rest_dates_dict[container_num] = maersk_search(container_num)
                 if len(maersk_rest_dates_dict) != 0:
                     break
-        if len(maersk_rest_dates_dict) == 0:
-            print('\n[Driver Alert] Maersk Search Fatal Error (Rest Sheet)\n')
-            #highlight all maersk rest sheet items red
+            if len(maersk_rest_dates_dict) == 0:
+                print('\n[Driver Alert] Maersk Search Fatal Error (Rest Sheet)\n')
+                #highlight all maersk rest sheet items red
 
-    
+    '''
     #Searching for all CMA CGM containers from the Custom sheet
     if len(custom_cma_list) != 0:
         for container_num in custom_cma_list:
@@ -1096,9 +1080,9 @@ def main():
                     cma_custom_dates_dict[container_num] = cma_search(container_num)
                 if len(cma_rest_dates_dict) != 0:
                     break
-        if len(cma_custom_dates_dict) == 0:
-            print('\n[Driver Alert] CMA CGM Search Fatal Error (Custom Sheet)\n')
-            #highlight all cma Custom sheet items red
+            if len(cma_custom_dates_dict) == 0:
+                print('\n[Driver Alert] CMA CGM Search Fatal Error (Custom Sheet)\n')
+                #highlight all cma Custom sheet items red
 
     #Searching for all CMA CGM containers from the rest sheet
     if len(rest_cma_list) != 0:
@@ -1111,9 +1095,9 @@ def main():
                     cma_rest_dates_dict[container_num] = cma_search(container_num)
                 if len(cma_rest_dates_dict) != 0:
                     break
-        if len(cma_rest_dates_dict) == 0:
-            print('\n[Driver Alert] CMA CGM Search Fatal Error (Rest Sheet)\n')
-            #highlight all cma rest sheet items red
+            if len(cma_rest_dates_dict) == 0:
+                print('\n[Driver Alert] CMA CGM Search Fatal Error (Rest Sheet)\n')
+                #highlight all cma rest sheet items red
     
     if len(custom_evergreen_list) != 0:
         evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
