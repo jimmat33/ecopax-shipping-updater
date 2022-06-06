@@ -17,6 +17,9 @@ from os.path import isfile, join
 from openpyxl.styles import PatternFill, Alignment 
 from openpyxl import load_workbook
 from dateutil import parser
+from ShippingContainer import *
+from Cosco import *
+
 
 #Global lists of all modified cells in each sheet
 modified_custom_cells_list = list()
@@ -86,6 +89,11 @@ def get_month_num(month):
         return '12'
     else:
         return 'ERROR'
+
+
+def random_sleep():
+    sleep_time = random.uniform(0.25, 1.25)
+    time.sleep(sleep_time)
 
 
 def replace_values(date_dict,df, sheet_name):
@@ -208,104 +216,6 @@ def replace_values(date_dict,df, sheet_name):
 
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
-
-def cosco_search(container_num_list):
-    '''
-    This function searches the cosco site for the estimated arrival date of a list of crate numbers
-    '''
-    return_dict = dict() 
-    try:
-        #setting up driver options
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument("--incognito")
-
-        #This is setting up the initial driver connection
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        cosco_web_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number='
-        cosco_search_link = cosco_web_link + container_num_list[0]
-        driver.implicitly_wait(0.5)
-        driver.get(cosco_search_link)
-
-        print('\n[Connection Alert] Driver Connection to Cosco Site Successful\n')
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('-------------------------------- Cosco Site Connection Failed --------------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-        return {}
-
-    '''
-    try:
-        #clicking past the TOS popup
-        driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div/div/div[3]/div/button').click()
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('------------------------------- Failed to click past Cosco TOS -------------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-        return {}
-    '''
-
-    try:
-        #finding estimated arrival date in website table
-        web_date = driver.find_element(By.XPATH,'/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]')
-        
-        #waiting to get date from page and pulling data
-        time.sleep(3) 
-        str_date = web_date.get_attribute('textContent')
-
-        #properly formatting date of first index in list
-        year = str_date[0:4]
-        month = str_date[5:7]
-        day = str_date[8:10]
-
-        #adding date to storage data structure
-        return_dict[container_num_list[0]] = [month, day, year]
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('----------------------------- Failed to find/process date Cosco ------------------------------')
-        print(f'--------------------------- Container Num {container_num_list[0]}----------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-
-
-    i = 1
-
-    while i < len(container_num_list):
-        try:
-            #clearning textbox, entering in new container, and clicking search button
-            textbox = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[1]/div/div/div[1]/input')
-            textbox.clear()
-            textbox.send_keys(container_num_list[i])
-            driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[2]/button').click()
-
-            time.sleep(3)
-
-            #pulling date from cosco table
-            str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div[2]/p[2]'))).get_attribute('textContent')
-
-            #formatting date properly
-            year = str_date[0:4]
-            month = str_date[5:7]
-            day = str_date[8:10]
-
-            #adding date to storage data structure
-            return_dict[container_num_list[i]] = [month, day, year]
-
-        except Exception:
-            print('\n----------------------------------------------------------------------------------------------')
-            print('----------------------------- Failed to find/process date Cosco ------------------------------')
-            print(f'--------------------------- Container Num {container_num_list[i]}----------------------------')
-            print('----------------------------------------------------------------------------------------------\n')
-
-        i += 1
-
-    driver.close()
-
-    return return_dict
 
 
 def one_search(container_num_list):
@@ -1053,6 +963,8 @@ def hmm_search(container_num):
 def main():
     #prompt to update uc chrome and regular chrome if needed, maybe do manually?
 
+    cont = ShippingContainer('1','1','1')
+    cont.container_num = '2'
 
     #Setting up all the lists for each 
     custom_cosco_list = list()
@@ -1137,28 +1049,31 @@ def main():
     hmm_rest_dates_dict = {}
 
     #---------------------------------------- All searches for each website----------------------------------------
+
+    cosco = CoscoSearch(custom_cosco_list)
     
     #Searching for all cosco containers from the custom sheet
     if len(custom_cosco_list) != 0:
-        cosco_custom_dates_dict = cosco_search(custom_cosco_list)
+        cosco_custom_dates_dict = cosco.search(custom_cosco_list)
         if len(cosco_custom_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Cosco Search Again (Custom Sheet)\n')
-                cosco_custom_dates_dict = cosco_search(custom_cosco_list)
+                cosco_custom_dates_dict = cosco.search(custom_cosco_list)
                 if len(cosco_custom_dates_dict) != 0:
                     break
         if len(cosco_custom_dates_dict) == 0:
             print('\n[Driver Alert] Cosco Search Fatal Error (Custom Sheet)\n')
             #highlight all cosco custom sheet items red
 
+    cosco = CoscoSearch(rest_cosco_list)
 
     #Searching for all cosco containers from the rest sheet
     if len(rest_cosco_list) != 0:
-        cosco_rest_dates_dict = cosco_search(rest_cosco_list)
+        cosco_rest_dates_dict = cosco.search(rest_cosco_list)
         if len(cosco_rest_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Costco Search Again (Rest Sheet)\n')
-                cosco_rest_dates_dict = cosco_search(rest_cosco_list)
+                cosco_rest_dates_dict = cosco.search(rest_cosco_list)
                 if len(cosco_rest_dates_dict) != 0:
                     break
         if len(cosco_rest_dates_dict) == 0:

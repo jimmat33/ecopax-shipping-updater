@@ -21,6 +21,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CMA.py" />
+    <Compile Include="HMM.py" />
+    <Compile Include="Evergreen.py" />
+    <Compile Include="Maersk.py" />
+    <Compile Include="Hapag-Lloyd.py" />
+    <Compile Include="ONE.py" />
+    <Compile Include="Cosco.py" />
+    <Compile Include="ExcelFile.py" />
+    <Compile Include="ShippingContainer.py" />
     <Compile Include="ecopax_shipping_updater.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
