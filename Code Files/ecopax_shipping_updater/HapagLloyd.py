@@ -31,7 +31,7 @@ class HapagSearch(object):
     def bypass_tos(self, driver):
         try:
             try:
-                WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+                WebDriverWait(driver, 12).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
 
                 driver.minimize_window()
             except:

@@ -240,7 +240,7 @@ def main():
     hmm_rest_dates_dict = {}
 
     #---------------------------------------- All searches for each website----------------------------------------
-    '''
+    
     cosco = CoscoSearch(custom_cosco_list)
     
     #Searching for all cosco containers from the custom sheet
@@ -436,7 +436,7 @@ def main():
             print('\n[Driver Alert] CMA CGM Search Fatal Error (Rest Sheet)\n')
             #highlight all cma rest sheet items red
    
-
+    '''
     hapag = HapagSearch(custom_hapag_list)
 
     #Searching for all Hapag-Loyd containers from the custom sheet
