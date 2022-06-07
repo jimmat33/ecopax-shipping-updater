@@ -19,6 +19,8 @@ from openpyxl import load_workbook
 from dateutil import parser
 from ShippingContainer import *
 from Cosco import *
+from ONE import *
+from HapagLloyd import *
 
 
 #Global lists of all modified cells in each sheet
@@ -216,120 +218,9 @@ def replace_values(date_dict,df, sheet_name):
 
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
-
-
-def one_search(container_num_list):
-    '''
-    This function searches the one site for the estimated arrival date of a list of crate numbers
-    '''
-    return_dict = dict()
-
-    try:
-        #Setting up driver options
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument("--incognito")
-
-        #Performing site connection
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        one_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
-        driver.implicitly_wait(0.5)
-        driver.get(one_link)
-
-        print('\n[Connection Alert] Driver Connection to ONE Site Successful\n')
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('--------------------------------- ONE Site Connection Failed ---------------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-        return {}
-
-
-    try:
-        #Finding the frame so site can be interactive
-        frame = driver.find_element(By.CSS_SELECTOR, '#__next > main > div > div.MainLayout_one-container__4HS_a > div > div.IframeCurrentEcom_wrapper__qvnCe > iframe')
-        driver.switch_to.frame(frame)
-
-        #Selecting container number from dropdown
-        select = Select(driver.find_element(By.NAME, 'searchType'))
-        select.select_by_visible_text('Container No.')
-
-        #Entering container number in textbox and clicking for search
-        textbox = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/table/tbody/tr/td/div/textarea')
-        textbox.clear()
-        textbox.send_keys(container_num_list[0])
-        driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[1]/div[1]/button/span').click()
-
-        time.sleep(0.5)
-
-    except:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('------------------------------- Failed to use ONE Site Search --------------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-
-
-    try:
-        #Pulling Date from site
-        arrival_text = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
-
-        #date formatting
-        month = arrival_text[-11:-9]
-        day = arrival_text[-8:-6]
-        year = arrival_text[-16:-12]
-
-        #adding date to storage data structure
-        return_dict[container_num_list[0]] = [month, day, year]
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('------------------------------ Failed to find/process date ONE -------------------------------')
-        print(f'--------------------------- Container Num {container_num_list[0]}----------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-
-
-    i = 1
-
-    while i < len(container_num_list):
-        try:
-            #Entering container num into the textbox and searching
-            textbox = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/table/tbody/tr/td/div/textarea')
-            textbox.clear()
-            textbox.send_keys(container_num_list[i])
-            driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[1]/div[1]/button/span').click()
-
-            time.sleep(0.5)
-
-            #pulling date from site
-            arrival_text = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
-
-            #formatting date
-            month = arrival_text[-11:-9]
-            day = arrival_text[-8:-6]
-            year = arrival_text[-16:-12]
-
-            #adding date to storage data structure
-            return_dict[container_num_list[i]] = [month, day, year]
-
-        except Exception:
-            print('\n----------------------------------------------------------------------------------------------')
-            print('------------------------------ Failed to find/process date ONE -------------------------------')
-            print(f'--------------------------- Container Num {container_num_list[i]}----------------------------')
-            print('----------------------------------------------------------------------------------------------\n')
-
-
-        i += 1
-
-    driver.close()
-
-    return return_dict 
-
-
+'''
 def hapag_search(container_num_list):
-    '''
-    This function searches the hapag-lloyd site for the estimated arrival date of a crate
-    '''
+
     return_dict = dict()
 
     try:
@@ -445,7 +336,7 @@ def hapag_search(container_num_list):
 
     return return_dict
 
-
+'''
 def maersk_search(container_num):
     '''
     This function searches the maersk site for the estimated arrival date of a crate
@@ -1051,7 +942,7 @@ def main():
     #---------------------------------------- All searches for each website----------------------------------------
 
     cosco = CoscoSearch(custom_cosco_list)
-    
+    '''
     #Searching for all cosco containers from the custom sheet
     if len(custom_cosco_list) != 0:
         cosco_custom_dates_dict = cosco.search(custom_cosco_list)
@@ -1079,57 +970,62 @@ def main():
         if len(cosco_rest_dates_dict) == 0:
             print('\n[Driver Alert] Cosco Search Fatal Error (Rest Sheet)\n')
             #highlight all cosco rest sheet items red
-    
+
+    one = ONESearch(custom_one_list)
 
     #Searching for all ONE containers from the custom sheet
     if len(custom_one_list) != 0:
-        one_custom_dates_dict = one_search(custom_one_list)
+        one_custom_dates_dict = one.search(custom_one_list)
         if len(one_custom_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying ONE Search Again (Custom Sheet)\n')
-                one_custom_dates_dict = one_search(custom_one_list)
+                one_custom_dates_dict = one.search(custom_one_list)
                 if len(one_custom_dates_dict) != 0:
                     break
         if len(one_custom_dates_dict) == 0:
             print('\n[Driver Alert] ONE Search Fatal Error (Custom Sheet)\n')
             #highlight all ONE custom sheet items red
 
+    one = ONESearch(rest_one_list)
 
     #Searching for all ONE containers from the rest sheet
     if len(rest_one_list) != 0:
-        one_rest_dates_dict = one_search(rest_one_list)
+        one_rest_dates_dict = one.search(rest_one_list)
         if len(one_rest_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying ONE Search Again (rest Sheet)\n')
-                one_rest_dates_dict = one_search(rest_one_list)
+                one_rest_dates_dict = one.search(rest_one_list)
                 if len(one_rest_dates_dict) != 0:
                     break
         if len(one_rest_dates_dict) == 0:
             print('\n[Driver Alert] ONE Search Fatal Error (rest Sheet)\n')
             #highlight all ONE rest sheet items red
 
-    
+    '''
+    hapag = HapagSearch(custom_hapag_list)
+
     #Searching for all Hapag-Loyd containers from the custom sheet
     if len(custom_hapag_list) != 0:
-        hapag_custom_dates_dict = hapag_search(custom_hapag_list)
+        hapag_custom_dates_dict = hapag.search(custom_hapag_list)
         if len(hapag_custom_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Hapag-Loyd Search Again (Custom Sheet)\n')
-                hapag_custom_dates_dict = hapag_search(custom_hapag_list)
+                hapag_custom_dates_dict = hapag.search(custom_hapag_list)
                 if len(hapag_custom_dates_dict) != 0:
                     break
         if len(hapag_custom_dates_dict) == 0:
             print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Custom Sheet)\n')
             #highlight all hapag custom sheet items red
-
+    
+    hapag = HapagSearch(rest_hapag_list)
 
     #Searching for all Hapag-Loyd containers from the rest sheet
     if len(rest_hapag_list) != 0:
-        hapag_rest_dates_dict = hapag_search(rest_hapag_list)
+        hapag_rest_dates_dict = hapag.search(rest_hapag_list)
         if len(hapag_rest_dates_dict) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Hapag-Loyd Search Again (Rest Sheet)\n')
-                hapag_rest_dates_dict = hapag_search(rest_hapag_list)
+                hapag_rest_dates_dict = hapag.search(rest_hapag_list)
                 if len(hapag_rest_dates_dict) != 0:
                     break
         if len(hapag_rest_dates_dict) == 0:

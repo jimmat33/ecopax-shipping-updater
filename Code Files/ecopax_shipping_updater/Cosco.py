@@ -1,8 +1,8 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 class CoscoSearch(object):
 
@@ -10,6 +10,7 @@ class CoscoSearch(object):
         self.container_num_list = container_num_list
         self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + container_num_list[0]
         self.return_dict = dict()
+        self.error_list = []
 
 
     def get_options(self, options_obj):
@@ -30,7 +31,7 @@ class CoscoSearch(object):
             print('\n==============================================================================================')
             print('                                  Cosco Site Connection Failed')
             print('==============================================================================================\n')
-            return {}
+            self.error_list.append('ERROR')
 
 
     def pull_date(self, driver, i):
@@ -49,7 +50,7 @@ class CoscoSearch(object):
             day = str_date[8:10]
 
             #adding date to storage data structure
-            self.return_dict[self.container_num_list[0]] = [month, day, year]
+            self.return_dict[self.container_num_list[i]] = [month, day, year]
 
         except Exception:
             print('\n==============================================================================================')
@@ -66,13 +67,13 @@ class CoscoSearch(object):
             driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[2]/button').click()
         except Exception:
             print('\n==============================================================================================')
-            print('                                  Failed to modify search Textbox')
+            print('                                  Failed to modify Cosco search Textbox')
             print('==============================================================================================\n')
 
 
     def search(self, container_num_list):
         '''
-        This function searches the cosco site for the estimated arrival date of a list of crate numbers
+        This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
         options = webdriver.ChromeOptions()
         self.get_options(options)
@@ -80,6 +81,9 @@ class CoscoSearch(object):
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
         self.connect(driver)
+
+        if len(self.error_list) != 0:
+            return {}
 
         self.pull_date(driver, 0)
 
@@ -91,7 +95,7 @@ class CoscoSearch(object):
 
                 time.sleep(3)
 
-                self.pull_date()
+                self.pull_date(driver, i)
 
             except Exception:
                 pass

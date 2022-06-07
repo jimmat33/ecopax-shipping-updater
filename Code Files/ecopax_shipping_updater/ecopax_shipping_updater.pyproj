@@ -25,7 +25,7 @@
     <Compile Include="HMM.py" />
     <Compile Include="Evergreen.py" />
     <Compile Include="Maersk.py" />
-    <Compile Include="Hapag-Lloyd.py" />
+    <Compile Include="HapagLloyd.py" />
     <Compile Include="ONE.py" />
     <Compile Include="Cosco.py" />
     <Compile Include="ExcelFile.py" />
