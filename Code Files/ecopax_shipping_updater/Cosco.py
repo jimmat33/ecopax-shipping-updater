@@ -13,11 +13,11 @@ class CoscoSearch(object):
         self.error_list = []
 
 
-    def get_options(self, options_obj):
-        options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options_obj.add_argument('--headless')
-        options_obj.add_argument('--disable-gpu')
-        options_obj.add_argument("--incognito")
+    def get_options(self, options):
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--incognito')
 
 
     def connect(self, driver):

@@ -558,7 +558,7 @@ def main():
             print('\n[Driver Alert] Maersk Search Fatal Error (Rest Sheet)\n')
             #highlight all maersk rest sheet items red
 
-    '''
+    
 
     cma = CMASearch(custom_cma_list)
 
@@ -590,7 +590,7 @@ def main():
             print('\n[Driver Alert] CMA CGM Search Fatal Error (Rest Sheet)\n')
             #highlight all cma rest sheet items red
    
-    
+    '''
     #Searching for all Evergreen containers from the custom sheet
     if len(custom_evergreen_list) != 0:
         evergreen_custom_dates_dict = evergreen_search(custom_evergreen_list)
