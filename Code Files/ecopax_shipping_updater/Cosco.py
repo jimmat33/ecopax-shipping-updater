@@ -8,7 +8,7 @@ class CoscoSearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
-        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + container_num_list[0]
+        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0]
         self.return_dict = dict()
         self.error_list = []
 

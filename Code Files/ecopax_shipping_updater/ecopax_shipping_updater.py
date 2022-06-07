@@ -21,6 +21,7 @@ from ShippingContainer import *
 from Cosco import *
 from ONE import *
 from HapagLloyd import *
+from Maersk import *
 
 
 #Global lists of all modified cells in each sheet
@@ -219,128 +220,8 @@ def replace_values(date_dict,df, sheet_name):
         workbook.save(filename=r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
 
 '''
-def hapag_search(container_num_list):
-
-    return_dict = dict()
-
-    try:
-        #Setting up driver options
-        options = webdriver.ChromeOptions()
-
-        #connecting to website
-        driver = uc.Chrome(options=options)
-        hapag_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
-        driver.implicitly_wait(0.5)
-        driver.get(hapag_link)
-
-        print('\n[Connection Alert] Driver Connection to Hapag-Lloyd Site Successful\n')
-
-        time.sleep(5)
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('----------------------------- Hapag-Lloyd Site Connection Failed -----------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-        return {}
-
-    try:
-        try:
-            WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
-
-            driver.minimize_window()
-        except:
-            driver.find_element(By.ID, "accept-recommended-btn-handler").click()
-
-            driver.minimize_window()
-
-        time.sleep(0.5)
-    
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('------------------------------- Hapag-Lloyd TOS Bypass Failed --------------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-        return {}
-
-
-    try:
-        textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
-        textbox.clear()
-        textbox.send_keys(container_num_list[0])
-
-        driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
-    
-        time.sleep(0.5)
-
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('-------------------------- Failed to use Hapag-Lloyd Site Search -----------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-
-
-    try:
-        table_text = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
-        str_text = table_text.get_attribute('textContent')
-        index = str_text.find("Vessel arrival")
-
-        target_text = str_text[269:]
-        date_text = target_text[(target_text.find("20")):]
-
-        year = date_text[0:4]
-        month = date_text[5:7]
-        day = date_text[8:10]
-
-        return_dict[container_num_list[0]] = [month, day, year]
-    
-    except Exception:
-        print('\n----------------------------------------------------------------------------------------------')
-        print('-------------------------- Failed to find/process date Hapag-Lloyd ---------------------------')
-        print(f'--------------------------- Container Num {container_num_list[0]}----------------------------')
-        print('----------------------------------------------------------------------------------------------\n')
-
-
-    i = 1
-
-    while i < len(container_num_list):
-        try:
-            textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
-            textbox.clear()
-
-            textbox.send_keys(container_num_list[i])
-            driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
-            time.sleep(0.5)
-
-            time.sleep(0.5)
-    
-            table_text = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
-            str_text = table_text.get_attribute('textContent')
-            index = str_text.find("Vessel arrival")
-
-            target_text = str_text[269:]
-            date_text = target_text[(target_text.find("20")):]
-
-            year = date_text[0:4]
-            month = date_text[5:7]
-            day = date_text[8:10]
-
-            return_dict[container_num_list[i]] = [month, day, year]
-
-        except:
-            print('\n----------------------------------------------------------------------------------------------')
-            print('-------------------------- Failed to find/process date Hapag-Lloyd ---------------------------')
-            print(f'--------------------------- Container Num {container_num_list[i]}----------------------------')
-            print('----------------------------------------------------------------------------------------------\n')
-
-        i += 1
-
-    driver.close()
-
-    return return_dict
-
-'''
 def maersk_search(container_num):
-    '''
-    This function searches the maersk site for the estimated arrival date of a crate
-    '''
+
     try:
         #setting up driver options
         options = webdriver.ChromeOptions()
@@ -401,7 +282,7 @@ def maersk_search(container_num):
 
     return  {}
    
-
+'''
 def cma_search(container_num_list):
     '''
     This function searches the CMA CGM site for the estimated arrival date of a crate
@@ -940,9 +821,9 @@ def main():
     hmm_rest_dates_dict = {}
 
     #---------------------------------------- All searches for each website----------------------------------------
-
-    cosco = CoscoSearch(custom_cosco_list)
     '''
+    cosco = CoscoSearch(custom_cosco_list)
+    
     #Searching for all cosco containers from the custom sheet
     if len(custom_cosco_list) != 0:
         cosco_custom_dates_dict = cosco.search(custom_cosco_list)
@@ -1001,7 +882,7 @@ def main():
             print('\n[Driver Alert] ONE Search Fatal Error (rest Sheet)\n')
             #highlight all ONE rest sheet items red
 
-    '''
+    
     hapag = HapagSearch(custom_hapag_list)
 
     #Searching for all Hapag-Loyd containers from the custom sheet
@@ -1032,16 +913,19 @@ def main():
             print('\n[Driver Alert] Hapag-Loyd Search Fatal Error (Rest Sheet)\n')
             #highlight all hapag rest sheet items red
     
-
+    '''
     #Searching for all Maersk containers from the Custom sheet
     if len(custom_maersk_list) != 0:
         for container_num in custom_maersk_list:
-            maersk_custom_dates_dict[container_num] = maersk_search(container_num)
+
+            maersk = MaerskSearch(container_num)
+
+            maersk_custom_dates_dict[container_num] = maersk.search(container_num)
         if len(custom_maersk_list) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Maersk Search Again (Custom Sheet)\n')
                 for container_num in custom_maersk_list:
-                    maersk_custom_dates_dict[container_num] = maersk_search(container_num)
+                    maersk_custom_dates_dict[container_num] = maersk.search(container_num)
                 if len(maersk_rest_dates_dict) != 0:
                     break
         if len(maersk_custom_dates_dict) == 0:
@@ -1052,12 +936,15 @@ def main():
     #Searching for all Maersk containers from the rest sheet
     if len(rest_maersk_list) != 0:
         for container_num in rest_maersk_list:
-            maersk_rest_dates_dict[container_num] = maersk_search(container_num)
+
+            maersk = MaerskSearch(container_num)
+
+            maersk_rest_dates_dict[container_num] = maersk.search(container_num)
         if len(rest_maersk_list) == 0:
             for i in range(2):
                 print('\n[Driver Alert] Trying Maersk Search Again (Rest Sheet)\n')
                 for container_num in rest_maersk_list:
-                    maersk_rest_dates_dict[container_num] = maersk_search(container_num)
+                    maersk_rest_dates_dict[container_num] = maersk.search(container_num)
                 if len(maersk_rest_dates_dict) != 0:
                     break
         if len(maersk_rest_dates_dict) == 0:
