@@ -4,7 +4,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from ecopax_shipping_updater import get_month_num
 
 class MaerskSearch(object):
 
@@ -14,6 +13,37 @@ class MaerskSearch(object):
         self.return_list = []
         self.error_list = []
 
+    def get_month_num(self, month):
+        '''
+        This function takes a month as a word and returns it as the respective number of the month for
+        proper date formatting
+        '''
+        if month == 'January' or month == 'JAN' or month == 'Jan':
+            return '01'
+        elif month == 'February' or month == 'FEB' or month == 'Feb':
+            return '02'
+        elif month == 'March' or month == 'MAR' or month == 'Mar':
+            return '03'
+        elif month == 'April' or month == 'APR' or month == 'Apr':
+            return '04'
+        elif month == 'May' or month == 'MAY' or month == 'May':
+            return '05'
+        elif month == 'June' or month == 'JUN' or month == 'Jun':
+            return '06'
+        elif month == 'July' or month == 'JUL' or month == 'Jul':
+            return '07'
+        elif month == 'August' or month == 'AUG' or month == 'Aug':
+            return '08'
+        elif month == 'September' or month == 'SEP' or month == 'Sep':
+            return '09'
+        elif month == 'October' or month == 'OCT' or month == 'Oct':
+            return '10'
+        elif month == 'November' or month == 'NOV' or month == 'Nov':
+            return '11'
+        elif month == 'December' or month == 'DEC' or month == 'Dec':
+            return '12'
+        else:
+            return 'ERROR'
 
     def get_options(self, options_obj):
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -56,7 +86,7 @@ class MaerskSearch(object):
             year = str(str_text[-5:-1].strip())
 
             month = str((str_text[3:-5]).strip())
-            month_num = get_month_num(month)
+            month_num = self.get_month_num(month)
 
             day = str(str_text[0:3].strip())
 
