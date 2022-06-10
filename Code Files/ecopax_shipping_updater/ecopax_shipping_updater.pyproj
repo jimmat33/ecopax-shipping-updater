@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ShippingContainerDB.py" />
     <Compile Include="CMA.py" />
     <Compile Include="GetMonthNum.py" />
     <Compile Include="HMM.py" />
@@ -32,6 +33,7 @@
     <Compile Include="ExcelFile.py" />
     <Compile Include="ShippingContainer.py" />
     <Compile Include="ecopax_shipping_updater.py" />
+    <Compile Include="ShippingUpdaterGUI.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

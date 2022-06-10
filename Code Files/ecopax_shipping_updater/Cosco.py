@@ -8,14 +8,20 @@ class CoscoSearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
-        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0]
-        self.return_dict = dict()
-        self.error_list = []
+        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0].container_num
+        self._error_list = []
+
+    @property
+    def error_list(self):
+        return self._error_list
+    @error_list.setter
+    def error_list(self, new_error_list):
+        self._error_list = new_error_list
 
 
     def get_options(self, options):
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options.add_argument('--headless')
+        #options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--incognito')
 
@@ -25,7 +31,7 @@ class CoscoSearch(object):
             driver.implicitly_wait(0.5)
             driver.get(self.cosco_search_link)
 
-            print('\n[Connection Alert] Driver Connection to Cosco Site Successful\n')
+            print(f'\n[Connection Alert] Driver Connection to Cosco Site Successful\n')
 
         except Exception:
             print('\n==============================================================================================')
@@ -50,12 +56,12 @@ class CoscoSearch(object):
             day = str_date[8:10]
 
             #adding date to storage data structure
-            self.return_dict[self.container_num_list[i]] = [month, day, year]
+            self.container_num_list[i].arrival_date = [month, day, year]
 
         except Exception:
             print('\n==============================================================================================')
             print('                              Failed to find/process date Cosco')
-            print(f'                             Container Num {self.container_num_list[i]} ')
+            print(f'                             Container Num {self.container_num_list[i].container_num} ')
             print('==============================================================================================\n')
 
 
@@ -63,7 +69,7 @@ class CoscoSearch(object):
         try:
             textbox = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[1]/div/div/div[1]/input')
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i].container_num)
             driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[2]/button').click()
         except Exception:
             print('\n==============================================================================================')
@@ -71,7 +77,7 @@ class CoscoSearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self, container_num_list):
+    def search(self):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
@@ -89,7 +95,7 @@ class CoscoSearch(object):
 
         i = 1
 
-        while i < len(container_num_list):
+        while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
 
@@ -103,8 +109,6 @@ class CoscoSearch(object):
             i += 1
 
         driver.close()
-
-        return self.return_dict
 
 
 
