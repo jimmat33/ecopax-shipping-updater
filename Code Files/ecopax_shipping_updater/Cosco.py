@@ -3,12 +3,13 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from ShippingContainerDB import db_update_container
 
 class CoscoSearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
-        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0].container_num
+        self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0][0]
         self._error_list = []
 
     @property
@@ -24,7 +25,6 @@ class CoscoSearch(object):
         #options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--incognito')
-
 
     def connect(self, driver):
         try: 
@@ -55,13 +55,15 @@ class CoscoSearch(object):
             month = str_date[5:7]
             day = str_date[8:10]
 
-            #adding date to storage data structure
-            self.container_num_list[i].arrival_date = [month, day, year]
+            formatted_date = month + '/' + day + '/' + year
+
+            #adding date to storage database
+            db_update_container(self.container_num_list[i][0], formatted_date)
 
         except Exception:
             print('\n==============================================================================================')
             print('                              Failed to find/process date Cosco')
-            print(f'                             Container Num {self.container_num_list[i].container_num} ')
+            print(f'                             Container Num {self.container_num_list[i][0]} ')
             print('==============================================================================================\n')
 
 
@@ -69,7 +71,7 @@ class CoscoSearch(object):
         try:
             textbox = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[1]/div/div/div[1]/input')
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i].container_num)
+            textbox.send_keys(self.container_num_list[i][0])
             driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/form/div/div[2]/button').click()
         except Exception:
             print('\n==============================================================================================')

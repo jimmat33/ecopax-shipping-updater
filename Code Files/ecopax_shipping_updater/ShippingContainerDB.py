@@ -4,6 +4,18 @@ from ShippingContainer import *
 import os
 from datetime import datetime
 
+def compare_dates(old_date, new_date):
+
+    dt_old_date = datetime.strptime(old_date, "%m/%d/%Y")
+    dt_new_date = datetime.strptime(new_date, "%m/%d/%Y")
+
+    if dt_old_date < dt_new_date:
+        return 1
+    elif dt_old_date == dt_new_date:
+        return 0
+
+
+
 def db_connect():
     db_file_name = os.path.abspath('shipping-container.db')
     db_conn = None
@@ -18,19 +30,38 @@ def db_connect():
     return db_conn
 
 
-def db_get_container_list(carrier_company):
+
+def db_get_containers_by_carrier(carrier_company):
     db_connection = db_connect()
+    container_list = []
 
     with db_connection:
-        cur = db_connection.cursor()
+        try:
+            cur = db_connection.cursor()
 
-        sql_statement = ''' Select ContainerNum, CarrierCompany, ArrivalDate, Filepath, SheetName, ContainerNumCellLocation, DateCellLocation WHERE CarrieCompany =?'''
+            get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, Filepath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE CarrierCompany =?'''
+
+            cur.execute(get_sql_statement, [carrier_company])
+
+            container_list = cur.fetchall()
+        except:
+            pass
+
+        db_connection.commit()
 
 
+    db_connection.close()
+
+    return container_list
 
 
 def db_add_container(cont, tab):
     db_connection = db_connect()
+
+    if isinstance(cont, ShippingContainer):
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        cont_prop = cont.get_properties() + [dt_string, 'False']
 
     with db_connection:
         if tab == 'reg':
@@ -39,18 +70,48 @@ def db_add_container(cont, tab):
              
                 add_sql_statement = ''' INSERT INTO ShippingContainerTable(ContainerNum, CarrierCompany, ArrivalDate, FilePath, SheetName, ContainerNumCellLocation, DateCellLocation, DateAdded, ArrivalDateChanged) VALUES(?,?,?,?,?,?,?,?,?) '''
 
-                now = datetime.now()
-                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-                cont_prop = cont.get_properties() + [dt_string, 'False']
-
                 cur.execute(add_sql_statement, cont_prop)
             except Exception:
 
-                update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate  =? Where ContainerNum =? '''
+                get_old_data_sql_statement = ''' SELECT FilePath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE ContainerNum =? '''
+        
+                cur.execute(get_old_data_sql_statement, [cont_prop[0]])
+                loc_list = cur.fetchall()
 
-                cont_properties = cont.get_properties()
+                old_container_num_location = loc_list[0][2]
+                old_date_location = loc_list[0][3]
+                old_file_path = loc_list[0][0]
+                old_sheet = loc_list[0][1]
 
-                cur.execute(update_sql_statement, [cont_properties[2], cont_properties[0]])
+                if old_file_path != cont_prop[3]:
+                    updated_file_path = old_file_path + '<' + cont_prop[3]
+                    updated_sheet = old_sheet + '<' + cont_prop[4]
+                    updated_num_loc = old_container_num_location + '<' + cont_prop[5]
+                    updated_date_loc = old_date_location + '<' + cont_prop[6]
+
+                elif old_sheet != cont_prop[4]:
+                    updated_file_path = old_file_path
+                    updated_sheet = old_sheet + '<' + cont_prop[4]
+                    updated_num_loc = old_container_num_location + '<' + cont_prop[5]
+                    updated_date_loc = old_date_location + '<' + cont_prop[6]
+
+                elif old_container_num_location != cont_prop[5] or old_date_location != cont_prop[6]:
+                    updated_file_path = old_file_path
+                    updated_sheet = old_sheet
+                    updated_num_loc = old_container_num_location + '<' + cont_prop[5]
+                    updated_date_loc = old_date_location + '<' + cont_prop[6]
+
+                else:
+                    updated_file_path = old_file_path
+                    updated_sheet = old_sheet
+                    updated_num_loc = old_container_num_location
+                    updated_date_loc = old_date_location
+
+                updated_props = [cont_prop[2], updated_num_loc, updated_date_loc, updated_file_path, updated_sheet, cont_prop[0]]
+
+                update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate  =?, ContainerNumCellLocation =?, DateCellLocation =?, Filepath =?, SheetName =? WHERE ContainerNum =? '''
+
+                cur.execute(update_sql_statement, updated_props)
 
         else:
             try:
@@ -66,6 +127,46 @@ def db_add_container(cont, tab):
 
 
     db_connection.close()
+
+
+def db_update_container(cont_num, cont_date):
+    db_connection = db_connect()
+
+    with db_connection:
+        try:
+
+            cur = db_connection.cursor()
+
+            get_old_data_sql_statement = ''' SELECT ArrivalDate FROM ShippingContainerTable WHERE ContainerNum =? '''
+        
+            cur.execute(get_old_data_sql_statement, [cont_num])
+            arrival_list = cur.fetchall()
+
+            if arrival_list != 'arrived' or arrival_list != 'Date Error':
+
+                date_comp = compare_dates(arrival_list[0][0], cont_date)
+
+                if date_comp == 1:
+                    update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate =?, ArrivalDateChanged =? WHERE ContainerNum =? '''
+
+                    cur.execute(update_sql_statement, ['arrived', 'True', cont_num])
+                elif date_comp == 0:
+                    pass
+                else:
+                    update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate =?, ArrivalDateChanged =? WHERE ContainerNum =? '''
+
+                    cur.execute(update_sql_statement, [cont_date, 'True', cont_num])
+
+
+        except Exception:
+            pass
+
+        db_connection.commit()
+
+
+    db_connection.close()
+
+
 
 def db_remove_container():
     pass
@@ -110,17 +211,19 @@ def db_add_excel_file(excel_prop_list):
     db_connection.close()
 
 
-    def db_get_excel_file_info(file_path, sheet_name):
-        db_connection = db_connect()
+def db_get_excel_file_info(file_path, sheet_name):
+    db_connection = db_connect()
 
-        with db_connection:
-                cur = db_connection.cursor()
+    with db_connection:
+            cur = db_connection.cursor()
 
-                get_sql_statement(''' SELECT DateCellColumn, ContainerNumCellColumn, CarrierCellColumn FROM ExcelFileTable WHERE FilePath =? AND SheetName =? ''')
+            get_sql_statement = ''' SELECT DateCellColumn, ContainerNumCellColumn, CarrierCellColumn FROM ExcelFileTable WHERE FilePath =? AND SheetName =? '''
 
-                rows = cur.execute(insert_sql_statement, [file_path, sheet_name])
+            cur.execute(get_sql_statement, [file_path, sheet_name])
 
-       db_connection.commit()
+            rows = cur.fetchall()
+
+    db_connection.commit()
 
 
     db_connection.close()

@@ -8,6 +8,10 @@ def main():
 
     xls = ExcelFile(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Panera Ecopax PET cup Inventory File.xlsx')
     xls.parse_workbook()
+
+    xls_two = ExcelFile(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+    xls_two.parse_workbook()
+
     i = 1
 
     #for every excel file, sort containers, return the list of containers and
@@ -17,15 +21,10 @@ def main():
 
 if __name__ == '__main__': 
     main()
-    '''
-    gui_framework = ShippingUpdaterGUI()
-    gui_framework.run_gui()
-       
-    on open:
-    multiprocess excel spreadsheets
+    
+    cosco_containers = db_get_containers_by_carrier('Cosco')
 
-    on search button click:
-    multiprocess search
+    cosco = CoscoSearch(cosco_containers)
+    cosco.search()
 
-
-    '''
+    i = 0
