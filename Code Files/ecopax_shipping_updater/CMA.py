@@ -1,15 +1,3 @@
-import time
-import random
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-import os
-from os import listdir
-from os.path import isfile, join
-
 
 class CMASearch(object):
 
@@ -17,79 +5,15 @@ class CMASearch(object):
         self.container_num_list = container_num_list
         self.cma_search_link = 'https://www.cma-cgm.com/ebusiness/tracking'
         self.speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
-        self.return_dict = dict()
         self.error_list = []
+        self._db_changes = 0
 
         abs_path = os.path.abspath('ecopax-shipping-updater')
         self.use_path = abs_path + '\\' + 'Audio Captcha Files'
 
-    def random_sleep(self):
-        sleep_time = random.uniform(0.25, 1.25)
-        time.sleep(sleep_time)
-
-    def get_month_num(self, month):
-        '''
-        This function takes a month as a word and returns it as the respective number of the month for
-        proper date formatting
-        '''
-        if month == 'January' or month == 'JAN' or month == 'Jan':
-            return '01'
-        elif month == 'February' or month == 'FEB' or month == 'Feb':
-            return '02'
-        elif month == 'March' or month == 'MAR' or month == 'Mar':
-            return '03'
-        elif month == 'April' or month == 'APR' or month == 'Apr':
-            return '04'
-        elif month == 'May' or month == 'MAY' or month == 'May':
-            return '05'
-        elif month == 'June' or month == 'JUN' or month == 'Jun':
-            return '06'
-        elif month == 'July' or month == 'JUL' or month == 'Jul':
-            return '07'
-        elif month == 'August' or month == 'AUG' or month == 'Aug':
-            return '08'
-        elif month == 'September' or month == 'SEP' or month == 'Sep':
-            return '09'
-        elif month == 'October' or month == 'OCT' or month == 'Oct':
-            return '10'
-        elif month == 'November' or month == 'NOV' or month == 'Nov':
-            return '11'
-        elif month == 'December' or month == 'DEC' or month == 'Dec':
-            return '12'
-        else:
-            return 'ERROR'
-
-    def get_date_from_cma(self, given_str):
-        '''
-        This function is specifically used for CMA CGM, it takes the raw data from their website and
-        returns a string that can be used to create the proper date for adding to the container's
-        dictionary entry
-        '''
-        start_index = 0
-
-        #This if block is checking for the days of the week and then using that as a basis for the starting index of the date
-        if given_str.find("Sunday") != -1:
-            start_index = given_str.find("Sunday") + len("Sunday") + 1
-        elif given_str.find("Monday") != -1:
-            start_index = given_str.find("Monday") + len("Monday") + 1
-        elif given_str.find("Tuesday") != -1:
-            start_index = given_str.find("Tuesday") + len("Tuesday") + 1 
-        elif given_str.find("Wednesday") != -1:
-            start_index = given_str.find("Wednesday") + len("Wednesday") + 1
-        elif given_str.find("Thursday") != -1:
-            start_index = given_str.find("Thursday") + len("Thursday") + 1
-        elif given_str.find("Friday") != -1:
-            start_index = given_str.find("Friday") + len("Friday") + 1
-        elif given_str.find("Saturday") != -1:
-            start_index = given_str.find("Saturday") + len("Saturday") + 1
-        elif given_str.find("Sunday") != -1:
-            start_index = given_str.find("Sunday") + len("Sunday") + 1
-        else:
-            return 'ERROR'
-
-        actual_date = given_str[start_index:(start_index + 11)]
-
-        return actual_date
+    @property
+    def db_changes(self):
+        return self._db_changes
 
 
     def get_options(self, options):
@@ -98,6 +22,8 @@ class CMASearch(object):
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_argument("--incognito")
+        options.add_argument('--disable-gpu')
+        options.add_argument("--mute-audio")
         options.add_experimental_option("prefs", prefs)
 
 
@@ -127,7 +53,7 @@ class CMASearch(object):
             except Exception:
                 pass
             
-            self.random_sleep()
+            random_sleep()
             time.sleep(3)
 
             try:
@@ -146,7 +72,7 @@ class CMASearch(object):
             driver.switch_to.window(driver.window_handles[1])
             driver.get(audio_src_link)
 
-            self.random_sleep()
+            random_sleep()
 
             driver.execute_script('''let aLink = document.createElement("a");let videoSrc = document.querySelector("video").firstChild.src;aLink.href = videoSrc;aLink.download = "";aLink.click();aLink.remove();''')
 
@@ -183,7 +109,7 @@ class CMASearch(object):
 
             driver.switch_to.window(driver.window_handles[0])
 
-            self.random_sleep()
+            random_sleep()
 
             frame = driver.find_element_by_css_selector('body > iframe')
             driver.switch_to.frame(frame)
@@ -192,11 +118,11 @@ class CMASearch(object):
             textbox = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
 
             for num in key_str:
-                self.random_sleep()
+                random_sleep()
                 textbox.send_keys(num)
                 time.sleep(0.5)
 
-            self.random_sleep()
+            random_sleep()
             time.sleep(4)
             driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]').click()
 
@@ -212,12 +138,12 @@ class CMASearch(object):
     def pull_date(self, driver, i):
         try:
             #getting and formatting date
-            self.random_sleep()
+            random_sleep()
 
             str_date = WebDriverWait(driver, 12).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div'))).get_attribute('textContent')
 
             #getting workable date
-            useable_date = self.get_date_from_cma(str_date)
+            useable_date = get_date_from_cma(str_date)
 
             #if usable no usable date
             if useable_date == 'ERROR':
@@ -226,40 +152,40 @@ class CMASearch(object):
                 self.return_dict[self.container_num_list[i]] = 'ERROR'
             else:
                 #getting month as a number
-                month = self.get_month_num(useable_date[3:6])
+                month = get_month_num(useable_date[3:6])
 
-                #if getting month causes error
-                if month == 'ERROR':
-                    self.return_dict[self.container_num_list[i]] = 'ERROR'
-                else:
-                    day = useable_date[0:2]
-                    year = useable_date[7:]
+                day = useable_date[0:2]
+                year = useable_date[7:]
 
-                    #adding date to storage structure
-                    self.return_dict[self.container_num_list[i]] = [month, day, year]
+                formatted_date = month + '/' + day + '/' + year
+
+                #adding date to storage database
+                db_update_container(self.container_num_list[i][0], formatted_date)
+                db_changes += 1
 
         except Exception:
+            db_update_container(self.container_num_list[i][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date CMA CGM')
-            print(f'                             Container Num {self.container_num_list[i]} ')
+            print(f'                             Container Num {self.container_num_list[i][0]} ')
             print('==============================================================================================\n')
 
 
     def modify_search(self, driver, i):
         try:
             #Finding textbox and entering container number without captcha, then clicking search
-            self.random_sleep()
+            random_sleep()
 
-            WebDriverWait(driver, 12).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+            WebDriverWait(driver, 15).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
 
             textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
             textbox.clear()
 
-            self.random_sleep()
+            random_sleep()
 
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i][0])
 
-            self.random_sleep()
+            random_sleep()
             time.sleep(2)
 
             driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
@@ -270,7 +196,7 @@ class CMASearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self, container_num_list):
+    def search_algorithm(self):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
@@ -292,7 +218,7 @@ class CMASearch(object):
 
         i = 1
 
-        while i < len(container_num_list):
+        while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
 
@@ -307,7 +233,24 @@ class CMASearch(object):
 
         driver.close()
 
-        return self.return_dict
+
+def cma_search():
+    cma_search_list = db_get_containers_by_carrier('CMA CGM')
+
+    cma = CMASearch(cma_search_list)
+
+    if len(cma_search_list) != 0:
+        cma.search_algorithm()
+    if cma.db_changes == 0:
+        for i in range(2):
+            print('\n[Driver Alert] Trying CMA CGM Search Again\n')
+            cma.search_algorithm()
+            if cma.db_changes != 0:
+                break
+    if cma.db_changes == 0:
+        print('\n[Driver Alert] CMA CGM Search Fatal Error\n')
+
+
 
 
 

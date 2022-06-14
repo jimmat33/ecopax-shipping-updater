@@ -1,21 +1,10 @@
-import openpyxl
 import re
-import pandas as pd
-from dateutil import parser
 import string
+from datetime import datetime
+import openpyxl
+import pandas as pd
+from ShippingContainerDB import db_add_excel_file, db_get_excel_file_info, db_add_container
 from ShippingContainer import *
-from Cosco import CoscoSearch
-from ONE import ONESearch
-from HapagLloyd import HapagSearch
-from CMA import CMASearch
-from Evergreen import EvergreenSearch
-from HMM import HMMSearch
-from Maersk import MaerskSearch
-from openpyxl.styles import PatternFill, Alignment 
-from openpyxl import load_workbook
-from dateutil import parser
-import datetime
-from ShippingContainerDB import *
 
 class ExcelFile(object):
     def __init__(self, file_path):

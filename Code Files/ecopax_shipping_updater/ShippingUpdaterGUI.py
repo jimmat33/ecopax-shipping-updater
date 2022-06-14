@@ -1,6 +1,4 @@
-import tkinter as tk
-from tkinter import *
-
+ 
 class ShippingUpdaterGUI(object):
     def __init__(self):
         self.root = Tk()

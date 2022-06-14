@@ -1,22 +1,16 @@
-import time
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import Select
 
 class ONESearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
         self.one_search_link = 'https://ecomm.one-line.com/one-ecom/manage-shipment/cargo-tracking'
-        self.return_dict = dict()
         self.error_list = []
+        self.db_changes = 0
 
 
     def get_options(self, options_obj):
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options_obj.add_argument('--headless')
+        #options_obj.add_argument('--headless')
         options_obj.add_argument('--disable-gpu')
         options_obj.add_argument("--incognito")
 
@@ -48,7 +42,7 @@ class ONESearch(object):
             #Entering container number in textbox and clicking for search
             textbox = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/table/tbody/tr/td/div/textarea')
             textbox.clear()
-            textbox.send_keys(self.container_num_list[0])
+            textbox.send_keys(self.container_num_list[0][0])
             driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[1]/div[1]/button/span').click()
 
             time.sleep(0.5)
@@ -62,6 +56,7 @@ class ONESearch(object):
 
     def pull_date(self, driver, i):
         try:
+            time.sleep(2)
             arrival_text = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[10]/td[4]').get_attribute('textContent')
 
             #date formatting
@@ -69,21 +64,30 @@ class ONESearch(object):
             day = arrival_text[-8:-6]
             year = arrival_text[-16:-12]
 
-            #adding date to storage data structure
-            self.return_dict[self.container_num_list[i]] = [month, day, year]
+            formatted_date = month + '/' + day + '/' + year
+
+            #adding date to storage database
+            db_update_container(self.container_num_list[i][0], formatted_date)
+            self.db_changes += 1
 
         except Exception:
+            db_update_container(self.container_num_list[i][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date ONE')
-            print(f'                             Container Num {self.container_num_list[i]} ')
+            print(f'                             Container Num {self.container_num_list[i][0]} ')
             print('==============================================================================================\n')
 
 
     def modify_search(self, driver, i):
         try:
+            try:
+                WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[9]/div[3]/div/button'))).click()
+            except Exception:
+                pass
+
             textbox = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/table/tbody/tr/td/div/textarea')
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i][0])
             driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[1]/div[1]/button/span').click()
         except Exception:
             print('\n==============================================================================================')
@@ -91,7 +95,7 @@ class ONESearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self, container_num_list):
+    def search_algorithm(self):
         '''
         This function searches the ONE site for the estimated arrival date of a list of crate numbers
         '''
@@ -111,7 +115,7 @@ class ONESearch(object):
 
         i = 1
 
-        while i < len(container_num_list):
+        while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
 
@@ -126,4 +130,20 @@ class ONESearch(object):
 
         driver.close()
 
-        return self.return_dict
+
+def one_search(self):
+
+    one_search_list = db_get_containers_by_carrier('ONE')
+
+    one = ONESearch(one_search_list)
+
+    if len(one_search_list) != 0:
+        one.search_algorithm(one_search_list)
+    if one.db_changes == 0:
+        for i in range(2):
+            print('\n[Driver Alert] Trying ONE Search Again\n')
+            one.search_algorithm(one_search_list)
+            if one.db_changes != 0:
+                break
+    if one.db_changes == 0:
+        print('\n[Driver Alert] ONE Search Fatal Error\n')

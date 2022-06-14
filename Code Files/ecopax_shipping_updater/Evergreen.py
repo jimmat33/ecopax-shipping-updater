@@ -3,54 +3,27 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingUpdaterUtility import get_month_num
 
 class EvergreenSearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
         self.evergreen_search_link = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do'
-        self.return_dict = dict()
         self.error_list = []
+        self._db_changes = 0
+
+    @property
+    def db_changes(self):
+        return self._db_changes
 
 
     def get_options(self, options):
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-       #options.add_argument('--headless')
+        #options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--incognito')
-
-
-    def get_month_num(self, month):
-        '''
-        This function takes a month as a word and returns it as the respective number of the month for
-        proper date formatting
-        '''
-        if month == 'January' or month == 'JAN' or month == 'Jan':
-            return '01'
-        elif month == 'February' or month == 'FEB' or month == 'Feb':
-            return '02'
-        elif month == 'March' or month == 'MAR' or month == 'Mar':
-            return '03'
-        elif month == 'April' or month == 'APR' or month == 'Apr':
-            return '04'
-        elif month == 'May' or month == 'MAY' or month == 'May':
-            return '05'
-        elif month == 'June' or month == 'JUN' or month == 'Jun':
-            return '06'
-        elif month == 'July' or month == 'JUL' or month == 'Jul':
-            return '07'
-        elif month == 'August' or month == 'AUG' or month == 'Aug':
-            return '08'
-        elif month == 'September' or month == 'SEP' or month == 'Sep':
-            return '09'
-        elif month == 'October' or month == 'OCT' or month == 'Oct':
-            return '10'
-        elif month == 'November' or month == 'NOV' or month == 'Nov':
-            return '11'
-        elif month == 'December' or month == 'DEC' or month == 'Dec':
-            return '12'
-        else:
-            return 'ERROR'
 
     def connect(self, driver):
         try: 
@@ -83,15 +56,19 @@ class EvergreenSearch(object):
             day = str_date[32:34]
             year = str_date[35:]
 
-            month_num = self.get_month_num(month)
+            month_num = get_month_num(month)
 
-            #adding entry to data structure
-            self.return_dict[self.container_num_list[i]] = [month_num, day, year]
+            formatted_date = month_num + '/' + day + '/' + year
+
+            #adding date to storage database
+            db_update_container(self.container_num_list[i][0], formatted_date)
+            self._db_changes += 1
 
         except Exception:
+            db_update_container(self.container_num_list[i][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date Evergreen')
-            print(f'                             Container Num {self.container_num_list[i]} ')
+            print(f'                             Container Num {self.container_num_list[i][0]} ')
             print('==============================================================================================\n')
 
 
@@ -100,7 +77,7 @@ class EvergreenSearch(object):
             #accessign textbox, inputting number and clicking search
             textbox = driver.find_element(By.XPATH, '/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[1]')                                        
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i][0])
             driver.find_element(By.XPATH, '/html/body/div[4]/center/table[2]/tbody/tr/td/form/span[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td[2]/input[2]').click()
 
         except Exception:
@@ -113,7 +90,7 @@ class EvergreenSearch(object):
             #accessign textbox, inputting number and clicking search
             textbox = driver.find_element(By.XPATH, '/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[1]')                                        
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i][0])
             driver.find_element(By.XPATH, '/html/body/div[5]/center/table[1]/tbody/tr/td/form/table/tbody/tr/td/table/tbody/tr/td[2]/input[2]').click()
 
         except Exception:
@@ -122,7 +99,7 @@ class EvergreenSearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self, container_num_list):
+    def search_algorithm(self):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
@@ -144,7 +121,7 @@ class EvergreenSearch(object):
 
         i = 1
 
-        while i < len(container_num_list):
+        while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
 
@@ -159,7 +136,24 @@ class EvergreenSearch(object):
 
         driver.close()
 
-        return self.return_dict
+
+def evergreen_search():
+
+    evergreen_search_list = db_get_containers_by_carrier('Evergreen')
+
+    evergreen = EvergreenSearch(evergreen_search_list)
+
+    if len(evergreen_search_list) != 0:
+        evergreen.search_algorithm()
+    if evergreen.db_changes == 0:
+        for i in range(2):
+            print('\n[Driver Alert] Trying Evergreen Search Again\n')
+            evergreen.search_algorithm()
+            if evergreen.db_changes != 0:
+                break
+    if evergreen.db_changes == 0:
+        print('\n[Driver Alert] Evergreen Search Fatal Error\n')
+
 
 
 

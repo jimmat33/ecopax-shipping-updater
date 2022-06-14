@@ -1,18 +1,15 @@
-import time
-import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 class HapagSearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
         self.hapag_search_link = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html'
-        self.return_dict = dict()
         self.error_list = []
+        self._db_changes = 0
+
+    @property
+    def db_changes(self):
+        return self._db_changes
 
     def connect(self, driver):
         try: 
@@ -61,12 +58,17 @@ class HapagSearch(object):
             month = date_text[5:7]
             day = date_text[8:10]
 
-            self.return_dict[self.container_num_list[i]] = [month, day, year]
+            formatted_date = month + '/' + day + '/' + year
+
+            #adding date to storage database
+            db_update_container(self.container_num_list[i][0], formatted_date)
+            self.db_changes += 1
 
         except Exception:
+            db_update_container(self.container_num_list[i][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date Hapag-Lloyd')
-            print(f'                             Container Num {self.container_num_list[i]} ')
+            print(f'                             Container Num {self.container_num_list[i][0]} ')
             print('==============================================================================================\n')
 
 
@@ -74,7 +76,7 @@ class HapagSearch(object):
         try:
             textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
             textbox.clear()
-            textbox.send_keys(self.container_num_list[i])
+            textbox.send_keys(self.container_num_list[i][0])
             driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
         except Exception:
             print('\n==============================================================================================')
@@ -82,7 +84,7 @@ class HapagSearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self, container_num_list):
+    def search_algorithm(self):
         '''
         This function searches the Hapag-Lloyd site for the estimated arrival date of a list of crate numbers
         '''
@@ -101,7 +103,7 @@ class HapagSearch(object):
 
         i = 1
 
-        while i < len(container_num_list):
+        while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
 
@@ -116,7 +118,24 @@ class HapagSearch(object):
 
         driver.close()
 
-        return self.return_dict
+
+def hapag_search():
+
+    hapag_search_list = db_get_containers_by_carrier('Hapag-Lloyd')
+
+    hapag = HapagSearch(hapag_search_list)
+
+    if len(hapag_search_list) != 0:
+        hapag.search_algorithm(hapag_search_list)
+    if hapag.db_changes == 0:
+        for i in range(2):
+            print('\n[Driver Alert] Trying Hapag-Lloyd Search Again\n')
+            hapag.search_algorithm(hapag_search_list)
+            if hapag.db_changes != 0:
+                break
+    if hapag.db_changes == 0:
+        print('\n[Driver Alert] Hapag-Lloyd Search Fatal Error\n')
+
 
 
 

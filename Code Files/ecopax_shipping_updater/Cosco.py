@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from ShippingContainerDB import db_update_container
+from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
 
 class CoscoSearch(object):
 
@@ -11,6 +11,11 @@ class CoscoSearch(object):
         self.container_num_list = container_num_list
         self.cosco_search_link = 'https://elines.coscoshipping.com/ebusiness/cargoTracking?trackingType=CONTAINER&number=' + self.container_num_list[0][0]
         self._error_list = []
+        self._db_changes = 0
+
+    @property
+    def db_changes(self):
+        return self._db_changes
 
     @property
     def error_list(self):
@@ -59,8 +64,10 @@ class CoscoSearch(object):
 
             #adding date to storage database
             db_update_container(self.container_num_list[i][0], formatted_date)
+            self._db_changes += 1
 
         except Exception:
+            db_update_container(self.container_num_list[i][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date Cosco')
             print(f'                             Container Num {self.container_num_list[i][0]} ')
@@ -79,7 +86,7 @@ class CoscoSearch(object):
             print('==============================================================================================\n')
 
 
-    def search(self):
+    def search_algorithm(self):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
@@ -114,4 +121,20 @@ class CoscoSearch(object):
 
 
 
+def cosco_search():
+
+    cosco_search_list = db_get_containers_by_carrier('Cosco')
+
+    cosco = CoscoSearch(cosco_search_list)
+
+    if len(cosco_search_list) != 0:
+        cosco.search_algorithm()
+    if cosco.db_changes == 0:
+        for i in range(2):
+            print('\n[Driver Alert] Trying Cosco Search Again\n')
+            cosco.search_algorithm()
+            if cosco.db_changes != 0:
+                break
+    if cosco.db_changes == 0:
+        print('\n[Driver Alert] Cosco Search Fatal Error\n')
 

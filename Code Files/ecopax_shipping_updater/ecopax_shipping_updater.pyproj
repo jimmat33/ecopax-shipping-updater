@@ -23,7 +23,7 @@
   <ItemGroup>
     <Compile Include="ShippingContainerDB.py" />
     <Compile Include="CMA.py" />
-    <Compile Include="GetMonthNum.py" />
+    <Compile Include="ShippingUpdaterUtility.py" />
     <Compile Include="HMM.py" />
     <Compile Include="Evergreen.py" />
     <Compile Include="Maersk.py" />
