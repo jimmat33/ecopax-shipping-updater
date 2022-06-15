@@ -133,7 +133,7 @@ def hapag_search():
     if len(hapag_search_list) != 0:
         hapag.search_algorithm()
     if hapag.db_changes == 0:
-        for i in range(2):
+        for i in range(5):
             print('\n[Driver Alert] Trying Hapag-Lloyd Search Again\n')
             hapag.search_algorithm()
             if hapag.db_changes != 0:

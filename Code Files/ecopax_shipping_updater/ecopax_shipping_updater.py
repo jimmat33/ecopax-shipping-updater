@@ -1,3 +1,4 @@
+import multiprocessing
 import threading
 from ShippingUpdaterUtility import *
 from CMA import cma_search
@@ -22,7 +23,6 @@ def main():
 #py2exe for executable 
 
 if __name__ == '__main__': 
-    start_time = time.time()
     main()
     '''
     cosco_search()
@@ -43,43 +43,44 @@ if __name__ == '__main__':
 
 
 
-
+    start_time = time.perf_counter()
     
-    t1 = threading.Thread(target=cosco_search)
-    t2 = threading.Thread(target=evergreen_search)
-    t3 = threading.Thread(target=hmm_search)
-    t4 = threading.Thread(target=maersk_search)
-    t5 = threading.Thread(target=one_search)
-    t6 = threading.Thread(target=hapag_search)
+    p1 = multiprocessing.Process(target=cosco_search)
+    p2 = multiprocessing.Process(target=evergreen_search)
+    p3 = multiprocessing.Process(target=hmm_search)
+    p4 = multiprocessing.Process(target=maersk_search)
+    p5 = multiprocessing.Process(target=one_search)
+    p6 = multiprocessing.Process(target=hapag_search)
 
     cma_list = get_divided_containers_by_carrier('CMA CGM')
-    cma_thread_lst = []
+    cma_process_lst = []
 
     for lst_chunk in cma_list:
-        t_cma = threading.Thread(target=cma_search, args=(lst_chunk,))
-        cma_thread_lst.append(t_cma)
+        p_cma = multiprocessing.Process(target=cma_search, args=(lst_chunk,))
+        cma_process_lst.append(p_cma)
 
-    t1.start()
-    t2.start()
-    t3.start()
-    t4.start()
-    t5.start()
-    t6.start()
+    p1.start()
+    p2.start()
+    p3.start()
+    p4.start()
+    p5.start()
+    p6.start()
 
-    for srch_thread in cma_thread_lst:
-        srch_thread.start()
+    for srch_process in cma_process_lst:
+        srch_process.start()
 
-    t1.join()
-    t2.join()
-    t3.join()
-    t4.join()
-    t5.join()
-    t6.join()
+    p1.join()
+    p2.join()
+    p3.join()
+    p4.join()
+    p5.join()
+    p6.join()
+
+    for srch_process in cma_process_lst:
+        srch_process.join()
 
 
-    for srch_thread in cma_thread_lst:
-        srch_thread.join()
 
-    print(f'\n\nDone, Time Ran: {time.time() - start_time}')
+    print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
     
 

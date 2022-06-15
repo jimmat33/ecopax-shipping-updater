@@ -135,7 +135,8 @@ class CMASearch(object):
 
             random_sleep()
             time.sleep(4)
-            driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]').click()
+
+            WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]'))).click()
 
             os.remove(send_keys_str)
 
@@ -193,7 +194,7 @@ class CMASearch(object):
             #Finding textbox and entering container number without captcha, then clicking search
             random_sleep()
 
-            WebDriverWait(driver, 15).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
+            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')))
 
             textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
             textbox.clear()
@@ -258,7 +259,7 @@ def cma_search(cma_search_list):
     if len(cma_search_list) != 0:
         cma.search_algorithm()
     if cma.db_changes == 0:
-        for i in range(2):
+        for i in range(5):
             print('\n[Driver Alert] Trying CMA CGM Search Again\n')
             cma.search_algorithm()
             if cma.db_changes != 0:
