@@ -12,7 +12,7 @@ class HMMSearch(object):
 
     def __init__(self, container_num):
         self.container_num = container_num
-        self.hmm_search_link = 'https://www.hmm21.com/cms/company/engn/index.jsp?type=2&number=' + self.container_num[0][0] + '&is_quick=Y&quick_params='
+        self.hmm_search_link = 'https://www.hmm21.com/cms/company/engn/index.jsp?type=2&number=' + self.container_num[0] + '&is_quick=Y&quick_params='
         self.return_list = []
         self.error_list = []
         self._db_changes = 0
@@ -79,7 +79,7 @@ class HMMSearch(object):
             driver.switch_to.frame(frame)
 
             #finding and processing date
-            str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[4]/form[1]/div/div[6]/table/tbody/tr[3]/td[5]/span'))).get_attribute('textContent')
+            str_date = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[4]/form[1]/div/div[6]/table/tbody/tr[3]/td[4]/span'))).get_attribute('textContent')
 
             month = str_date[3:6]
             day = str_date[0:2]
@@ -90,7 +90,7 @@ class HMMSearch(object):
             formatted_date = month_num + '/' + day + '/' + year
 
             #adding date to storage database
-            db_update_container(self.container_num[0][0], formatted_date)
+            db_update_container(self.container_num[0], formatted_date)
             
 
             driver.close()
@@ -105,7 +105,7 @@ class HMMSearch(object):
             db_update_container(self.container_num[0][0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date HMM')
-            print(f'                             Container Num {self.container_num[0][0]} ')
+            print(f'                              Container Num {self.container_num[0]} ')
             print('==============================================================================================\n')
 
 

@@ -1,3 +1,4 @@
+from pyexpat import native_encoding
 import re
 import string
 from datetime import datetime
@@ -183,7 +184,7 @@ class ExcelFile(object):
             j = 0
 
             while j < len(sheet_data.index):
-                row = sheet_data.iloc[j]
+                row = sheet_data.iloc[j].values
                 if isinstance(row[container_num_column - 1], str) and self.container_num_pattern.match(row[container_num_column - 1]):
                     
                     obj_container_num = row[container_num_column - 1]
@@ -192,10 +193,10 @@ class ExcelFile(object):
 
                     obj_carrier_company = self.parse_carrier(row[carrier_column - 1])
 
-                    if isinstance(row[date_column - 1], datetime): 
+                    if isinstance(row[date_column - 1], datetime) and str(row[date_column - 1]) != 'NaT': 
                         obj_arrival_date = row[date_column - 1].strftime('%m/%d/%Y')
                     else:
-                        obj_arrival_date = row[date_column - 1]
+                        obj_arrival_date = str(row[date_column - 1])
 
                     obj_container_num_column = string.ascii_uppercase[container_num_column]
                     obj_arrival_date_column = string.ascii_uppercase[date_column]

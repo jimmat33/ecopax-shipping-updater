@@ -1,3 +1,9 @@
+import time
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
 
 class HapagSearch(object):
 
@@ -26,15 +32,14 @@ class HapagSearch(object):
 
 
     def bypass_tos(self, driver):
+        time.sleep(7)
+
         try:
             try:
-                WebDriverWait(driver, 12).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+                WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
 
-                driver.minimize_window()
             except:
                 driver.find_element(By.ID, "accept=recommended=btn=handler").click()
-
-                driver.minimize_window()
 
             time.sleep(0.5)
     
@@ -42,7 +47,6 @@ class HapagSearch(object):
             print('\n==============================================================================================')
             print('                                Hapag-Lloyd TOS Bypass Failed')
             print('==============================================================================================\n')
-            self.error_list.append('ERROR')
 
 
     def pull_date(self, driver, i):
@@ -51,7 +55,7 @@ class HapagSearch(object):
             str_text = table_text.get_attribute('textContent')
             index = str_text.find("Vessel arrival")
 
-            target_text = str_text[269:]
+            target_text = str_text[index:]
             date_text = target_text[(target_text.find("20")):]
 
             year = date_text[0:4]
@@ -62,7 +66,7 @@ class HapagSearch(object):
 
             #adding date to storage database
             db_update_container(self.container_num_list[i][0], formatted_date)
-            self.db_changes += 1
+            self._db_changes += 1
 
         except Exception:
             db_update_container(self.container_num_list[i][0], 'Date Error')
@@ -97,6 +101,7 @@ class HapagSearch(object):
         if len(self.error_list) != 0:
             return {}
         
+        time.sleep(5)
         self.modify_search(driver, 0)
 
         self.pull_date(driver, 0)
@@ -126,11 +131,11 @@ def hapag_search():
     hapag = HapagSearch(hapag_search_list)
 
     if len(hapag_search_list) != 0:
-        hapag.search_algorithm(hapag_search_list)
+        hapag.search_algorithm()
     if hapag.db_changes == 0:
         for i in range(2):
             print('\n[Driver Alert] Trying Hapag-Lloyd Search Again\n')
-            hapag.search_algorithm(hapag_search_list)
+            hapag.search_algorithm()
             if hapag.db_changes != 0:
                 break
     if hapag.db_changes == 0:

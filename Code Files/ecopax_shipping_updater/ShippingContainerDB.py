@@ -5,6 +5,16 @@ from datetime import datetime
 
 def compare_dates(old_date, new_date):
     try:
+        dt_new_date = datetime.strptime(new_date, "%m/%d/%Y")
+
+        if old_date.lower() == 'date error' and dt_new_date <= datetime.today():
+            return 2
+        elif old_date.lower() == 'date error':
+            return 1
+    except Exception:
+        pass
+
+    try:
         dt_old_date = datetime.strptime(old_date, "%m/%d/%Y")
         dt_new_date = datetime.strptime(new_date, "%m/%d/%Y")
 
@@ -15,7 +25,7 @@ def compare_dates(old_date, new_date):
         elif dt_old_date > dt_new_date:
             return 1
         else:
-           return 0
+            return 0
     except Exception:
         return -1
 
@@ -26,7 +36,7 @@ def db_connect():
 
     try: 
         db_conn = sl.connect(db_file_name)
-    except Error as e:
+    except sl.Error as e:
         print('\n')
         print(e)
         print('\n')
@@ -43,7 +53,7 @@ def db_get_containers_by_carrier(carrier_company):
         try:
             cur = db_connection.cursor()
 
-            get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, Filepath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE CarrierCompany =? AND ArrivalDate !=? '''
+            get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, Filepath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE CarrierCompany =? AND (ArrivalDate !=? OR ArrivalDate IS NULL) '''
 
             cur.execute(get_sql_statement, [carrier_company, 'arrived'])
 
@@ -164,11 +174,11 @@ def db_update_container(cont_num, cont_date):
                 if cont_date[0:5] != 'ERROR' and arrival_list[0][0] != None:
                     date_comp = compare_dates(arrival_list[0][0], cont_date)
                     if date_comp == -1:
-                        if arrival_list[0][1] == 'Evergreen':
+                        if arrival_list[0][1] == 'Evergreen' or arrival_list[0][1] == 'Hapag-Lloyd':
                             cur.execute(update_sql_statement, ['arrived', 'True', cont_num])
                         else:
                             cur.execute(update_sql_statement, ['Date Error', 'True', cont_num])
-                    if date_comp == 1:
+                    elif date_comp == 1:
                         cur.execute(update_sql_statement, [cont_date, 'True', cont_num])
                     elif date_comp == 2:
                         cur.execute(update_sql_statement, ['arrived', 'True', cont_num])
@@ -189,7 +199,7 @@ def db_update_container(cont_num, cont_date):
 
 
         except Exception:
-            pass
+            print(Exception)
 
         db_connection.commit()
 

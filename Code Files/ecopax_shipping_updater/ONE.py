@@ -1,3 +1,12 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
 
 class ONESearch(object):
 
@@ -71,11 +80,34 @@ class ONESearch(object):
             self.db_changes += 1
 
         except Exception:
-            db_update_container(self.container_num_list[i][0], 'Date Error')
-            print('\n==============================================================================================')
-            print('                              Failed to find/process date ONE')
-            print(f'                             Container Num {self.container_num_list[i][0]} ')
-            print('==============================================================================================\n')
+            try:
+                check_text = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[5]/td[2]').get_attribute('textContent')
+
+                if check_text.lower().find('port of discharging'):
+
+                    time.sleep(2)
+                    arrival_text = driver.find_element(By.XPATH, '/html/body/div[3]/div[2]/div[1]/form/div[8]/table/tbody/tr[5]/td[4]').get_attribute('textContent')
+
+                    #date formatting
+                    month = arrival_text[-11:-9]
+                    day = arrival_text[-8:-6]
+                    year = arrival_text[-16:-12]
+
+                    formatted_date = month + '/' + day + '/' + year
+
+                    #adding date to storage database
+                    db_update_container(self.container_num_list[i][0], formatted_date)
+                    self.db_changes += 1
+                else:
+                    raise Exception
+
+            except Exception:
+
+                db_update_container(self.container_num_list[i][0], 'Date Error')
+                print('\n==============================================================================================')
+                print('                              Failed to find/process date ONE')
+                print(f'                             Container Num {self.container_num_list[i][0]} ')
+                print('==============================================================================================\n')
 
 
     def modify_search(self, driver, i):
@@ -131,19 +163,19 @@ class ONESearch(object):
         driver.close()
 
 
-def one_search(self):
+def one_search():
 
     one_search_list = db_get_containers_by_carrier('ONE')
 
     one = ONESearch(one_search_list)
 
     if len(one_search_list) != 0:
-        one.search_algorithm(one_search_list)
-    if one.db_changes == 0:
-        for i in range(2):
-            print('\n[Driver Alert] Trying ONE Search Again\n')
-            one.search_algorithm(one_search_list)
-            if one.db_changes != 0:
-                break
-    if one.db_changes == 0:
-        print('\n[Driver Alert] ONE Search Fatal Error\n')
+        one.search_algorithm()
+        if one.db_changes == 0:
+            for i in range(2):
+                print('\n[Driver Alert] Trying ONE Search Again\n')
+                one.search_algorithm()
+                if one.db_changes != 0:
+                    break
+        if one.db_changes == 0:
+            print('\n[Driver Alert] ONE Search Fatal Error\n')

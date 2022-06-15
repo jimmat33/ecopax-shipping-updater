@@ -1,3 +1,7 @@
+import time
+import random
+from ShippingContainerDB import *
+import numpy as np
 
 def random_sleep():
         sleep_time = random.uniform(0.25, 1.25)
@@ -66,6 +70,13 @@ def get_date_from_cma(given_str):
     actual_date = given_str[start_index:(start_index + 11)]
 
     return actual_date
+
+def get_divided_containers_by_carrier(carrier_company):
+    total_list = db_get_containers_by_carrier(carrier_company)
+    ret_list = np.array_split(total_list, 6)
+
+    return ret_list
+
 
 
 

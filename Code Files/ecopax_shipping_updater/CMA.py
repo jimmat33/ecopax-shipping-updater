@@ -1,3 +1,15 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from ShippingContainerDB import db_update_container
+from ShippingUpdaterUtility import get_month_num, get_date_from_cma, random_sleep
+import os
+from os import listdir
+from os.path import isfile, join
 
 class CMASearch(object):
 
@@ -43,13 +55,13 @@ class CMASearch(object):
 
     def bypass_audio_captcha(self, driver):
         try:
-            time.sleep(1)
+            time.sleep(2)
             frame = driver.find_element_by_css_selector('body > iframe')
             driver.switch_to.frame(frame)
 
             time.sleep(2)
             try:
-                WebDriverWait(driver, 8).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
+                WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
             except Exception:
                 pass
             
@@ -57,12 +69,14 @@ class CMASearch(object):
             time.sleep(3)
 
             try:
-                WebDriverWait(driver, 8).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
+                WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
             except Exception:
                 pass
 
             time.sleep(5)
             audio_src_link = WebDriverWait(driver, 10).until(EC.invisibility_of_element((By.TAG_NAME, 'audio'))).get_attribute('currentSrc')
+
+            audio_file_name = audio_src_link[36:]
 
             time.sleep(2)
             driver.execute_script("window.open('');")
@@ -86,15 +100,12 @@ class CMASearch(object):
 
             driver.get(self.speech_to_text_link)
 
-            onlyfiles = [f for f in listdir(self.use_path) if isfile(join(self.use_path, f))]
-
             time.sleep(5)
                 
             root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
             btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
 
-            file_str = onlyfiles[0]
-            send_keys_str = self.use_path + '\\' + file_str
+            send_keys_str = self.use_path + '\\' + audio_file_name
 
             btn.send_keys(send_keys_str)
 
@@ -132,6 +143,12 @@ class CMASearch(object):
             print('\n===============================================================================================')
             print('                              CMA CGM Audio Captcha Bypass Failed')
             print('===============================================================================================\n')
+
+            try:
+                os.remove(send_keys_str)
+            except:
+                pass
+
             self.error_list.append('ERROR') 
 
 
@@ -161,7 +178,7 @@ class CMASearch(object):
 
                 #adding date to storage database
                 db_update_container(self.container_num_list[i][0], formatted_date)
-                db_changes += 1
+                self._db_changes += 1
 
         except Exception:
             db_update_container(self.container_num_list[i][0], 'Date Error')
@@ -186,7 +203,7 @@ class CMASearch(object):
             textbox.send_keys(self.container_num_list[i][0])
 
             random_sleep()
-            time.sleep(2)
+            time.sleep(4)
 
             driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
 
@@ -234,8 +251,7 @@ class CMASearch(object):
         driver.close()
 
 
-def cma_search():
-    cma_search_list = db_get_containers_by_carrier('CMA CGM')
+def cma_search(cma_search_list):
 
     cma = CMASearch(cma_search_list)
 

@@ -1,9 +1,19 @@
+from selenium import webdriver
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingUpdaterUtility import get_month_num
+
 
 class MaerskSearch(object):
 
     def __init__(self, container_num):
         self.container_num = container_num
-        self.maersk_search_link ='https://www.maersk.com/tracking/' + self.container_num[0][0]
+        self.maersk_search_link ='https://www.maersk.com/tracking/' + self.container_num[0]
         self.error_list = []
         self._db_changes = 0
 
@@ -63,10 +73,10 @@ class MaerskSearch(object):
             self._db_changes += 1
 
         except Exception:
-            db_update_container(self.container_num[0][0], 'Date Error')
+            db_update_container(self.container_num[0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date Maersk')
-            print(f'                             Container Num {self.container_num[0][0]} ')
+            print(f'                             Container Num {self.container_num[0]} ')
             print('==============================================================================================\n')
 
 
@@ -93,7 +103,7 @@ class MaerskSearch(object):
 
 
 
-def maersk_search(container_list):
+def maersk_search():
      maersk_containers = db_get_containers_by_carrier('Maersk')
 
      if len(maersk_containers) != 0:
