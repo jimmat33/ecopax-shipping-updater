@@ -1,6 +1,7 @@
 import multiprocessing
 import threading
 from ShippingUpdaterUtility import *
+from ShippingUpdaterGUI import *
 from CMA import cma_search
 from Cosco import cosco_search
 from Evergreen import evergreen_search
@@ -23,8 +24,12 @@ def main():
 #py2exe for executable 
 
 if __name__ == '__main__': 
-    main()
+    gui_frame = ShippingUpdaterGUI()
+    gui_frame.run_gui()
+
     '''
+    main()
+    
     cosco_search()
     
     evergreen_search()
@@ -42,7 +47,7 @@ if __name__ == '__main__':
     '''
 
 
-
+    '''
     start_time = time.perf_counter()
     
     p1 = multiprocessing.Process(target=cosco_search)
@@ -82,5 +87,5 @@ if __name__ == '__main__':
 
 
     print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
-    
+    '''
 
