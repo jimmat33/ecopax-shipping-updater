@@ -1,4 +1,5 @@
 import time
+from selenium.common.exceptions import NoSuchElementException
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -10,6 +11,8 @@ from ShippingUpdaterUtility import get_month_num, get_date_from_cma, random_slee
 import os
 from os import listdir
 from os.path import isfile, join
+from datetime import date, timedelta
+import string
 
 class CMASearch(object):
 
@@ -139,6 +142,7 @@ class CMASearch(object):
             WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]'))).click()
 
             os.remove(send_keys_str)
+            time.sleep(5)
 
         except Exception:
             print('\n===============================================================================================')
@@ -154,32 +158,40 @@ class CMASearch(object):
 
 
     def pull_date(self, driver, i):
-        try:
-            #getting and formatting date
-            random_sleep()
+        try:     
+            try:
+                #getting and formatting date
+                random_sleep()
 
-            str_date = WebDriverWait(driver, 12).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div'))).get_attribute('textContent')
+                str_date = WebDriverWait(driver, 12).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#trackingsearchsection > div > section > div > div > div'))).get_attribute('textContent')
 
-            #getting workable date
-            useable_date = get_date_from_cma(str_date)
+                #getting workable date
+                useable_date = get_date_from_cma(str_date)
 
-            #if usable no usable date
-            if useable_date == 'ERROR':
+                if useable_date == 'ERROR':
+                    days_remaining = WebDriverWait(driver, 12).until(EC.presence_of_element_located((By.CLASS_NAME, 'remaining'))).get_attribute('innerText')
+                    days_added = int(days_remaining[11:].strip(string.ascii_letters))
+                    date_est = date.today() + timedelta(days = days_added)
 
-                #adding date to storage structure
-                self.return_dict[self.container_num_list[i]] = 'ERROR'
-            else:
-                #getting month as a number
-                month = get_month_num(useable_date[3:6])
+                    formatted_date = date_est.strftime('%m/%d/%Y')
 
-                day = useable_date[0:2]
-                year = useable_date[7:]
+                    db_update_container(self.container_num_list[i][0], formatted_date)
+                    self._db_changes += 1
+                else:
+                    #getting month as a number
+                    month = get_month_num(useable_date[3:6])
 
-                formatted_date = month + '/' + day + '/' + year
+                    day = useable_date[0:2]
+                    year = useable_date[7:]
 
-                #adding date to storage database
-                db_update_container(self.container_num_list[i][0], formatted_date)
-                self._db_changes += 1
+                    formatted_date = month + '/' + day + '/' + year
+
+                    #adding date to storage database
+                    db_update_container(self.container_num_list[i][0], formatted_date)
+                    self._db_changes += 1
+
+            except NoSuchElementException:
+                driver.refresh()
 
         except Exception:
             db_update_container(self.container_num_list[i][0], 'Date Error')
@@ -190,7 +202,7 @@ class CMASearch(object):
 
 
     def modify_search(self, driver, i):
-        try:
+       try:     
             #Finding textbox and entering container number without captcha, then clicking search
             random_sleep()
 
@@ -206,12 +218,12 @@ class CMASearch(object):
             random_sleep()
             time.sleep(4)
 
-            driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
-
-        except Exception:
+            driver.find_element(By.ID, 'btnTracking').click()
+       except Exception:
             print('\n==============================================================================================')
             print('                                  Failed to modify CMA CGM search Textbox')
             print('==============================================================================================\n')
+            self.error_list.append('ERROR')
 
 
     def search_algorithm(self):
@@ -222,15 +234,15 @@ class CMASearch(object):
         self.get_options(options)
 
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver.set_page_load_timeout(25)
 
         self.connect(driver)
 
         self.bypass_audio_captcha(driver)
 
+        self.modify_search(driver, 0)
         if len(self.error_list) != 0:
             return {}
-
-        self.modify_search(driver, 0)
 
         self.pull_date(driver, 0)
 
@@ -261,6 +273,7 @@ def cma_search(cma_search_list):
     if cma.db_changes == 0:
         for i in range(5):
             print('\n[Driver Alert] Trying CMA CGM Search Again\n')
+            time.sleep(7)
             cma.search_algorithm()
             if cma.db_changes != 0:
                 break

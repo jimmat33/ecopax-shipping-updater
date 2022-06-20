@@ -27,7 +27,7 @@ class CoscoSearch(object):
 
     def get_options(self, options):
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        #options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--incognito')
 
@@ -129,12 +129,12 @@ def cosco_search():
 
     if len(cosco_search_list) != 0:
         cosco.search_algorithm()
-    if cosco.db_changes == 0:
-        for i in range(2):
-            print('\n[Driver Alert] Trying Cosco Search Again\n')
-            cosco.search_algorithm()
-            if cosco.db_changes != 0:
-                break
-    if cosco.db_changes == 0:
-        print('\n[Driver Alert] Cosco Search Fatal Error\n')
+        if cosco.db_changes == 0:
+            for i in range(2):
+                print('\n[Driver Alert] Trying Cosco Search Again\n')
+                cosco.search_algorithm()
+                if cosco.db_changes != 0:
+                    break
+        if cosco.db_changes == 0:
+            print('\n[Driver Alert] Cosco Search Fatal Error\n')
 

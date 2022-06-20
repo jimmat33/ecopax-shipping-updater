@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,6 +6,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
 from ShippingUpdaterUtility import get_month_num
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class MaerskSearch(object):
@@ -22,10 +24,13 @@ class MaerskSearch(object):
         return self._db_changes
 
     def get_options(self, options_obj):
+        '''
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
         options_obj.add_argument('--disable-gpu')
         options_obj.add_argument("--incognito")
-
+        options_obj.add_argument("--headless")
+        options_obj.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
+        '''
 
     def connect(self, driver):
         try: 
@@ -85,10 +90,19 @@ class MaerskSearch(object):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
+        '''
         options = webdriver.ChromeOptions()
         self.get_options(options)
+        '''
+        profile = webdriver.FirefoxProfile(r'C:\Users\jmattison\AppData\Roaming\Mozilla\Firefox\Profiles\pu0y31p7.default-release')
+        options = FirefoxOptions()
+        options.add_argument('--headless')
+        profile.set_preference("dom.webdriver.enabled", False)
+        profile.set_preference('useAutomationExtension', False)
+        profile.update_preferences()
+        desired = DesiredCapabilities.FIREFOX
 
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = webdriver.Firefox(firefox_profile=profile, desired_capabilities=desired, options=options)
 
         self.connect(driver)
 

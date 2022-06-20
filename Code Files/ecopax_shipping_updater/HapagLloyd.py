@@ -39,7 +39,7 @@ class HapagSearch(object):
                 WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
 
             except:
-                driver.find_element(By.ID, "accept=recommended=btn=handler").click()
+                 WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.CLASS_NAME, "save-preference-btn-handler onetrust-close-btn-handler"))).click()
 
             time.sleep(0.5)
     
@@ -50,6 +50,7 @@ class HapagSearch(object):
 
 
     def pull_date(self, driver, i):
+        time.sleep(5)
         try:
             table_text = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[5]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[2]/table')
             str_text = table_text.get_attribute('textContent')
@@ -67,6 +68,8 @@ class HapagSearch(object):
             #adding date to storage database
             db_update_container(self.container_num_list[i][0], formatted_date)
             self._db_changes += 1
+        except TimeoutError:
+            driver.refresh()
 
         except Exception:
             db_update_container(self.container_num_list[i][0], 'Date Error')
@@ -81,7 +84,9 @@ class HapagSearch(object):
             textbox = driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/table/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td/div/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr/td[1]/table/tbody/tr/td[2]/input')
             textbox.clear()
             textbox.send_keys(self.container_num_list[i][0])
-            driver.find_element(By.XPATH, '/html/body/div[5]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/form/div[4]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/button').click()
+
+            driver.find_element(By.ID, 'tracing_by_container_f:hl25').click()
+
         except Exception:
             print('\n==============================================================================================')
             print('                                  Failed to modify Hapag-Lloyd search Textbox')
@@ -93,6 +98,7 @@ class HapagSearch(object):
         This function searches the Hapag-Lloyd site for the estimated arrival date of a list of crate numbers
         '''
         driver = uc.Chrome()
+        driver.set_page_load_timeout(25)
 
         self.connect(driver)
 
@@ -132,14 +138,14 @@ def hapag_search():
 
     if len(hapag_search_list) != 0:
         hapag.search_algorithm()
-    if hapag.db_changes == 0:
-        for i in range(5):
-            print('\n[Driver Alert] Trying Hapag-Lloyd Search Again\n')
-            hapag.search_algorithm()
-            if hapag.db_changes != 0:
-                break
-    if hapag.db_changes == 0:
-        print('\n[Driver Alert] Hapag-Lloyd Search Fatal Error\n')
+        if hapag.db_changes == 0:
+            for i in range(5):
+                print('\n[Driver Alert] Trying Hapag-Lloyd Search Again\n')
+                hapag.search_algorithm()
+                if hapag.db_changes != 0:
+                    break
+        if hapag.db_changes == 0:
+            print('\n[Driver Alert] Hapag-Lloyd Search Fatal Error\n')
 
 
 

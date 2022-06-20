@@ -1,0 +1,362 @@
+1655742992267	geckodriver	INFO	Listening on 127.0.0.1:55300
+1655743430052	geckodriver	INFO	Listening on 127.0.0.1:55469
+1655743519038	geckodriver	INFO	Listening on 127.0.0.1:55583
+1655743522078	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "55584" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileJd8bQt"
+1655743522755	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55584
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileJd8bQt\\search.json.mozlz4", (void 0)))
+1655743525223	Marionette	INFO	Listening on port 55590
+1655743525267	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:55584/devtools/browser/690db013-6026-4850-8e5d-f79b7a76c92e
+1655743528642	Marionette	INFO	Stopped listening on port 55590
+1655743686963	geckodriver	INFO	Listening on 127.0.0.1:55687
+1655743690036	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "55688" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilemPAE6v"
+1655743690668	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55688
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilemPAE6v\\search.json.mozlz4", (void 0)))
+1655743693409	Marionette	INFO	Listening on port 55693
+DevTools listening on ws://localhost:55688/devtools/browser/fcd95db9-a035-494a-9012-a5110c538eb5
+1655743693754	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655743734736	Marionette	INFO	Stopped listening on port 55693
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+1655744324413	geckodriver	INFO	Listening on 127.0.0.1:54519
+1655744327477	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "54520" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilevMYTQg"
+1655744328103	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54520
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilevMYTQg\\search.json.mozlz4", (void 0)))
+1655744330599	Marionette	INFO	Listening on port 54527
+DevTools listening on ws://localhost:54520/devtools/browser/a5a9571d-3022-485e-853d-769a303c0c05
+1655744330688	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655744334137	Marionette	INFO	Stopped listening on port 54527
+1655744401194	geckodriver	INFO	Listening on 127.0.0.1:54614
+1655744404811	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "54615" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileeUd8QX"
+1655744405222	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54615
+1655744407289	Marionette	INFO	Listening on port 54621
+DevTools listening on ws://localhost:54615/devtools/browser/268aab68-cef6-4eac-acc8-5b55ddccde42
+1655744407510	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655744410414	Marionette	INFO	Stopped listening on port 54621
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileeUd8QX\protections.sqlite
+[Parent 16680, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1655744456494	geckodriver	INFO	Listening on 127.0.0.1:54688
+1655744460081	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54689" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileepoExv"
+*** You are running in headless mode.
+1655744460545	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54689
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655744462313	Marionette	INFO	Listening on port 54694
+DevTools listening on ws://localhost:54689/devtools/browser/455e0bb8-ab1b-4e02-acc6-3ce7ee1c0f8c
+1655744462746	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655744465619	Marionette	INFO	Stopped listening on port 54694
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileepoExv\protections.sqlite
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_FailedAsyncOpen) Channel closing: too late to send/recv, messages will be lost
+
+1655744588510	geckodriver	INFO	Listening on 127.0.0.1:54772
+1655744592009	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54773" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileuSahju"
+*** You are running in headless mode.
+1655744592432	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54773
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655744594179	Marionette	INFO	Listening on port 54778
+DevTools listening on ws://localhost:54773/devtools/browser/3c6f8ea9-015e-4f90-ad77-45a213685558
+1655744594676	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileuSahju\thumbnails) because it does not exist
+gging-port" "54826" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilefGz7TV"
+*** You are running in headless mode.
+1655744606894	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54826
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655744608809	Marionette	INFO	Listening on port 54832
+DevTools listening on ws://localhost:54826/devtools/browser/964f916b-0d10-46d8-84b8-3e735df3c64f
+1655744609127	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1655744616883	geckodriver	INFO	Listening on 127.0.0.1:54886
+1655744620394	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54887" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileG65aw2"
+*** You are running in headless mode.
+1655744620835	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54887
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655744622958	Marionette	INFO	Listening on port 54892
+DevTools listening on ws://localhost:54887/devtools/browser/aa3e54e1-03fc-4274-abd6-f6333917964a
+1655744623125	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1655744631347	geckodriver	INFO	Listening on 127.0.0.1:54951
+1655744647763	geckodriver	INFO	Listening on 127.0.0.1:54962
+1655744651251	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "54963" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileeCJvw2"
+1655744651679	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54963
+1655744653773	Marionette	INFO	Listening on port 54968
+DevTools listening on ws://localhost:54963/devtools/browser/c9483f83-e2c6-4fad-a85f-fba680c849f6
+1655744653931	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1655744663009	geckodriver	INFO	Listening on 127.0.0.1:55014
+1655744666620	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "55015" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileEyPtYc"
+1655744667143	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55015
+1655744669963	Marionette	INFO	Listening on port 55021
+DevTools listening on ws://localhost:55015/devtools/browser/29597a0e-9d76-4a55-9409-af2bfab9a99c
+1655744670323	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+1655744675691	Marionette	WARN	TimedPromise timed out after 500 ms: stacktrace:
+TimedPromise/<@chrome://remote/content/marionette/sync.js:235:19
+TimedPromise@chrome://remote/content/marionette/sync.js:220:10
+interaction.flushEventLoop@chrome://remote/content/marionette/interaction.js:431:10
+webdriverClickElement@chrome://remote/content/marionette/interaction.js:179:31
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1655744756966	geckodriver	INFO	Listening on 127.0.0.1:55101
+1655744760438	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "55102" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilecKIRJW"
+1655744760859	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55102
+1655744762978	Marionette	INFO	Listening on port 55107
+DevTools listening on ws://localhost:55102/devtools/browser/65276e7b-4b13-4144-b3c9-cb826d024fc9
+1655744763114	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/FbeA24hyLI/hit7f6rD/ITULbHd7Rgg/MAYuB/nsmCzQ, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript error: , line 0: NotFoundError: No such JSWindowActor 'DevToolsFrame'
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilecKIRJW\thumbnails) because it does not exist
+zprofilennaJx2"
+1655744775898	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55153
+1655744778317	Marionette	INFO	Listening on port 55162
+DevTools listening on ws://localhost:55153/devtools/browser/a946c54a-4d51-417f-bd6c-bb780f72cb59
+1655744778581	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.hmm21.com/cms/company/engn/resource/js/functions.js, line 3: TypeError: $(...).formDesign is not a function
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "https://www.hmm21.com"
+1655744783912	Marionette	WARN	TimedPromise timed out after 500 ms: stacktrace:
+TimedPromise/<@chrome://remote/content/marionette/sync.js:235:19
+TimedPromise@chrome://remote/content/marionette/sync.js:220:10
+interaction.flushEventLoop@chrome://remote/content/marionette/interaction.js:431:10
+webdriverClickElement@chrome://remote/content/marionette/interaction.js:179:31
+JavaScript warning: https://www.hmm21.com/V-HvUlGT/Sxx/PJ_/F1655744791182	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "55214" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileil4z4w"
+1655744791675	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55214
+1655744794060	Marionette	INFO	Listening on port 55219
+DevTools listening on ws://localhost:55214/devtools/browser/d2eda987-1bde-4ae9-88fc-91adb733a905
+1655744794435	Marionette	INFO	Stopped listening on port 55219
+1655744794516	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[Parent 22220, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+JavaScript error: chrome://remote/content/marionette/driver.js, line 2125: NS_ERROR_ILLEGAL_VALUE: Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIObserverService.removeObserver]
+1655744993469	geckodriver	INFO	Listening on 127.0.0.1:55290
+1655744998149	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "55291" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileiB8iD4"
+*** You are running in headless mode.
+1655745000276	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55291
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655745004785	Marionette	INFO	Listening on port 55314
+DevTools listening on ws://localhost:55291/devtools/browser/22b38c2c-2294-41fc-b13d-3b3e9bfa8e2d
+1655745005165	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655745010003	Marionette	INFO	Stopped listening on port 55314
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+[Parent 33020, IPC I/O Parent] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:554
+1655750152722	geckodriver	INFO	Listening on 127.0.0.1:58853
+1655750158696	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "58854" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileQziKQp"
+*** You are running in headless mode.
+1655750161325	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:58854
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655750166716	Marionette	INFO	Listening on port 58890
+DevTools listening on ws://localhost:58854/devtools/browser/49174e8b-3c78-4ff9-a3f8-608a19bb4ac7
+1655750167292	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655750173642	Marionette	INFO	Stopped listening on port 58890
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_ScriptError) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655751447595	geckodriver	INFO	Listening on 127.0.0.1:54637
+1655751452199	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54638" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile7AQDmo"
+*** You are running in headless mode.
+1655751455769	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54638
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655751462280	Marionette	INFO	Listening on port 54666
+DevTools listening on ws://localhost:54638/devtools/browser/7b5174fa-79e2-4ea9-86bf-e83801c3f5ba
+1655751462783	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655751466385	Marionette	INFO	Stopped listening on port 54666
+[Parent 28436, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1655752717028	geckodriver	INFO	Listening on 127.0.0.1:57106
+1655752722462	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "57107" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilediKpMa"
+*** You are running in headless mode.
+1655752725341	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:57107
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655752731076	Marionette	INFO	Listening on port 57134
+DevTools listening on ws://localhost:57107/devtools/browser/c17fb25d-c36d-4718-abff-8d6b38397cd5
+1655752731599	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655752735272	Marionette	INFO	Stopped listening on port 57134
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilediKpMa\protections.sqlite
+[Parent 276, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1655753458785	geckodriver	INFO	Listening on 127.0.0.1:58899
+1655753463153	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "58900" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileu8OmWQ"
+*** You are running in headless mode.
+1655753466417	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:58900
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655753472004	Marionette	INFO	Listening on port 58924
+DevTools listening on ws://localhost:58900/devtools/browser/20677467-53ac-499a-811c-108ffca15c9e
+1655753472358	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655753475782	Marionette	INFO	Stopped listening on port 58924
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+1655754649513	geckodriver	INFO	Listening on 127.0.0.1:59797
+1655754654467	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "59798" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileCKEdWr"
+*** You are running in headless mode.
+1655754657456	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:59798
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655754662604	Marionette	INFO	Listening on port 59829
+DevTools listening on ws://localhost:59798/devtools/browser/6a343dfa-ca03-4e22-a4da-4cb0f2feccf6
+1655754663096	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655754671623	Marionette	INFO	Stopped listening on port 59829
+
+###!!! [Child][PContentChild] Error: Send(msgname=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+[Parent 15564, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167

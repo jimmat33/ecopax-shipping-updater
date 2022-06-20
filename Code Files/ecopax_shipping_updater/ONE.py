@@ -19,9 +19,10 @@ class ONESearch(object):
 
     def get_options(self, options_obj):
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
-        #options_obj.add_argument('--headless')
+        options_obj.add_argument('--headless')
         options_obj.add_argument('--disable-gpu')
         options_obj.add_argument("--incognito")
+        options_obj.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
 
 
     def connect(self, driver):

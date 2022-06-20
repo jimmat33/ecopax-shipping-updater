@@ -73,7 +73,7 @@ def get_date_from_cma(given_str):
 
 def get_divided_containers_by_carrier(carrier_company):
     total_list = db_get_containers_by_carrier(carrier_company)
-    ret_list = np.array_split(total_list, 6)
+    ret_list = np.array_split(total_list, 3)
 
     return ret_list
 

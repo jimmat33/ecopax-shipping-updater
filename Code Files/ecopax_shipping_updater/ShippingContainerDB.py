@@ -7,9 +7,9 @@ def compare_dates(old_date, new_date):
     try:
         dt_new_date = datetime.strptime(new_date, "%m/%d/%Y")
 
-        if old_date.lower() == 'date error' and dt_new_date <= datetime.today():
+        if old_date.lower() == 'date error'  or old_date.lower() == 'nat' and dt_new_date <= datetime.today():
             return 2
-        elif old_date.lower() == 'date error':
+        elif old_date.lower() == 'date error' or old_date.lower() == 'nat':
             return 1
     except Exception:
         pass
@@ -42,6 +42,44 @@ def db_connect():
         print('\n')
 
     return db_conn
+
+def db_get_all_containers():
+    db_connection = db_connect()
+    cont_list = []
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, FilePath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE ArrivalDateChanged =?'''
+        cur.execute(get_sql_statement, ['True'])
+        rows = cur.fetchall()
+
+        db_connection.commit()
+
+    db_connection.close()
+
+
+    for row in rows:
+        cont = ShippingContainer(row[0], row[1], row[2], row[3], row[4].split('<'), row[5].split('<'), row[6].split('<'))
+        cont_list.append(cont)
+
+    return cont_list
+
+def db_get_all_excel_files():
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT FilePath, SheetName FROM ExcelFileTable'''
+        cur.execute(get_sql_statement)
+        rows = cur.fetchall()
+
+        db_connection.commit()
+
+    db_connection.close()
+
+    return rows
 
 
 
@@ -108,6 +146,11 @@ def db_add_container(cont, tab):
                     updated_sheet = old_sheet + '<' + cont_prop[4]
                     updated_num_loc = old_container_num_location + '<' + cont_prop[5]
                     updated_date_loc = old_date_location + '<' + cont_prop[6]
+                elif old_sheet == cont_prop[4] and (old_container_num_location != cont_prop[5] and old_date_location != cont_prop[6]):
+                    updated_file_path = old_file_path
+                    updated_sheet = old_sheet
+                    updated_num_loc = cont_prop[5]
+                    updated_date_loc = cont_prop[6]
                 else:
                     updated_file_path = old_file_path
                     updated_sheet = old_sheet
@@ -126,7 +169,12 @@ def db_add_container(cont, tab):
 
                         cur.execute(update_sql_statement, updated_props)
 
-                    if cont_prop[4] not in old_sheet_list:
+                    elif cont_prop[4] not in old_sheet_list:
+                        update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate  =?, ContainerNumCellLocation =?, DateCellLocation =?, Filepath =?, SheetName =? WHERE ContainerNum =? '''
+
+                        cur.execute(update_sql_statement, updated_props)
+
+                    elif cont_prop[5] not in old_loc_list:
                         update_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDate  =?, ContainerNumCellLocation =?, DateCellLocation =?, Filepath =?, SheetName =? WHERE ContainerNum =? '''
 
                         cur.execute(update_sql_statement, updated_props)
@@ -138,7 +186,7 @@ def db_add_container(cont, tab):
             try:
                 cur = db_connection.cursor()
              
-                add_sql_statement = ''' INSERT INTO NoSearchContainerTable(ContainerRowNum, FilePath, SheetName) VALUES(?,?,?) '''
+                add_sql_statement = ''' INSERT INTO NoSearchContainerTable(ContainerNum, FilePath, SheetName, ContainerNumCellLocation) VALUES(?,?,?,?) '''
 
                 cur.execute(add_sql_statement, cont)
             except Exception:
@@ -206,10 +254,6 @@ def db_update_container(cont_num, cont_date):
 
     db_connection.close()
 
-
-
-def db_remove_container():
-    pass
 
 def db_add_excel_file(excel_prop_list):
     db_connection = db_connect()

@@ -134,7 +134,7 @@ class ExcelFile(object):
                     while j < len(values_list):
                         if isinstance(values_list[j], str) or isinstance(values_list[j], datetime):
                             try:
-                                if values_list[j] == 'arrived' or values_list[j] == 'Date Error' or isinstance(values_list[j], datetime) or bool(datetime.datetime.strptime(values_list[j], '%m/%d/%Y')):
+                                if values_list[j] == 'arrived' or values_list[j] == 'Date Error' or bool(datetime.strptime(values_list[j], '%m/%d/%Y')):
                                     column_type_dict[j].append('Date')
                             except Exception:
                                 pass
@@ -198,8 +198,8 @@ class ExcelFile(object):
                     else:
                         obj_arrival_date = str(row[date_column - 1])
 
-                    obj_container_num_column = string.ascii_uppercase[container_num_column]
-                    obj_arrival_date_column = string.ascii_uppercase[date_column]
+                    obj_container_num_column = string.ascii_uppercase[container_num_column - 1]
+                    obj_arrival_date_column = string.ascii_uppercase[date_column - 1]
                     obj_container_num_location = obj_container_num_column + str(j + 2)
                     obj_arrival_date_location = obj_arrival_date_column + str(j + 2)
 
@@ -207,7 +207,7 @@ class ExcelFile(object):
                         new_shipping_cont = ShippingContainer(obj_container_num, obj_carrier_company, obj_arrival_date, self.file_path, self.sheet_names[i], obj_container_num_location, obj_arrival_date_location)
                         db_add_container(new_shipping_cont, 'reg')
                     else:
-                        no_search_cont = [j + 2, self.file_path, self.sheet_names[i]]
+                        no_search_cont = [obj_container_num, self.file_path, self.sheet_names[i], obj_container_num_location]
                         db_add_container(no_search_cont, 'no-search')
 
                 j += 1
@@ -215,7 +215,7 @@ class ExcelFile(object):
             i += 1
 
 
-    def replace_values(date_dict,df, sheet_name):
+    def replace_values():
         pass
         '''
         #gets all containers for the sheet

@@ -21,7 +21,7 @@ class EvergreenSearch(object):
 
     def get_options(self, options):
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        #options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--incognito')
 
@@ -145,14 +145,14 @@ def evergreen_search():
 
     if len(evergreen_search_list) != 0:
         evergreen.search_algorithm()
-    if evergreen.db_changes == 0:
-        for i in range(2):
-            print('\n[Driver Alert] Trying Evergreen Search Again\n')
-            evergreen.search_algorithm()
-            if evergreen.db_changes != 0:
-                break
-    if evergreen.db_changes == 0:
-        print('\n[Driver Alert] Evergreen Search Fatal Error\n')
+        if evergreen.db_changes == 0:
+            for i in range(2):
+                print('\n[Driver Alert] Trying Evergreen Search Again\n')
+                evergreen.search_algorithm()
+                if evergreen.db_changes != 0:
+                    break
+        if evergreen.db_changes == 0:
+            print('\n[Driver Alert] Evergreen Search Fatal Error\n')
 
 
 
