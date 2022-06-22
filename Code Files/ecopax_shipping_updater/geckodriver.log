@@ -360,3 +360,209 @@ DevTools listening on ws://localhost:59798/devtools/browser/6a343dfa-ca03-4e22-a
 ###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
 
 [Parent 15564, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1655844518829	geckodriver	INFO	Listening on 127.0.0.1:53988
+1655844522828	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "53989" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileBeBc75"
+*** You are running in headless mode.
+1655844523858	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:53989
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844526639	Marionette	INFO	Listening on port 54006
+DevTools listening on ws://localhost:53989/devtools/browser/8ee3e389-a74a-485c-970a-d1de9bce36c5
+1655844527070	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844530983	Marionette	INFO	Stopped listening on port 54006
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+1655844537149	geckodriver	INFO	Listening on 127.0.0.1:54161
+1655844541156	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54162" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilepXe8cz"
+*** You are running in headless mode.
+1655844541788	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54162
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844544073	Marionette	INFO	Listening on port 54203
+DevTools listening on ws://localhost:54162/devtools/browser/c59b26e2-0112-45f9-a586-467772c1070a
+1655844544597	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844568160	Marionette	INFO	Stopped listening on port 54203
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655844569653	geckodriver	INFO	Listening on 127.0.0.1:54288
+1655844573104	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54289" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileJFVY9N"
+*** You are running in headless mode.
+1655844573621	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54289
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844575748	Marionette	INFO	Listening on port 54294
+DevTools listening on ws://localhost:54289/devtools/browser/19ae0bec-c4b9-440a-b1c3-53832d7626dc
+1655844576268	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844580238	Marionette	INFO	Stopped listening on port 54294
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileJFVY9N\protections.sqlite
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655844581917	geckodriver	INFO	Listening on 127.0.0.1:54366
+1655844585385	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54367" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile1p1fV5"
+*** You are running in headless mode.
+1655844585801	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54367
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844587839	Marionette	INFO	Listening on port 54373
+DevTools listening on ws://localhost:54367/devtools/browser/1a66ac88-4fc7-45e1-95be-4b575f05469c
+1655844588071	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844611198	Marionette	INFO	Stopped listening on port 54373
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655844613249	geckodriver	INFO	Listening on 127.0.0.1:54530
+1655844617193	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54531" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileRM8Caj"
+*** You are running in headless mode.
+1655844617867	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54531
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844620242	Marionette	INFO	Listening on port 54540
+DevTools listening on ws://localhost:54531/devtools/browser/e5bfc45e-8501-42ca-bc35-cee29fee9095
+1655844620899	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844623380	Marionette	INFO	Stopped listening on port 54540
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileRM8Caj\protections.sqlite
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655844624735	geckodriver	INFO	Listening on 127.0.0.1:54617
+1655844628942	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "54618" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileoYpKy0"
+*** You are running in headless mode.
+1655844630104	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:54618
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655844633442	Marionette	INFO	Listening on port 54629
+DevTools listening on ws://localhost:54618/devtools/browser/d6fbb0b1-6b24-493f-ac51-550afc7ba9aa
+1655844634168	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655844658885	Marionette	INFO	Stopped listening on port 54629
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+

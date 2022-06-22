@@ -57,6 +57,20 @@ def main():
     xls_1 = ExcelFile(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet Test.xlsx')
     xls_1.parse_workbook()
 
+    xls_2 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2017.xlsx')
+    xls_2.parse_workbook()
+
+    xls_3 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2018.xlsx')
+    xls_3.parse_workbook()
+
+    xls_4 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2020.xlsx')
+    xls_4.parse_workbook()
+
+    xls_5 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2021.xlsx')
+    xls_5.parse_workbook()
+
+    xls_6 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2022.xlsx')
+    xls_6.parse_workbook()
     
 
 #py2exe for executable 
@@ -87,7 +101,7 @@ if __name__ == '__main__':
     '''
 
 
-    '''
+    
     start_time = time.perf_counter()
     
     p1 = multiprocessing.Process(target=cosco_search)
@@ -124,7 +138,7 @@ if __name__ == '__main__':
 
 
     print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
-    '''
+    
     modify_sheets()
 
 

@@ -218,7 +218,7 @@ class CMASearch(object):
             random_sleep()
             time.sleep(4)
 
-            driver.find_element(By.ID, 'btnTracking').click()
+            driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
        except Exception:
             print('\n==============================================================================================')
             print('                                  Failed to modify CMA CGM search Textbox')
