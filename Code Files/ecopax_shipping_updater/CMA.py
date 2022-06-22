@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
-from ShippingContainerDB import db_update_container
+from ShippingContainerDB import *
 from ShippingUpdaterUtility import get_month_num, get_date_from_cma, random_sleep
 import os
 from os import listdir
@@ -216,9 +216,9 @@ class CMASearch(object):
             textbox.send_keys(self.container_num_list[i][0])
 
             random_sleep()
-            time.sleep(4)
+            time.sleep(5)
 
-            driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button').click()
+            driver.find_element(By.XPATH, '//p/button').click()
        except Exception:
             print('\n==============================================================================================')
             print('                                  Failed to modify CMA CGM search Textbox')
@@ -251,6 +251,8 @@ class CMASearch(object):
         while i < len(self.container_num_list):
             try:
                 self.modify_search(driver, i)
+                if len(self.error_list) != 0:
+                    return {}
 
                 time.sleep(1)
 
@@ -279,6 +281,10 @@ def cma_search(cma_search_list):
                 break
     if cma.db_changes == 0:
         print('\n[Driver Alert] CMA CGM Search Fatal Error\n')
+        for cont in cma_search_list:
+            cont_props = db_get_container_info(cont)
+            db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+            db_remove_container(cont)
 
 
 

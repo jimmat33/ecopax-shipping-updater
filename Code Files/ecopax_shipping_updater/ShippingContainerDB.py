@@ -7,9 +7,9 @@ def compare_dates(old_date, new_date):
     try:
         dt_new_date = datetime.strptime(new_date, "%m/%d/%Y")
 
-        if old_date.lower() == 'date error'  or old_date.lower() == 'nat' and dt_new_date <= datetime.today():
+        if old_date.lower() == 'date error'  or old_date.lower() == 'nat' or old_date.lower() == 'nan' and dt_new_date <= datetime.today():
             return 2
-        elif old_date.lower() == 'date error' or old_date.lower() == 'nat':
+        elif old_date.lower() == 'date error' or old_date.lower() == 'nat' or old_date.lower() == 'nan':
             return 1
     except Exception:
         pass
@@ -42,6 +42,41 @@ def db_connect():
         print('\n')
 
     return db_conn
+
+def db_get_no_search_cont():
+    db_connection = db_connect()
+    cont_list = []
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT ContainerNum, FilePath, SheetName, ContainerNumCellLocation FROM NoSearchContainerTable '''
+        cur.execute(get_sql_statement)
+        rows = cur.fetchall()
+
+        db_connection.commit()
+
+    db_connection.close()
+
+    for row in rows:
+        cont = ShippingContainer(row[0], 'no search', None, row[1].split('<'), row[2].split('<'), row[3].split('<'), None)
+        cont_list.append(cont)
+
+    return cont_list
+
+
+
+def db_set_all_cont_false():
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' UPDATE ShippingContainerTable SET ArrivalDateChanged =? '''
+        cur.execute(get_sql_statement, ['False'])
+        db_connection.commit()
+
+    db_connection.close()
 
 def db_get_all_containers():
     db_connection = db_connect()
@@ -81,6 +116,33 @@ def db_get_all_excel_files():
 
     return rows
 
+def db_get_container_info(cont_num):
+    db_connection = db_connect()
+    prop_list = []
+
+    with db_connection:
+        cur = db_connection.cursor()
+        get_sql_statement = ''' SELECT ContainerNum, Filepath, SheetName, ContainerNumCellLocation FROM ShippingContainerTable WHERE ContainerNum =? '''
+        cur.execute(get_sql_statement, [cont_num[0]])
+
+        prop_list = cur.fetchall()
+        db_connection.commit()
+
+    db_connection.close()
+
+    return prop_list
+
+def db_remove_container(cont_num):
+    db_connection = db_connect()
+    
+    with db_connection:
+        cur = db_connection.cursor()
+        remove_sql_statement = ''' DELETE FROM ShippingContainerTable WHERE ContainerNum =? '''
+        cur.execute(remove_sql_statement, [cont_num])
+
+        db_connection.commit()
+
+    db_connection.close()
 
 
 def db_get_containers_by_carrier(carrier_company):

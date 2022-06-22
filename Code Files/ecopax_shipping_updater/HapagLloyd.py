@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
-from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingContainerDB import *
 
 class HapagSearch(object):
 
@@ -36,7 +36,7 @@ class HapagSearch(object):
 
         try:
             try:
-                WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[11]/div[2]/div[3]/div[1]/button[2]'))).click()
+                WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="accept-recommended-btn-handler"]'))).click()
 
             except:
                  WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.CLASS_NAME, "save-preference-btn-handler onetrust-close-btn-handler"))).click()
@@ -47,6 +47,7 @@ class HapagSearch(object):
             print('\n==============================================================================================')
             print('                                Hapag-Lloyd TOS Bypass Failed')
             print('==============================================================================================\n')
+            self.error_list.append('ERROR')
 
 
     def pull_date(self, driver, i):
@@ -105,6 +106,7 @@ class HapagSearch(object):
         self.bypass_tos(driver)
 
         if len(self.error_list) != 0:
+            driver.close()
             return {}
         
         time.sleep(5)
@@ -146,6 +148,10 @@ def hapag_search():
                     break
         if hapag.db_changes == 0:
             print('\n[Driver Alert] Hapag-Lloyd Search Fatal Error\n')
+            for cont in hapag_search_list:
+                cont_props = db_get_container_info(cont)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(cont)
 
 
 

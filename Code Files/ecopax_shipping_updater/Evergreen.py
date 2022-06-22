@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingContainerDB import *
 from ShippingUpdaterUtility import get_month_num
 
 class EvergreenSearch(object):
@@ -153,6 +153,10 @@ def evergreen_search():
                     break
         if evergreen.db_changes == 0:
             print('\n[Driver Alert] Evergreen Search Fatal Error\n')
+            for cont in evergreen_search_list:
+                cont_props = db_get_container_info(cont)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(cont)
 
 
 

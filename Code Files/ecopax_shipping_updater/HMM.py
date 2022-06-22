@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
-from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingContainerDB import *
 from ShippingUpdaterUtility import get_month_num
 
 
@@ -138,17 +138,20 @@ def hmm_search():
             hmm_cont = HMMSearch(container_num)
             hmm_cont.search_algorithm()
             
-        if hmm_cont.db_changes == 0:
-            for i in range(2):
-                print('\n[Driver Alert] Trying HMM Search Again\n')
-                for container_num in hmm_containers:
-                    hmm_cont = HMMSearch(container_num)
-                    hmm_cont.search_algorithm()
+            if hmm_cont.db_changes == 0:
+                for i in range(2):
+                    print('\n[Driver Alert] Trying HMM Search Again\n')
+                    for container_num in hmm_containers:
+                        hmm_cont = HMMSearch(container_num)
+                        hmm_cont.search_algorithm()
 
-                if hmm_cont.db_changes != 0:
-                    break
-        if hmm_cont.db_changes == 0:
-            print('\n[Driver Alert] HMM Search Fatal Error\n')
+                    if hmm_cont.db_changes != 0:
+                        break
+            if hmm_cont.db_changes == 0:
+                print('\n[Driver Alert] HMM Search Fatal Error\n')
+                cont_props = db_get_container_info(container_num)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(container_num)
 
 
 

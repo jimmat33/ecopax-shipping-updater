@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingContainerDB import *
 from ShippingUpdaterUtility import get_month_num
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -125,17 +125,20 @@ def maersk_search():
             maersk_cont = MaerskSearch(container_num)
             maersk_cont.search_algorithm()
             
-        if maersk_cont.db_changes == 0:
-            for i in range(2):
-                print('\n[Driver Alert] Trying Maersk Search Again\n')
-                for container_num in maersk_containers:
-                    maersk_cont = MaerskSearch(container_num)
-                    maersk_cont.search_algorithm()
+            if maersk_cont.db_changes == 0:
+                for i in range(2):
+                    print('\n[Driver Alert] Trying Maersk Search Again\n')
+                    for container_num in maersk_containers:
+                        maersk_cont = MaerskSearch(container_num)
+                        maersk_cont.search_algorithm()
 
-                if maersk_cont.db_changes != 0:
-                    break
-        if maersk_cont.db_changes == 0:
-            print('\n[Driver Alert] Maersk Search Fatal Error\n')
+                    if maersk_cont.db_changes != 0:
+                        break
+            if maersk_cont.db_changes == 0:
+                print('\n[Driver Alert] Maersk Search Fatal Error\n')
+                cont_props = db_get_container_info(container_num)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(container_num)
 
 
 

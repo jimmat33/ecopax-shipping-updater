@@ -566,3 +566,348 @@ DevTools listening on ws://localhost:54618/devtools/browser/d6fbb0b1-6b24-493f-a
 
 ###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
 
+1655910487089	geckodriver	INFO	Listening on 127.0.0.1:59072
+1655910491489	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "59073" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilew9UAiZ"
+*** You are running in headless mode.
+1655910492419	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:59073
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655910495371	Marionette	INFO	Listening on port 59109
+DevTools listening on ws://localhost:59073/devtools/browser/a512c638-4e97-4ac9-a12e-eefc037f2fa1
+1655910495903	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilew9UAiZ\thumbnails) because it does not exist
+1655911015184	geckodriver	INFO	Listening on 127.0.0.1:56278
+1655911020241	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56279" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilesXE2wA"
+*** You are running in headless mode.
+1655911021906	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:56279
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655911026181	Marionette	INFO	Listening on port 56308
+DevTools listening on ws://localhost:56279/devtools/browser/50c10d4f-285a-49a9-bcc3-045249535d29
+1655911026295	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilesXE2wA\thumbnails) because it does not exist
+1655911052683	Marionette	INFO	Stopped listening on port 56308
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.jsm", 379))
+1655911071974	geckodriver	INFO	Listening on 127.0.0.1:56597
+1655911077233	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56598" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilejaQh8u"
+*** You are running in headless mode.
+1655911078489	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:56598
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655911084284	Marionette	INFO	Listening on port 56619
+DevTools listening on ws://localhost:56598/devtools/browser/c97ad5f7-8cc8-46bc-b7d0-6cb896962ced
+1655911084627	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilejaQh8u\thumbnails) because it does not exist
+1655911111121	Marionette	INFO	Stopped listening on port 56619
+1655911112922	geckodriver	INFO	Listening on 127.0.0.1:56853
+1655911117049	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56854" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile1Wy1y9"
+*** You are running in headless mode.
+1655911117691	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:56854
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655911120859	Marionette	INFO	Listening on port 56863
+DevTools listening on ws://localhost:56854/devtools/browser/b4727f6a-c6f6-4f23-85e3-4f07d8b5ec2f
+1655911121137	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655911145081	Marionette	INFO	Stopped listening on port 56863
+
+###!!! [Child][PContentChild] Error: Send(msgname=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+1655913435509	geckodriver	INFO	Listening on 127.0.0.1:57246
+1655913440467	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "57247" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilel6YzpQ"
+*** You are running in headless mode.
+1655913441746	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:57247
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655913446064	Marionette	INFO	Listening on port 57281
+DevTools listening on ws://localhost:57247/devtools/browser/ccfd3c59-f236-4f1f-bf2a-766b732a2033
+1655913446667	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 106: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilel6YzpQ\thumbnails) because it does not exist
+1655913472206	Marionette	INFO	Stopped listening on port 57281
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+1655913484257	geckodriver	INFO	Listening on 127.0.0.1:57637
+1655913488559	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "57638" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileiR6AGS"
+*** You are running in headless mode.
+1655913489379	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:57638
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655913492316	Marionette	INFO	Listening on port 57674
+DevTools listening on ws://localhost:57638/devtools/browser/f18f73cf-6ddb-4ea1-a711-4f386ff97f60
+1655913492901	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655918909205	geckodriver	INFO	Listening on 127.0.0.1:55263
+1655918913239	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "55264" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileyTTXEc"
+*** You are running in headless mode.
+1655918915292	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55264
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655918922351	Marionette	INFO	Listening on port 55284
+DevTools listening on ws://localhost:55264/devtools/browser/14ee94b1-9576-45cc-a9f7-511495e37248
+1655918922618	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655918930593	Marionette	INFO	Stopped listening on port 55284
+JavaScript error: resource://gre/modules/UrlClassifierListManager.jsm, line 694: TypeError: this.tablesData[table] is undefined
+!!! error running onStopped callback: TypeError: callback is not a function
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_RemoveCorsPreflightCacheEntry) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_RemoveCorsPreflightCacheEntry) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_RemoveCorsPreflightCacheEntry) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_RemoveCorsPreflightCacheEntry) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_RemoveCorsPreflightCacheEntry) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_ScriptError) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+1655918936131	geckodriver	INFO	Listening on 127.0.0.1:55511
+1655918940382	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "55512" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilepQWVyD"
+*** You are running in headless mode.
+1655918941128	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55512
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655918944626	Marionette	INFO	Listening on port 55521
+DevTools listening on ws://localhost:55512/devtools/browser/6445d6a6-42cd-49cb-a248-c2672b08140f
+1655918945214	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655918948811	Marionette	INFO	Stopped listening on port 55521
+WARNING: At least one completion condition is taking too long to complete. Conditions: [{"name":"ContentParent: id=19a045acd00","state":{"remoteTypePrefix":"web"},"filename":"/builds/worker/checkouts/gecko/dom/ipc/ContentParent.cpp","lineNumber":3638,"stack":["resource://gre/modules/nsAsyncShutdown.jsm:addBlocker:162"]}] Barrier: profile-before-change
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.jsm", 379))
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655919084511	geckodriver	INFO	Listening on 127.0.0.1:55847
+1655919089352	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "55848" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile8T6qyP"
+*** You are running in headless mode.
+1655919091896	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:55848
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655919097262	Marionette	INFO	Listening on port 55872
+1655919097386	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:55848/devtools/browser/deb377be-6c20-44a3-a4d8-fa144272dc7e
+1655919103094	Marionette	INFO	Stopped listening on port 55872
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+1655919107502	geckodriver	INFO	Listening on 127.0.0.1:56094
+1655919111766	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56095" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilehPkLCL"
+*** You are running in headless mode.
+1655919112562	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:56095
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655919115442	Marionette	INFO	Listening on port 56104
+DevTools listening on ws://localhost:56095/devtools/browser/322c74b6-d2e7-4080-ab95-12841927e6d8
+1655919116038	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655919119607	Marionette	INFO	Stopped listening on port 56104
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.jsm", 379))
+1655919869299	geckodriver	INFO	Listening on 127.0.0.1:50512
+1655919873521	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "50513" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilel9ruwF"
+*** You are running in headless mode.
+1655919874556	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:50513
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655919881396	Marionette	INFO	Listening on port 50523
+1655919881567	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:50513/devtools/browser/b04ae43e-728b-47d7-8410-7a97806f7cd5
+1655919886282	Marionette	INFO	Stopped listening on port 50523
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+1655919891545	geckodriver	INFO	Listening on 127.0.0.1:50747
+1655919895873	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "50748" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileR2b3P6"
+*** You are running in headless mode.
+1655919896586	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:50748
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655919898982	Marionette	INFO	Listening on port 50770
+DevTools listening on ws://localhost:50748/devtools/browser/35c59574-b6c0-4495-877c-e3d19954f047
+1655919899266	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655919903115	Marionette	INFO	Stopped listening on port 50770
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileR2b3P6\protections.sqlite
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+1655920326703	geckodriver	INFO	Listening on 127.0.0.1:58667
+1655920331435	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "58668" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile3UVy2r"
+*** You are running in headless mode.
+1655920332648	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:58668
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655920337231	Marionette	INFO	Listening on port 58699
+1655920337534	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:58668/devtools/browser/ef3a1ffa-a74c-43da-adc9-a2b7bf6165d7
+1655920341872	Marionette	INFO	Stopped listening on port 58699
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_ScriptError) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_GetModulesTrust) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofile3UVy2r\protections.sqlite
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+1655920345909	geckodriver	INFO	Listening on 127.0.0.1:58876
+1655920350193	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "58877" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilelENt6k"
+*** You are running in headless mode.
+1655920350952	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:58877
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1655920353722	Marionette	INFO	Listening on port 58888
+DevTools listening on ws://localhost:58877/devtools/browser/5ec81659-c472-457a-932c-ec150efc49b7
+1655920353915	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1655920356898	Marionette	INFO	Stopped listening on port 58888
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofilelENt6k\protections.sqlite
+[Parent 22596, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+[Parent 22596, IPC I/O Parent] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:554

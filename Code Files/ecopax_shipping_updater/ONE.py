@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from ShippingContainerDB import db_get_containers_by_carrier, db_update_container
+from ShippingContainerDB import *
 
 class ONESearch(object):
 
@@ -19,7 +19,6 @@ class ONESearch(object):
 
     def get_options(self, options_obj):
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options_obj.add_argument('--headless')
         options_obj.add_argument('--disable-gpu')
         options_obj.add_argument("--incognito")
         options_obj.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
@@ -180,3 +179,7 @@ def one_search():
                     break
         if one.db_changes == 0:
             print('\n[Driver Alert] ONE Search Fatal Error\n')
+            for cont in one_search_list:
+                cont_props = db_get_container_info(cont)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(cont)

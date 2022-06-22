@@ -1,11 +1,13 @@
 from pyexpat import native_encoding
 import re
+import shutil
 import string
 from datetime import datetime
 import openpyxl
 import pandas as pd
 from ShippingContainerDB import db_add_excel_file, db_get_excel_file_info, db_add_container
 from ShippingContainer import *
+import os
 
 class ExcelFile(object):
     def __init__(self, file_path):
@@ -14,6 +16,30 @@ class ExcelFile(object):
         self.container_num_pattern = re.compile("[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]+(?s).*$")
         self.accepted_container_carriers = ['Cosco', 'ONE', 'Hapag-Lloyd', 'Maersk', 'CMA CGM', 'Evergreen', 'HMM']
         self.get_wb_columns = self.validate_column_types()
+        self.save_file_copy()
+
+
+    def save_file_copy(self):
+        copy_fp = os.path.abspath('Excel File Cache')
+        fp_list = self.file_path.split('\\')
+
+        orig_filename = fp_list[-1].split('.')[0]
+        new_fn = str(orig_filename) + '-copy-' + datetime.now().strftime('%m-%d-%y-%H-%M-%S') + '.xlsx'
+        
+        fp_list[-1] = new_fn
+        
+        old_filepath_str = ''
+
+        for part in fp_list:
+            if part == fp_list[0]:
+                old_filepath_str = old_filepath_str + part
+            else:
+                old_filepath_str = old_filepath_str + '\\' + part
+
+
+        shutil.copy(self.file_path, old_filepath_str)
+
+        shutil.move(old_filepath_str, copy_fp)
 
 
 
@@ -134,7 +160,7 @@ class ExcelFile(object):
                     while j < len(values_list):
                         if isinstance(values_list[j], str) or isinstance(values_list[j], datetime):
                             try:
-                                if values_list[j] == 'arrived' or values_list[j] == 'Date Error' or bool(datetime.strptime(values_list[j], '%m/%d/%Y')):
+                                if values_list[j] == 'arrived' or values_list[j] == 'Date Error' or isinstance(values_list[j], datetime) or bool(datetime.strptime(values_list[j], '%m/%d/%Y')):
                                     column_type_dict[j].append('Date')
                             except Exception:
                                 pass
@@ -157,7 +183,7 @@ class ExcelFile(object):
 
             sorted_date_list = sorted(date_column_list)
 
-            if max(date_column_list) > container_num_column[1]:
+            if max(date_column_list) > container_num_column[1] and sorted_date_list[-2] != 0:
                 date_column = date_column_list.index(sorted_date_list[-2]) + 1
             else:
                 date_column = date_column_list.index(sorted_date_list[-1]) + 1 

@@ -1,5 +1,4 @@
 import multiprocessing
-import threading
 from ShippingUpdaterUtility import *
 from ShippingUpdaterGUI import *
 from ShippingContainerDB import *
@@ -25,16 +24,19 @@ def modify_sheets():
 
 
     cont_list = db_get_all_containers()
+    no_search_list = db_get_no_search_cont()
     excel_file_list = db_get_all_excel_files()
-    #unmodified_rows = db_get_no_search_cont()
+
 
     for xcel_sheet in excel_file_list:
         workbook = load_workbook(filename=xcel_sheet[0])
         sheet = workbook[xcel_sheet[1]]
         for cont in cont_list:
+
             if sheet.title in cont.wb_sheet:
                 cont_sheet_index = cont.wb_sheet.index(sheet.title)
                 date_cell_loc = cont.date_cell_location[cont_sheet_index]
+
                 if cont.arrival_date == 'arrived':
                     sheet[date_cell_loc] = 'arrived'
                     sheet[date_cell_loc].fill = greenFill
@@ -48,30 +50,19 @@ def modify_sheets():
                     sheet[date_cell_loc].fill = blue_fill
                     sheet[date_cell_loc].alignment = Alignment(horizontal='right')
 
+        for ns_cont in no_search_list:
+            if sheet.title in ns_cont.wb_sheet:
+                cont_num_cell_loc = ns_cont.container_num_cell_location[cont_sheet_index]
+                sheet[cont_num_cell_loc].fill = redFill
+
         workbook.save(xcel_sheet[0])
 
 
 def main():
     #prompt to update uc chrome and regular chrome if needed, maybe do manually?
 
-    xls_1 = ExcelFile(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet Test.xlsx')
-    xls_1.parse_workbook()
-
-    xls_2 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2017.xlsx')
-    xls_2.parse_workbook()
-
-    xls_3 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2018.xlsx')
-    xls_3.parse_workbook()
-
-    xls_4 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2020.xlsx')
-    xls_4.parse_workbook()
-
-    xls_5 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2021.xlsx')
-    xls_5.parse_workbook()
-
-    xls_6 = ExcelFile(r'C:\Users\jmattison\Desktop\Container Nums\POManagementReport - 2022.xlsx')
-    xls_6.parse_workbook()
-    
+    xls_1 = ExcelFile(r'C:\Users\jmattison\Desktop\ecopax-shipping-updater\Shipping Excel Sheet.xlsx')
+    #xls_1.parse_workbook()
 
 #py2exe for executable 
 
@@ -101,7 +92,7 @@ if __name__ == '__main__':
     '''
 
 
-    
+    '''
     start_time = time.perf_counter()
     
     p1 = multiprocessing.Process(target=cosco_search)
@@ -120,29 +111,29 @@ if __name__ == '__main__':
     p2.start()
     p4.start()
     p5.start()
-
+    
     for srch_process in cma_process_lst:
         srch_process.start()
-
+    
     p1.join()
     p2.join()
     p4.join()
     p5.join()
-
+   
     for srch_process in cma_process_lst:
         srch_process.join()
-
+    
     hmm_search()
     hapag_search()
     
 
 
     print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
-    
+    '''
+    '''
     modify_sheets()
+    db_set_all_cont_false()
+    '''
 
-
-
-    i = 1
    
 
