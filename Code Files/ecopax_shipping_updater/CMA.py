@@ -218,7 +218,29 @@ class CMASearch(object):
             random_sleep()
             time.sleep(5)
 
-            driver.find_element(By.XPATH, '//p/button').click()
+            try:
+                WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '//p/button'))).click()
+            except:
+                try:
+                    WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/p/button'))).click()
+                except:
+                    try:
+                        WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#btnTracking'))).click()
+                    except:
+                        try:
+                            WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.ID, 'btnTracking'))).click()
+                        except:
+                            try:
+                                WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.CLASS_NAME , 'o-button primary'))).click()
+                            except:
+                                try:
+                                    WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.NAME, 'search'))).click()
+                                except:
+                                    try:
+                                        WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.TAG_NAME, 'p'))).click()
+                                    except:
+                                        raise NoSuchElementException
+                                      
        except Exception:
             print('\n==============================================================================================')
             print('                                  Failed to modify CMA CGM search Textbox')
@@ -273,7 +295,7 @@ def cma_search(cma_search_list):
     if len(cma_search_list) != 0:
         cma.search_algorithm()
     if cma.db_changes == 0:
-        for i in range(5):
+        for i in range(3):
             print('\n[Driver Alert] Trying CMA CGM Search Again\n')
             time.sleep(7)
             cma.search_algorithm()

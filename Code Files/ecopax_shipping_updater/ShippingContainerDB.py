@@ -93,12 +93,49 @@ def db_get_all_containers():
 
     db_connection.close()
 
+    for row in rows:
+        cont = ShippingContainer(row[0], row[1], row[2], row[3], row[4].split('<'), row[5].split('<'), row[6].split('<'))
+        cont_list.append(cont)
+
+    return cont_list
+
+
+def db_get_all_unmod_containers():
+    db_connection = db_connect()
+    cont_list = []
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, FilePath, SheetName, ContainerNumCellLocation, DateCellLocation FROM ShippingContainerTable WHERE ArrivalDateChanged =?'''
+        cur.execute(get_sql_statement, ['False'])
+        rows = cur.fetchall()
+
+        db_connection.commit()
+
+    db_connection.close()
 
     for row in rows:
         cont = ShippingContainer(row[0], row[1], row[2], row[3], row[4].split('<'), row[5].split('<'), row[6].split('<'))
         cont_list.append(cont)
 
     return cont_list
+
+def db_get_all_containers_gui():
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT ContainerNum, CarrierCompany, ArrivalDate, FilePath FROM ShippingContainerTable '''
+        cur.execute(get_sql_statement)
+        rows = cur.fetchall()
+
+        db_connection.commit()
+
+    db_connection.close()
+
+    return rows
 
 def db_get_all_excel_files():
     db_connection = db_connect()
@@ -131,6 +168,7 @@ def db_get_container_info(cont_num):
     db_connection.close()
 
     return prop_list
+
 
 def db_remove_container(cont_num):
     db_connection = db_connect()
@@ -167,6 +205,7 @@ def db_get_containers_by_carrier(carrier_company):
     db_connection.close()
 
     return container_list
+
 
 
 def db_add_container(cont, tab):
@@ -375,4 +414,72 @@ def db_get_excel_file_info(file_path, sheet_name):
     db_connection.close()
 
     return rows
+
+def db_get_all_excel_filepaths():
+    db_connection = db_connect()
+    file_list = []
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_file_sql_statement = ''' SELECT FilePath FROM ExcelFileTable'''
+
+        try:
+            cur.execute(get_file_sql_statement)
+
+        except Exception:
+            pass
+        
+        
+        file_list = cur.fetchall()
+        db_connection.commit()
+
+    db_connection.close()
+
+    return file_list
+
+
+def db_remove_excel_file(filepath):
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        remove_file_sql_statement_1 = ''' DELETE FROM NoSearchContainerTable WHERE FilePath =? '''
+        remove_file_sql_statement_2 = ''' DELETE FROM ShippingContainerTable WHERE FilePath =? '''
+        remove_file_sql_statement_3 = ''' DELETE FROM ExcelFileTable WHERE FilePath =? '''
+
+        try:
+            cur.execute(remove_file_sql_statement_1, [filepath])
+            cur.execute(remove_file_sql_statement_2, [filepath])
+            cur.execute(remove_file_sql_statement_3, [filepath])
+        except Exception:
+            pass
+
+        db_connection.commit()
+
+    db_connection.close()
+
+
+
+def db_clear_database():
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        remove_file_sql_statement_1 = ''' DELETE FROM NoSearchContainerTable '''
+        remove_file_sql_statement_2 = ''' DELETE FROM ShippingContainerTable '''
+        remove_file_sql_statement_3 = ''' DELETE FROM ExcelFileTable '''
+
+        try:
+            cur.execute(remove_file_sql_statement_1)
+            cur.execute(remove_file_sql_statement_2)
+            cur.execute(remove_file_sql_statement_3)
+        except Exception:
+            pass
+
+        db_connection.commit()
+
+    db_connection.close()
 

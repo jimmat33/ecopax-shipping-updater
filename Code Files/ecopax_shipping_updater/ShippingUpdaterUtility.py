@@ -2,6 +2,8 @@ import time
 import random
 from ShippingContainerDB import *
 import numpy as np
+from openpyxl.styles import PatternFill, Alignment 
+from openpyxl import *
 
 def random_sleep():
         sleep_time = random.uniform(0.25, 1.25)
@@ -76,6 +78,66 @@ def get_divided_containers_by_carrier(carrier_company):
     ret_list = np.array_split(total_list, 3)
 
     return ret_list
+
+def modify_sheets():
+    greenFill = PatternFill(start_color='8FB547', end_color='8FB547', fill_type='solid')
+    redFill = PatternFill(start_color='FF7F7F', end_color='FF7F7F', fill_type='solid')
+    yellowFill = PatternFill(start_color='F1EB9C', end_color='F1EB9C', fill_type='solid')
+    blue_fill = PatternFill(start_color='84C4E4', end_color='84C4E4', fill_type='solid')
+    no_fill = PatternFill(fill_type=None)
+
+
+
+    cont_list = db_get_all_containers()
+    no_search_list = db_get_no_search_cont()
+    excel_file_list = db_get_all_excel_files()
+    unmod_cont_list= db_get_all_unmod_containers()
+
+
+    for xcel_sheet in excel_file_list:
+
+        workbook = load_workbook(filename=xcel_sheet[0])
+        sheet = workbook[xcel_sheet[1]]
+        if type(cont_list) == list:
+            
+            for cont in cont_list:
+
+                if sheet.title in cont.wb_sheet:
+                    cont_sheet_index = cont.wb_sheet.index(sheet.title)
+                    date_cell_loc = cont.date_cell_location[cont_sheet_index]
+
+                    if cont.arrival_date == 'arrived':
+                        sheet[date_cell_loc] = 'arrived'
+                        sheet[date_cell_loc].fill = greenFill
+                        sheet[date_cell_loc].alignment = Alignment(horizontal='right')
+                    elif cont.arrival_date == 'Date Error':
+                        sheet[date_cell_loc] = 'Date Error'
+                        sheet[date_cell_loc].fill = yellowFill
+                        sheet[date_cell_loc].alignment = Alignment(horizontal='right')
+                    else:
+                        sheet[date_cell_loc] = cont.arrival_date
+                        sheet[date_cell_loc].fill = blue_fill
+                        sheet[date_cell_loc].alignment = Alignment(horizontal='right')
+
+
+            for ns_cont in no_search_list:
+                if sheet.title in ns_cont.wb_sheet:
+                    cont_num_cell_loc = ns_cont.container_num_cell_location[cont_sheet_index]
+                    sheet[cont_num_cell_loc].fill = redFill
+
+
+            for cont in unmod_cont_list:
+
+                if sheet.title in cont.wb_sheet:
+                    cont_sheet_index = cont.wb_sheet.index(sheet.title)
+                    date_cell_loc = cont.date_cell_location[cont_sheet_index]
+
+                    if cont.arrival_date != 'arrived':
+                        sheet[date_cell_loc].fill = None
+
+
+
+        workbook.save(xcel_sheet[0])
 
 
 
