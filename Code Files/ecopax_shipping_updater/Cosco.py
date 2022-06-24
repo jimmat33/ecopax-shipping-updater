@@ -142,3 +142,5 @@ def cosco_search():
                 db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
                 db_remove_container(cont)
 
+            db_add_error('Cosco Search Failed')
+

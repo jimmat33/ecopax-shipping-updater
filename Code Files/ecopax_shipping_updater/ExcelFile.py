@@ -1,11 +1,10 @@
-from pyexpat import native_encoding
 import re
 import shutil
 import string
 from datetime import datetime
 import openpyxl
 import pandas as pd
-from ShippingContainerDB import db_add_excel_file, db_get_excel_file_info, db_add_container
+from ShippingContainerDB import *
 from ShippingContainer import *
 import os
 
@@ -91,7 +90,11 @@ class ExcelFile(object):
 
 
     def get_sheet_names(self):
-        xls = openpyxl.load_workbook(self.file_path)
+        try:
+            xls = openpyxl.load_workbook(self.file_path)
+        except Exception:
+            db_add_error(f'Excel file {self.filpath} may be corrupted')
+
         sheets_list = xls.sheetnames
 
         return sheets_list

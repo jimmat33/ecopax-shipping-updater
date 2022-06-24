@@ -294,19 +294,21 @@ def cma_search(cma_search_list):
 
     if len(cma_search_list) != 0:
         cma.search_algorithm()
-    if cma.db_changes == 0:
-        for i in range(3):
-            print('\n[Driver Alert] Trying CMA CGM Search Again\n')
-            time.sleep(7)
-            cma.search_algorithm()
-            if cma.db_changes != 0:
-                break
-    if cma.db_changes == 0:
-        print('\n[Driver Alert] CMA CGM Search Fatal Error\n')
-        for cont in cma_search_list:
-            cont_props = db_get_container_info(cont)
-            db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
-            db_remove_container(cont)
+        if cma.db_changes == 0:
+            for i in range(3):
+                print('\n[Driver Alert] Trying CMA CGM Search Again\n')
+                time.sleep(7)
+                cma.search_algorithm()
+                if cma.db_changes != 0:
+                    break
+        if cma.db_changes == 0:
+            print('\n[Driver Alert] CMA CGM Search Fatal Error\n')
+            for cont in cma_search_list:
+                cont_props = db_get_container_info(cont)
+                db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
+                db_remove_container(cont)
+
+            db_add_error('Part of CMA CGM Search Failed')
 
 
 

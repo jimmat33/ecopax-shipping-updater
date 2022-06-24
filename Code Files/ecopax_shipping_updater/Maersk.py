@@ -102,7 +102,10 @@ class MaerskSearch(object):
         profile.update_preferences()
         desired = DesiredCapabilities.FIREFOX
 
-        driver = webdriver.Firefox(firefox_profile=profile, desired_capabilities=desired, options=options)
+        try:
+            driver = webdriver.Firefox(firefox_profile=profile, desired_capabilities=desired, options=options)
+        except:
+            db_add_error('Please download Firefox to search the Maersk Site')
 
         self.connect(driver)
 
@@ -139,6 +142,8 @@ def maersk_search():
                 cont_props = db_get_container_info(container_num)
                 db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
                 db_remove_container(container_num)
+
+                db_add_error('Maersk Search Failed')
 
 
 

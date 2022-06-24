@@ -122,6 +122,7 @@ def modify_sheets():
 
             for ns_cont in no_search_list:
                 if sheet.title in ns_cont.wb_sheet:
+                    cont_sheet_index = ns_cont.wb_sheet.index(sheet.title)
                     cont_num_cell_loc = ns_cont.container_num_cell_location[cont_sheet_index]
                     sheet[cont_num_cell_loc].fill = redFill
 
@@ -133,11 +134,12 @@ def modify_sheets():
                     date_cell_loc = cont.date_cell_location[cont_sheet_index]
 
                     if cont.arrival_date != 'arrived':
-                        sheet[date_cell_loc].fill = None
+                        sheet[date_cell_loc].fill = no_fill
 
 
 
         workbook.save(xcel_sheet[0])
+
 
 
 

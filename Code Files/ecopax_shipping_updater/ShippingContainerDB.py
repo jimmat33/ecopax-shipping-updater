@@ -471,15 +471,57 @@ def db_clear_database():
         remove_file_sql_statement_1 = ''' DELETE FROM NoSearchContainerTable '''
         remove_file_sql_statement_2 = ''' DELETE FROM ShippingContainerTable '''
         remove_file_sql_statement_3 = ''' DELETE FROM ExcelFileTable '''
+        remove_file_sql_statement_4 = ''' DELETE FROM ErrorTable '''
 
         try:
             cur.execute(remove_file_sql_statement_1)
             cur.execute(remove_file_sql_statement_2)
             cur.execute(remove_file_sql_statement_3)
+            cur.execute(remove_file_sql_statement_4)
         except Exception:
             pass
 
         db_connection.commit()
 
     db_connection.close()
+
+
+def db_add_error(error_str):
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        add_sql_statement = ''' INSERT INTO ErrorTable(ErrorDesc) VALUES(?) '''
+
+        try:
+            cur.execute(add_sql_statement, [error_str])
+        except Exception:
+            pass
+
+        db_connection.commit()
+
+    db_connection.close()
+
+
+def db_get_all_errors():
+    db_connection = db_connect()
+
+    with db_connection:
+        cur = db_connection.cursor()
+
+        get_sql_statement = ''' SELECT ErrorDesc FROM ErrorTable '''
+
+        try:
+            cur.execute(get_sql_statement)
+
+            rows = cur.fetchall()
+        except Exception:
+            pass
+
+        db_connection.commit()
+
+    db_connection.close()
+
+    return rows
 

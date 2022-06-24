@@ -1,5 +1,10 @@
 from selenium import webdriver
-import undetected_chromedriver as uc
+
+try:
+    import undetected_chromedriver as uc
+except Exception:
+    db_add_error('Chrome Needs to be Updated - Cannot Search')
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -152,6 +157,8 @@ def hmm_search():
                 cont_props = db_get_container_info(container_num)
                 db_add_container([cont_props[0][0], cont_props[0][1], cont_props[0][2], cont_props[0][3]], 'no_search')
                 db_remove_container(container_num)
+
+                db_add_error('HMM Search Failed')
 
 
 

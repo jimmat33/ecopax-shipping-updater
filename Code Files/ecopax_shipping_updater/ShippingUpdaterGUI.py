@@ -33,14 +33,18 @@ class ShippingUpdaterGUI(object):
         self.excel_sheet_frame = 0
         self.cont_frame = 0
         self.error_log_frame = 0
+        self.error_index = 1
         self.excel_index = 1
         self.cont_table_index = 1
         self.xcel_file_list = []
+        self.time_ran_label = 0
+        self.error_list = []
 
 
     def run_gui(self):
         self.init_widgits()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.root.after(1, self.on_open)
         self.root.mainloop()
 
 
@@ -58,6 +62,11 @@ class ShippingUpdaterGUI(object):
 #run search button
         self.run_search_button = Button(self.root, text = 'Run Search', state = 'normal', command = self.run_search_btn_click)
         self.run_search_button.place(x = 25, y = 190, width = 220, height = 55)
+
+# time ran label
+        self.time_ran_label = Label(self.root, text= '', state = 'normal')
+        self.time_ran_label.place(x = 25, y = 252, height = 25)
+
 
 #error log table
         self.error_log_frame = Frame(self.root)
@@ -95,21 +104,31 @@ class ShippingUpdaterGUI(object):
         excel_vertical_scroll = Scrollbar(self.excel_sheet_frame)
         excel_vertical_scroll.pack(side=RIGHT, fill=Y)
 
-        self.excel_sheet_frame = ttk.Treeview(self.excel_sheet_frame,yscrollcommand=excel_vertical_scroll.set)
+        excel_horizontal_scroll = Scrollbar(self.excel_sheet_frame,orient='horizontal')
+        excel_horizontal_scroll.pack(side= BOTTOM,fill=X)
+
+        self.excel_sheet_frame = ttk.Treeview(self.excel_sheet_frame,yscrollcommand=excel_vertical_scroll.set, xscrollcommand =excel_horizontal_scroll.set)
 
         excel_vertical_scroll.config(command=self.excel_sheet_frame.yview)
+        excel_horizontal_scroll.config(command=self.excel_sheet_frame.xview)
         
             #setting up table
         self.excel_sheet_frame['columns'] = ('file_name')
         self.excel_sheet_frame.column('#0', width=0, stretch=NO)
-        self.excel_sheet_frame.column('file_name', anchor=CENTER, width = 267)
+        self.excel_sheet_frame.column('file_name', anchor=W, width = 400)
 
         self.excel_sheet_frame.heading('#0', text = '', anchor=CENTER)
-        self.excel_sheet_frame.heading('file_name', text = 'Excel File Name', anchor=CENTER)
+        self.excel_sheet_frame.heading('file_name', text = 'Excel File Name', anchor=W)
 
         self.excel_sheet_frame.pack()
 
-#report table
+        
+# cont num label
+        self.cont_num_label = Label(self.root, text= 'Total Containers: 0', state = 'normal')
+        self.cont_num_label.place(x = 330, y = 265, height = 25)
+
+
+#container table
         self.cont_frame = Frame(self.root)
         self.cont_frame.place(x = 323, y = 295, width = 462, height = 293)
 
@@ -178,6 +197,12 @@ class ShippingUpdaterGUI(object):
             self.cont_frame.insert(parent = '', index = 'end', iid = self.cont_table_index, text = '', values = (cont[0], cont[1], cont[2], cont[3],))
             self.cont_table_index += 1
 
+        tf_items = self.get_all_treeview_items(self.cont_frame)
+        cont_num_list = []
+        [cont_num_list.append(val[0]) for val in tf_items]
+
+        cont_len = len(cont_num_list)
+        self.cont_num_label['text'] = f'Total Containers: {cont_len}'
 
 
     def remove_spreadsheet_btn_click(self):
@@ -206,18 +231,36 @@ class ShippingUpdaterGUI(object):
                 if filepath in self.cont_frame.item(trvw_item)['values'][3].split('<'):
                     self.cont_frame.delete(trvw_item)
 
+            tf_items = self.get_all_treeview_items(self.cont_frame)
+            cont_num_list = []
+            [cont_num_list.append(val[0]) for val in tf_items]
+
+            cont_len = len(cont_num_list)
+            self.cont_num_label['text'] = f'Total Containers: {cont_len}'
+
 
         except:
+            listOfEntriesInTreeView = self.cont_frame.get_children()
+
             self.excel_sheet_frame.delete(selected_item_index)
 
             for trvw_item in listOfEntriesInTreeView:
                 if self.cont_frame.item(trvw_item)['values']['fp'] == filepath:
                     self.excel_sheet_frame.delete(trvw_item)
 
+            tf_items = self.get_all_treeview_items(self.cont_frame)
+            cont_num_list = []
+            [cont_num_list.append(val[0]) for val in tf_items]
+
+            cont_len = len(cont_num_list)
+            self.cont_num_label['text'] = f'Total Containers: {cont_len}'
+
 
 
     def run_search_btn_click(self):
+        self.time_ran_label['text'] = ''
         is_running = True
+        start_time = time.perf_counter()
 
         excel_file_list = db_get_all_excel_files()
         for xcel_sheet in excel_file_list:
@@ -233,7 +276,6 @@ class ShippingUpdaterGUI(object):
 
 
         if is_running:
-            start_time = time.perf_counter()
     
             p1 = multiprocessing.Process(target=cosco_search)
             p2 = multiprocessing.Process(target=evergreen_search)
@@ -269,18 +311,60 @@ class ShippingUpdaterGUI(object):
             print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
 
             modify_sheets()
-            db_set_all_cont_false()
 
-            '''
+            tf_items = self.get_all_treeview_items(self.cont_frame)
+            cont_num_list = []
+            [cont_num_list.append(val[0]) for val in tf_items]
+
+
             post_srch_cont_list = db_get_all_containers()
             for cont in post_srch_cont_list:
-                if cont.container_num
-            '''
+                if cont.container_num in cont_num_list:
+                    tv_index = (cont_num_list.index(cont.container_num)) + int(self.cont_frame.get_children()[0]) 
+                    
+                    self.cont_frame.item(str(tv_index))['values'][2] = cont.arrival_date
+            
+
+            db_set_all_cont_false()
+
+            error_lst = db_get_all_errors()
+
+            for err in error_lst:
+                self.error_log_frame.insert(parent = '', index = 'end', iid = self.error_index, text = '', values = (err[0],))
+                self.error_index += 1
+
+
+
+            time_ran = round(((time.perf_counter() - start_time)/60), 2)
+
+            self.time_ran_label['text'] = f'Time Ran: {time_ran} Minutes'
+
         else:
 
             print('Run search btn clicked')
 
 
+    def get_all_treeview_items(self, tv_frame):
+        values_lst = []
+        listOfEntriesInTreeView = tv_frame.get_children()
+
+        for trvw_item in listOfEntriesInTreeView:
+            itemvals = tv_frame.item(trvw_item)['values']
+            values_lst.append(itemvals)
+
+        return values_lst
+
+
     def on_closing(self):
-        #db_clear_database()
+        db_clear_database()
+
+        dir = os.path.abspath('ecopax-shipping-updater/Audio Captcha Files')
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
+
         self.root.destroy()
+
+    def on_open(self):
+        dir = os.path.abspath('Excel File Cache')
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
