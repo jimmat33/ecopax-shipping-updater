@@ -174,9 +174,12 @@ def db_remove_container(cont_num):
     db_connection = db_connect()
     
     with db_connection:
-        cur = db_connection.cursor()
-        remove_sql_statement = ''' DELETE FROM ShippingContainerTable WHERE ContainerNum =? '''
-        cur.execute(remove_sql_statement, [cont_num])
+        try:
+            cur = db_connection.cursor()
+            remove_sql_statement = ''' DELETE FROM ShippingContainerTable WHERE ContainerNum =? '''
+            cur.execute(remove_sql_statement, [cont_num])
+        except:
+            pass
 
         db_connection.commit()
 

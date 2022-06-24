@@ -258,6 +258,7 @@ class ShippingUpdaterGUI(object):
 
 
     def run_search_btn_click(self):
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Starting Run')
         self.time_ran_label['text'] = ''
         is_running = True
         start_time = time.perf_counter()
@@ -290,27 +291,41 @@ class ShippingUpdaterGUI(object):
                 cma_process_lst.append(p_cma)
 
             p1.start()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started Cosco')
             p2.start()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started Evergreen')
             p4.start()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started maersk')
             p5.start()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started one')
     
             for srch_process in cma_process_lst:
                 srch_process.start()
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started cma')
     
             p1.join()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished Cosco')
             p2.join()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished Evergreen')
             p4.join()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished maersk')
             p5.join()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished one')
    
             for srch_process in cma_process_lst:
                 srch_process.join()
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished cma')
     
             hmm_search()
             hapag_search()
-    
+
+
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished search')
             print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
 
-            modify_sheets()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
+            #modify_sheets()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
 
             tf_items = self.get_all_treeview_items(self.cont_frame)
             cont_num_list = []
@@ -356,7 +371,7 @@ class ShippingUpdaterGUI(object):
 
 
     def on_closing(self):
-        db_clear_database()
+        #db_clear_database()
 
         dir = os.path.abspath('ecopax-shipping-updater/Audio Captcha Files')
         for f in os.listdir(dir):

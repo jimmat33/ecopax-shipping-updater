@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="setup.py" />
     <Compile Include="ShippingContainerDB.py" />
     <Compile Include="CMA.py" />
     <Compile Include="ShippingUpdaterUtility.py" />
