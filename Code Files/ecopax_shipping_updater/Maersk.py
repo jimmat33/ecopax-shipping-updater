@@ -102,6 +102,8 @@ class MaerskSearch(object):
         profile.update_preferences()
         desired = DesiredCapabilities.FIREFOX
 
+        driver = 0
+
         try:
             driver = webdriver.Firefox(firefox_profile=profile, desired_capabilities=desired, options=options)
         except:

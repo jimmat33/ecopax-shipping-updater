@@ -258,6 +258,7 @@ class ShippingUpdaterGUI(object):
 
 
     def run_search_btn_click(self):
+        
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Starting Run')
         self.time_ran_label['text'] = ''
         is_running = True
@@ -274,10 +275,10 @@ class ShippingUpdaterGUI(object):
                 tkinter.messagebox.showwarning(title='Open Excel File Error', message=error_message)
                 is_running = False
                 break
-
+        
 
         if is_running:
-    
+            
             p1 = multiprocessing.Process(target=cosco_search)
             p2 = multiprocessing.Process(target=evergreen_search)
             p4 = multiprocessing.Process(target=maersk_search)
@@ -324,20 +325,20 @@ class ShippingUpdaterGUI(object):
             print(f'\n\nDone, Time Ran: {(time.perf_counter() - start_time)/60} minutes')
 
             print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
-            #modify_sheets()
+            modify_sheets()
             print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
 
-            tf_items = self.get_all_treeview_items(self.cont_frame)
-            cont_num_list = []
-            [cont_num_list.append(val[0]) for val in tf_items]
+            for item in self.cont_frame.get_children():
+                self.cont_frame.delete(item)
+            
+            
+            self.cont_table_index = 1
+            container_lst = db_get_all_containers_gui()
+            sorted_list = sorted(container_lst, key = operator.itemgetter(1))
 
-
-            post_srch_cont_list = db_get_all_containers()
-            for cont in post_srch_cont_list:
-                if cont.container_num in cont_num_list:
-                    tv_index = (cont_num_list.index(cont.container_num)) + int(self.cont_frame.get_children()[0]) 
-                    
-                    self.cont_frame.item(str(tv_index))['values'][2] = cont.arrival_date
+            for cont in sorted_list:
+                self.cont_frame.insert(parent = '', index = 'end', iid = self.cont_table_index, text = '', values = (cont[0], cont[1], cont[2], cont[3],))
+                self.cont_table_index += 1
             
 
             db_set_all_cont_false()
@@ -349,7 +350,7 @@ class ShippingUpdaterGUI(object):
                 self.error_index += 1
 
 
-
+           
             time_ran = round(((time.perf_counter() - start_time)/60), 2)
 
             self.time_ran_label['text'] = f'Time Ran: {time_ran} Minutes'
@@ -371,7 +372,7 @@ class ShippingUpdaterGUI(object):
 
 
     def on_closing(self):
-        #db_clear_database()
+        db_clear_database()
 
         dir = os.path.abspath('ecopax-shipping-updater/Audio Captcha Files')
         for f in os.listdir(dir):

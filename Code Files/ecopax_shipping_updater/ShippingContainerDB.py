@@ -78,6 +78,7 @@ def db_set_all_cont_false():
 
     db_connection.close()
 
+
 def db_get_all_containers():
     db_connection = db_connect()
     cont_list = []
@@ -121,6 +122,7 @@ def db_get_all_unmod_containers():
 
     return cont_list
 
+
 def db_get_all_containers_gui():
     db_connection = db_connect()
 
@@ -136,6 +138,7 @@ def db_get_all_containers_gui():
     db_connection.close()
 
     return rows
+
 
 def db_get_all_excel_files():
     db_connection = db_connect()
@@ -159,7 +162,7 @@ def db_get_container_info(cont_num):
 
     with db_connection:
         cur = db_connection.cursor()
-        get_sql_statement = ''' SELECT ContainerNum, Filepath, SheetName, ContainerNumCellLocation FROM ShippingContainerTable WHERE ContainerNum =? '''
+        get_sql_statement = ''' SELECT ContainerNum, Filepath, SheetName, ContainerNumCellLocation, ArrivalDate FROM ShippingContainerTable WHERE ContainerNum =? '''
         cur.execute(get_sql_statement, [cont_num[0]])
 
         prop_list = cur.fetchall()

@@ -2,6 +2,7 @@ from ShippingUpdaterGUI import *
 import multiprocessing
 
 if __name__ == '__main__': 
+    
     multiprocessing.freeze_support()
     gui_frame = ShippingUpdaterGUI()
     gui_frame.run_gui()
