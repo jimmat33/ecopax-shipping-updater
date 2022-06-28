@@ -1,3 +1,4 @@
+from plistlib import InvalidFileException
 import time
 from selenium.common.exceptions import NoSuchElementException
 from selenium import webdriver
@@ -9,22 +10,22 @@ from selenium.webdriver.chrome.service import Service
 from ShippingContainerDB import *
 from ShippingUpdaterUtility import get_month_num, get_date_from_cma, random_sleep
 import os
-from os import listdir
-from os.path import isfile, join
 from datetime import date, timedelta
 import string
+import urllib.request
+import speech_recognition as sr
+from pydub import AudioSegment
 
 class CMASearch(object):
 
     def __init__(self, container_num_list):
         self.container_num_list = container_num_list
         self.cma_search_link = 'https://www.cma-cgm.com/ebusiness/tracking'
-        self.speech_to_text_link = 'https://speech-to-text-demo.ng.bluemix.net/'
         self.error_list = []
         self._db_changes = 0
 
-        abs_path = os.path.abspath('ecopax-shipping-updater')
-        self.use_path = abs_path + '\\' + 'Audio Captcha Files'
+        abs_path = os.path.abspath('Audio Captcha Files')
+        self.use_path = abs_path
 
     @property
     def db_changes(self):
@@ -44,7 +45,6 @@ class CMASearch(object):
 
     def connect(self, driver):
         try: 
-            driver.implicitly_wait(0.5)
             driver.get(self.cma_search_link)
 
             print('\n[Connection Alert] Driver Connection to CMA CGM Site Successful\n')
@@ -62,100 +62,72 @@ class CMASearch(object):
             frame = driver.find_element_by_css_selector('body > iframe')
             driver.switch_to.frame(frame)
 
-            time.sleep(2)
             try:
                 WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div[3]/div/div[3]/div/div/div[2]/div[1]'))).click()
             except Exception:
                 pass
-            
-            random_sleep()
-            time.sleep(3)
 
             try:
                 WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[2]/div/a[4]'))).click()
             except Exception:
                 pass
 
-            time.sleep(5)
+            time.sleep(3)
             audio_src_link = WebDriverWait(driver, 10).until(EC.invisibility_of_element((By.TAG_NAME, 'audio'))).get_attribute('currentSrc')
 
             audio_file_name = audio_src_link[36:]
-
-            time.sleep(2)
-            driver.execute_script("window.open('');")
-  
-            # Switch to the new window and open new URL
-            time.sleep(3)
-            driver.switch_to.window(driver.window_handles[1])
-            driver.get(audio_src_link)
-
-            random_sleep()
-
-            driver.execute_script('''let aLink = document.createElement("a");let videoSrc = document.querySelector("video").firstChild.src;aLink.href = videoSrc;aLink.download = "";aLink.click();aLink.remove();''')
-
-
-            driver.execute_script("window.open('');")
-  
-            # Switch to the new window and open new URL
-            driver.switch_to.window(driver.window_handles[2])
-
-            time.sleep(2)
-
-            driver.get(self.speech_to_text_link)
-
-            time.sleep(5)
-                
-            root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
-            btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
-
             send_keys_str = self.use_path + '\\' + audio_file_name
 
-            btn.send_keys(send_keys_str)
+            try:
+                urllib.request.urlretrieve(audio_src_link, send_keys_str)
+            except Exception:
+                try:
+                    urllib.request.urlretrieve(audio_src_link, send_keys_str)
+                except Exception:
+                    raise InvalidFileException
 
-            time.sleep(15)
-            #btn.send_keys(path)
+            spl_fp = send_keys_str.split('.')
+            spl_fp[-1] = '.wav'
+            new_fp_str = ''.join(spl_fp)
+            dst = new_fp_str
 
-            # Audio to text is processing
-            text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+            sound = AudioSegment.from_mp3(send_keys_str)
+            sound.export(dst, format="wav")
 
-            result = " ".join( [ each.text for each in text ] )
-            key_str = result[33:-1]
+            audio_source_file = sr.AudioFile(new_fp_str)
 
-            driver.switch_to.window(driver.window_handles[0])
+            speech_recog = sr.Recognizer()
+            speech_recog.energy_threshold = 300
 
-            random_sleep()
+            with audio_source_file as source:
+                audio_data = speech_recog.record(source)
+                result = speech_recog.recognize_google(audio_data)
 
-            frame = driver.find_element_by_css_selector('body > iframe')
-            driver.switch_to.frame(frame)
-            time.sleep(2)
+            numeric_filter = filter(str.isdigit, result)
+            numeric_string = "".join(numeric_filter)
 
             textbox = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
-
-            for num in key_str:
-                random_sleep()
-                textbox.send_keys(num)
-                time.sleep(0.5)
-
-            random_sleep()
-            time.sleep(4)
+            textbox.send_keys(numeric_string)
 
             WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[4]'))).click()
 
             os.remove(send_keys_str)
-            time.sleep(5)
-
-        except Exception:
+            time.sleep(2)
+            os.remove(dst)
+        
+        except Exception as e:
+            print('\n' + str(e) + '\n')
             print('\n===============================================================================================')
             print('                              CMA CGM Audio Captcha Bypass Failed')
             print('===============================================================================================\n')
 
             try:
                 os.remove(send_keys_str)
+                time.sleep(2)
+                os.remove(dst)
             except:
-                pass
-
-            self.error_list.append('ERROR') 
-
+                pass 
+        
 
     def pull_date(self, driver, i):
         try:     
@@ -210,13 +182,8 @@ class CMASearch(object):
 
             textbox = driver.find_element(By.XPATH, '/html/body/div[3]/main/section/div/div[2]/fieldset/form[3]/div/span[1]/input[2]')
             textbox.clear()
-
-            random_sleep()
-
             textbox.send_keys(self.container_num_list[i][0])
 
-            random_sleep()
-            time.sleep(5)
 
             try:
                 WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '//p/button'))).click()
@@ -241,7 +208,8 @@ class CMASearch(object):
                                     except:
                                         raise NoSuchElementException
                                       
-       except Exception:
+       except Exception as e:
+            print('\n' + str(e) + '\n')
             print('\n==============================================================================================')
             print('                                  Failed to modify CMA CGM search Textbox')
             print('==============================================================================================\n')
@@ -252,6 +220,7 @@ class CMASearch(object):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
+        
         options = webdriver.ChromeOptions()
         self.get_options(options)
 

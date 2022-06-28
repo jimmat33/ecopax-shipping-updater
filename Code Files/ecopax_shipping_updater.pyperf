@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<ProfilingTarget xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ProjectTarget>
-    <TargetProject>a7018294-a4e6-43e2-ba9b-f5565f0c94ae</TargetProject>
-    <FriendlyName>ecopax_shipping_updater</FriendlyName>
-  </ProjectTarget>
-  <UseVTune>false</UseVTune>
-</ProfilingTarget>

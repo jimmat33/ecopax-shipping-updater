@@ -2,10 +2,8 @@ import tkinter as tk
 from tkinter import *
 import tkinter.font
 import os
-from tkinter.tix import Select
 from tkinter.ttk import *
 from  tkinter import ttk
-from tkcalendar import Calendar, DateEntry
 from tkinter import filedialog
 from ExcelFile import *
 from ShippingContainerDB import *
@@ -157,7 +155,6 @@ class ShippingUpdaterGUI(object):
         self.cont_frame.pack()
 
 
-
     def import_spreadsheet_btn_click(self):
         process_lst = []
         
@@ -261,7 +258,14 @@ class ShippingUpdaterGUI(object):
         
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Starting Run')
         self.time_ran_label['text'] = ''
+
+
+
         is_running = True
+        process_type = 'multi'
+
+
+
         start_time = time.perf_counter()
 
         excel_file_list = db_get_all_excel_files()
@@ -277,7 +281,7 @@ class ShippingUpdaterGUI(object):
                 break
         
 
-        if is_running:
+        if is_running and process_type == 'multi':
             
             p1 = multiprocessing.Process(target=cosco_search)
             p2 = multiprocessing.Process(target=evergreen_search)
@@ -326,7 +330,7 @@ class ShippingUpdaterGUI(object):
 
             print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
             modify_sheets()
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Started sheet modification')
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Finished sheet modification')
 
             for item in self.cont_frame.get_children():
                 self.cont_frame.delete(item)
@@ -355,9 +359,27 @@ class ShippingUpdaterGUI(object):
 
             self.time_ran_label['text'] = f'Time Ran: {time_ran} Minutes'
 
+        elif is_running and process_type == 'reg':
+            '''
+            cosco_search()
+    
+            evergreen_search()
+    
+            hmm_search()
+    
+            maersk_search()
+    
+            one_search()
+            '''
+            cma_cont_list = db_get_containers_by_carrier('CMA CGM')
+            cma_search(cma_cont_list)
+            '''
+            hapag_search()
+            '''
         else:
 
             print('Run search btn clicked')
+
 
 
     def get_all_treeview_items(self, tv_frame):
@@ -374,7 +396,7 @@ class ShippingUpdaterGUI(object):
     def on_closing(self):
         db_clear_database()
 
-        dir = os.path.abspath('ecopax-shipping-updater/Audio Captcha Files')
+        dir = os.path.abspath('Audio Captcha Files')
         for f in os.listdir(dir):
             os.remove(os.path.join(dir, f))
 
