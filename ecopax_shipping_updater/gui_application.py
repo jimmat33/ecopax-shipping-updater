@@ -1,11 +1,8 @@
 import tkinter as tk
-from tkinter import *
+from tkinter import Button, Label, Frame, ttk, Scrollbar, filedialog
 import tkinter.font
 import os
-from tkinter.ttk import *
-from  tkinter import ttk
-from tkinter import filedialog
-from ExcelFile import *
+import ExcelFile
 from shipping_container_db import *
 from CMA import cma_search
 from Cosco import cosco_search
@@ -42,20 +39,26 @@ class ShippingUpdaterGUI(object):
         '''
         self._init_widgits()
 
+
     def run_gui(self):
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.after(1, self.on_open)
         self.root.mainloop()
 
-    def _init_widgits(self):
-        self.import_sheet_button = Button(self.root, text = 'Import Spreadsheet', state = 'normal', command = self.import_spreadsheet_btn_click)
-        self.import_sheet_button.place(x = 25, y = 50, width = 220, height = 55)
 
-        self.remove_sheet_button = Button(self.root, text = 'Remove Spreadsheet', state = 'normal', command = self.remove_spreadsheet_btn_click)
-        self.remove_sheet_button.place(x = 25, y = 120, width = 220, height = 55)
+    def _init_widgits(self): #break this up into several areas
+        # import sheet button
+        self.import_sheet_button = Button(self.root, text='Import Spreadsheet', state='normal',
+                                          command=self.import_spreadsheet_btn_click)
+        self.import_sheet_button.place(x=25, y=50, width=220, height=55)
 
-        self.run_search_button = Button(self.root, text = 'Run Search', state = 'normal', command = self.run_search_btn_click)
-        self.run_search_button.place(x = 25, y = 190, width = 220, height = 55)
+        # remove sheet button
+        self.remove_sheet_button = Button(self.root, text='Remove Spreadsheet', state='normal',
+                                          command=self.remove_spreadsheet_btn_click)
+        self.remove_sheet_button.place(x=25, y=120, width=220, height=55)
+
+        self.run_search_button = Button(self.root, text='Run Search', state='normal', command=self.run_search_btn_click)
+        self.run_search_button.place(x=25, y = 190, width = 220, height = 55)
 
         self.time_ran_label = Label(self.root, text= '', state = 'normal')
         self.time_ran_label.place(x = 25, y = 252, height = 25)
@@ -66,7 +69,7 @@ class ShippingUpdaterGUI(object):
         error_vertical_scroll = Scrollbar(self.error_log_frame)
         error_vertical_scroll.pack(side=RIGHT, fill=Y)
 
-        error_horizontal_scroll = Scrollbar(self.error_log_frame,orient='horizontal')
+        error_horizontal_scroll = Scrollbar(self.error_log_frame ,orient='horizontal')
         error_horizontal_scroll.pack(side= BOTTOM,fill=X)
 
         self.error_log_frame = ttk.Treeview(self.error_log_frame,yscrollcommand=error_vertical_scroll.set, xscrollcommand =error_horizontal_scroll.set)
