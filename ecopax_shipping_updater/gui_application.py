@@ -24,7 +24,7 @@ class ShippingUpdaterGUI(object):
         self.root.title("Ecopax Shipping Updater")
         self.root.geometry('800x600')
         self.root.resizable(False, False)
-        img = tk.PhotoImage(file = (os.path.abspath('gui_icon.png')))
+        img = tk.PhotoImage(file=(os.path.abspath('gui_icon.png')))
         self.root.tk.call('wm', 'iconphoto', self.root._w, img)
         self.error_index = 1
         self.excel_index = 1
@@ -37,125 +37,131 @@ class ShippingUpdaterGUI(object):
         self.error_log_frame = 0
         self.time_ran_label = 0
         '''
-        self._init_widgits()
-
+        self.init_widgits()
 
     def run_gui(self):
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.after(1, self.on_open)
         self.root.mainloop()
 
+    def init_widgits(self):  # break this up into several areas
+        self.init_btns()
+        self.init_labels()
+        self.init_trvws()
 
-    def _init_widgits(self): #break this up into several areas
+    def init_btns(self):
         # import sheet button
-        self.import_sheet_button = Button(self.root, text='Import Spreadsheet', state='normal',
-                                          command=self.import_spreadsheet_btn_click)
-        self.import_sheet_button.place(x=25, y=50, width=220, height=55)
+        import_sheet_button = Button(self.root, text='Import Spreadsheet', state='normal',
+                                     command=self.import_spreadsheet_btn_click)
+        import_sheet_button.place(x=25, y=50, width=220, height=55)
 
         # remove sheet button
-        self.remove_sheet_button = Button(self.root, text='Remove Spreadsheet', state='normal',
-                                          command=self.remove_spreadsheet_btn_click)
-        self.remove_sheet_button.place(x=25, y=120, width=220, height=55)
+        remove_sheet_button = Button(self.root, text='Remove Spreadsheet', state='normal',
+                                     command=self.remove_spreadsheet_btn_click)
+        remove_sheet_button.place(x=25, y=120, width=220, height=55)
 
-        self.run_search_button = Button(self.root, text='Run Search', state='normal', command=self.run_search_btn_click)
-        self.run_search_button.place(x=25, y = 190, width = 220, height = 55)
+        # run search button
+        run_search_button = Button(self.root, text='Run Search', state='normal',
+                                   command=self.run_search_btn_click)
+        run_search_button.place(x=25, y=190, width=220, height=55)
 
-        self.time_ran_label = Label(self.root, text= '', state = 'normal')
-        self.time_ran_label.place(x = 25, y = 252, height = 25)
+    def init_trvws(self):
+        # container table
+        cont_frame = Frame(self.root)
+        cont_frame.place(x = 323, y = 295, width = 462, height = 293)
 
-        self.error_log_frame = Frame(self.root)
-        self.error_log_frame.place(x = 260, y = 35, width = 525, height = 240)
-
-        error_vertical_scroll = Scrollbar(self.error_log_frame)
-        error_vertical_scroll.pack(side=RIGHT, fill=Y)
-
-        error_horizontal_scroll = Scrollbar(self.error_log_frame ,orient='horizontal')
-        error_horizontal_scroll.pack(side= BOTTOM,fill=X)
-
-        self.error_log_frame = ttk.Treeview(self.error_log_frame,yscrollcommand=error_vertical_scroll.set, xscrollcommand =error_horizontal_scroll.set)
-
-        error_vertical_scroll.config(command=self.error_log_frame.yview)
-        error_horizontal_scroll.config(command=self.error_log_frame.xview)
-        
-            #setting up table
-        self.error_log_frame['columns'] = ('error_log')
-        self.error_log_frame.column('#0', width=0, stretch=NO)
-        self.error_log_frame.column('error_log', anchor=CENTER, width = 499)
-
-
-        self.error_log_frame.heading('#0', text = '', anchor=CENTER)
-        self.error_log_frame.heading('error_log', text = 'Errors', anchor=CENTER)
-
-        self.error_log_frame.pack()
-
-
-#excel sheet table
-        self.excel_sheet_frame = Frame(self.root)
-        self.excel_sheet_frame.place(x = 15, y = 295, width = 293, height = 290)
-
-            #table scrollbars
-        excel_vertical_scroll = Scrollbar(self.excel_sheet_frame)
-        excel_vertical_scroll.pack(side=RIGHT, fill=Y)
-
-        excel_horizontal_scroll = Scrollbar(self.excel_sheet_frame, orient='horizontal')
-        excel_horizontal_scroll.pack(side= BOTTOM,fill=X)
-
-        self.excel_sheet_frame = ttk.Treeview(self.excel_sheet_frame, yscrollcommand=excel_vertical_scroll.set, xscrollcommand =excel_horizontal_scroll.set)
-
-        excel_vertical_scroll.config(command=self.excel_sheet_frame.yview)
-        excel_horizontal_scroll.config(command=self.excel_sheet_frame.xview)
-        
-            #setting up table
-        self.excel_sheet_frame['columns'] = ('file_name')
-        self.excel_sheet_frame.column('#0', width=0, stretch=NO)
-        self.excel_sheet_frame.column('file_name', anchor=W, width = 400)
-
-        self.excel_sheet_frame.heading('#0', text = '', anchor=CENTER)
-        self.excel_sheet_frame.heading('file_name', text = 'Excel File Name', anchor=W)
-
-        self.excel_sheet_frame.pack()
-
-        
-# cont num label
-        self.cont_num_label = Label(self.root, text= 'Total Containers: 0', state = 'normal')
-        self.cont_num_label.place(x = 330, y = 265, height = 25)
-
-
-#container table
-        self.cont_frame = Frame(self.root)
-        self.cont_frame.place(x = 323, y = 295, width = 462, height = 293)
-
-            #table scrollbars
-        report_vertical_scroll = Scrollbar(self.cont_frame)
+        # table scrollbars
+        report_vertical_scroll = Scrollbar(cont_frame)
         report_vertical_scroll.pack(side=RIGHT, fill=Y)
 
-        self.cont_frame = ttk.Treeview(self.cont_frame,yscrollcommand=report_vertical_scroll.set)
+        cont_frame = ttk.Treeview(cont_frame, yscrollcommand=report_vertical_scroll.set)
 
-        report_vertical_scroll.config(command=self.cont_frame.yview)
-        
-            #setting up table
-        self.cont_frame['columns'] = ('cont_num', 'cont_carrier', 'cont_date', 'fp')
-        self.cont_frame.column('#0', width=0, stretch=NO)
-        self.cont_frame.column('cont_num', anchor=CENTER, width = 134)
-        self.cont_frame.column('cont_carrier', anchor=CENTER, width = 134)
-        self.cont_frame.column('cont_date', anchor=CENTER, width = 170)
-        self.cont_frame.column('fp', width = 0, stretch = NO)
+        report_vertical_scroll.config(command=cont_frame.yview)
 
-        self.cont_frame.heading('#0', text = '', anchor=CENTER)
-        self.cont_frame.heading('cont_num', text = 'Container Number', anchor=CENTER)
-        self.cont_frame.heading('cont_carrier', text = 'Container Carrier', anchor=CENTER)
-        self.cont_frame.heading('cont_date', text = 'Due to Dock Date', anchor=CENTER)
-        self.cont_frame.heading('fp', text = '', anchor=CENTER)
+        # setting up table
+        cont_frame['columns'] = ('cont_num', 'cont_carrier', 'cont_date', 'fp')
+        cont_frame.column('#0', width=0, stretch=NO)
+        cont_frame.column('cont_num', anchor=CENTER, width=134)
+        cont_frame.column('cont_carrier', anchor=CENTER, width=134)
+        cont_frame.column('cont_date', anchor=CENTER, width=170)
+        cont_frame.column('fp', width=0, stretch=NO)
 
-        self.cont_frame.pack()
+        cont_frame.heading('#0', text='', anchor=CENTER)
+        cont_frame.heading('cont_num', text='Container Number', anchor=CENTER)
+        cont_frame.heading('cont_carrier', text='Container Carrier', anchor=CENTER)
+        cont_frame.heading('cont_date', text='Due to Dock Date', anchor=CENTER)
+        cont_frame.heading('fp', text='', anchor=CENTER)
+        cont_frame.pack()
 
+        # error log frame
+        error_log_frame = Frame(self.root)
+        error_log_frame.place(x=260, y=35, width=525, height=240)
+
+        error_vertical_scroll = Scrollbar(error_log_frame)
+        error_vertical_scroll.pack(side=RIGHT, fill=Y)
+
+        error_horizontal_scroll = Scrollbar(error_log_frame, orient='horizontal')
+        error_horizontal_scroll.pack(side= BOTTOM,fill=X)
+
+        error_log_frame = ttk.Treeview(error_log_frame,
+                                       yscrollcommand=error_vertical_scroll.set,
+                                       xscrollcommand=error_horizontal_scroll.set)
+
+        error_vertical_scroll.config(command=error_log_frame.yview)
+        error_horizontal_scroll.config(command=error_log_frame.xview)
+
+        # setting up table
+        error_log_frame['columns'] = ('error_log')
+        error_log_frame.column('#0', width=0, stretch=NO)
+        error_log_frame.column('error_log', anchor=CENTER, width=499)
+
+        error_log_frame.heading('#0', text='', anchor=CENTER)
+        error_log_frame.heading('error_log', text='Errors', anchor=CENTER)
+
+        error_log_frame.pack()
+
+        # excel sheet table
+        excel_sheet_frame = Frame(self.root)
+        excel_sheet_frame.place(x = 15, y = 295, width = 293, height = 290)
+
+        # table scrollbars
+        excel_vertical_scroll = Scrollbar(excel_sheet_frame)
+        excel_vertical_scroll.pack(side=RIGHT, fill=Y)
+
+        excel_horizontal_scroll = Scrollbar(excel_sheet_frame, orient='horizontal')
+        excel_horizontal_scroll.pack(side=BOTTOM,fill=X)
+
+        excel_sheet_frame = ttk.Treeview(excel_sheet_frame,
+                                         yscrollcommand=excel_vertical_scroll.set,
+                                         xscrollcommand=excel_horizontal_scroll.set)
+
+        excel_vertical_scroll.config(command=excel_sheet_frame.yview)
+        excel_horizontal_scroll.config(command=excel_sheet_frame.xview)
+
+        # setting up table
+        excel_sheet_frame['columns'] = ('file_name')
+        excel_sheet_frame.column('#0', width=0, stretch=NO)
+        excel_sheet_frame.column('file_name', anchor=W, width=400)
+
+        excel_sheet_frame.heading('#0', text='', anchor=CENTER)
+        excel_sheet_frame.heading('file_name', text='Excel File Name', anchor=W)
+
+        excel_sheet_frame.pack()
+
+    def init_labels(self):
+        #time ran
+        time_ran_label = Label(self.root, text='', state='normal')
+        time_ran_label.place(x=25, y=252, height=25)
+
+        # cont num label
+        cont_num_label = Label(self.root, text='Total Containers: 0', state='normal')
+        cont_num_label.place(x=330, y=265, height=25)
 
     def import_spreadsheet_btn_click(self):
         process_lst = []
-        
+
         filename_list = filedialog.askopenfilenames(initialdir = "", title = "Select a File", filetypes = (("all files", "*.*"),))
 
-        
         #just for now, will multiprocess this
         for fp in filename_list:
             excel_file = ExcelFile(fp)
