@@ -1,12 +1,19 @@
+'''
+docstr
+'''
+import re
 import time
 import random
-from shipping_container_db import db_get_cont_by_carrier
 import numpy as np
 from openpyxl.styles import PatternFill, Alignment 
-from openpyxl import *
+from openpyxl import load_workbook
+from shipping_container_db import db_get_cont_by_carrier
 
 
 def random_sleep():
+    '''
+    docstr
+    '''
     sleep_time = random.uniform(0.25, 1.25)
     time.sleep(sleep_time)
 
@@ -16,33 +23,27 @@ def get_month_num(month):
     This function takes a month as a word and returns it as the respective number of the month for
     proper date formatting
     '''
-    if month == 'January' or month == 'JAN' or month == 'Jan':
-        return '01'
-    elif month == 'February' or month == 'FEB' or month == 'Feb':
-        return '02'
-    elif month == 'March' or month == 'MAR' or month == 'Mar':
-        return '03'
-    elif month == 'April' or month == 'APR' or month == 'Apr':
-        return '04'
-    elif month == 'May' or month == 'MAY' or month == 'May':
-        return '05'
-    elif month == 'June' or month == 'JUN' or month == 'Jun':
-        return '06'
-    elif month == 'July' or month == 'JUL' or month == 'Jul':
-        return '07'
-    elif month == 'August' or month == 'AUG' or month == 'Aug':
-        return '08'
-    elif month == 'September' or month == 'SEP' or month == 'Sep':
-        return '09'
-    elif month == 'October' or month == 'OCT' or month == 'Oct':
-        return '10'
-    elif month == 'November' or month == 'NOV' or month == 'Nov':
-        return '11'
-    elif month == 'December' or month == 'DEC' or month == 'Dec':
-        return '12'
-    else:
-        return 'ERROR'
 
+    if_dict = {
+        '01': ['January', 'JAN', 'Jan'],
+        '02': ['February', 'FEB', 'Feb'],
+        '03': ['March', 'MAR', 'Mar'],
+        '04': ['April', 'APR', 'Apr'],
+        '05': ['May', 'MAY', 'May'],
+        '06': ['June', 'JUN', 'Jun'],
+        '07': ['July', 'JUL', 'Jul'],
+        '08': ['August', 'AUG', 'Aug'],
+        '09': ['September', 'SEP', 'Sep'],
+        '10': ['October', 'OCT', 'Oct'],
+        '11': ['November', 'NOV', 'Nov'],
+        '12': ['December', 'DEC', 'Dec']
+  }
+
+    for key in if_dict.items():
+        if month in if_dict[key]:
+            return key
+
+    return 'ERROR'
 
 def get_date_from_cma(given_str):
     '''
@@ -52,7 +53,8 @@ def get_date_from_cma(given_str):
     '''
     start_index = 0
 
-    #This if block is checking for the days of the week and then using that as a basis for the starting index of the date
+    # This if block is checking for the days of the week and then using that as a basis for the
+    # starting index of the date
     if given_str.find("Sunday") != -1:
         start_index = given_str.find("Sunday") + len("Sunday") + 1
     elif given_str.find("Monday") != -1:
@@ -78,6 +80,9 @@ def get_date_from_cma(given_str):
 
 
 def get_divided_containers_by_carrier(carrier_company):
+    '''
+    docstr
+    '''
     total_list = db_get_cont_by_carrier(carrier_company)
     ret_list = np.array_split(total_list, 3)
 
@@ -85,6 +90,9 @@ def get_divided_containers_by_carrier(carrier_company):
 
 
 def modify_sheets():
+    '''
+    docstr
+    '''
     green_fill = PatternFill(start_color='8FB547', end_color='8FB547', fill_type='solid')
     red_fill = PatternFill(start_color='FF7F7F', end_color='FF7F7F', fill_type='solid')
     yellow_fill = PatternFill(start_color='F1EB9C', end_color='F1EB9C', fill_type='solid')
@@ -94,8 +102,7 @@ def modify_sheets():
     cont_list = db_get_all_containers()
     no_search_list = db_get_no_search_cont()
     excel_file_list = db_get_all_excel_files()
-    unmod_cont_list= db_get_all_unmod_containers()
-
+    unmod_cont_list = db_get_all_unmod_containers()
 
     for xcel_sheet in excel_file_list:
 
@@ -140,8 +147,3 @@ def modify_sheets():
                         sheet[date_cell_loc].fill = no_fill
 
         workbook.save(xcel_sheet[0])
-
-
-
-
-
