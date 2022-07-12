@@ -14,8 +14,8 @@ from shipping_container_db import (db_get_all_containers, db_get_all_excel_filep
                                    db_remove_excel_file, db_get_all_excel_files,
                                    db_set_all_cont_false, db_get_all_errors,
                                    db_get_cont_by_carrier, db_clear_database)
-from CMA import cma_search
-from Cosco import cosco_search
+from cma_driver import cma_search
+from cosco_driver import cosco_search
 from Evergreen import evergreen_search
 from HapagLloyd import hapag_search
 from HMM import hmm_search
