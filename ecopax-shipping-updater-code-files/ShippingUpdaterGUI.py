@@ -388,7 +388,8 @@ class ShippingUpdaterGUI(object):
             dir = os.path.abspath('Audio Captcha Files')
 
         for f in os.listdir(dir):
-            os.remove(os.path.join(dir, f))
+            if f != '.gitkeep':
+                os.remove(os.path.join(dir, f))
 
         self.root.destroy()
 
@@ -403,7 +404,8 @@ class ShippingUpdaterGUI(object):
             dir = os.path.abspath('Audio Captcha Files')
 
         for f in os.listdir(dir):
-            os.remove(os.path.join(dir, f))
+            if f != '.gitkeep':
+                os.remove(os.path.join(dir, f))
         
 
         if os.path.exists(os.path.abspath
@@ -414,4 +416,5 @@ class ShippingUpdaterGUI(object):
             dir = os.path.abspath('Excel File Cache')
 
         for f in os.listdir(dir):
-            os.remove(os.path.join(dir, f))
+            if f != '.gitkeep':
+                os.remove(os.path.join(dir, f))
