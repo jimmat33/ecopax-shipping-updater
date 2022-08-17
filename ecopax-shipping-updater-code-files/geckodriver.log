@@ -1,0 +1,252 @@
+1656339841473	geckodriver	INFO	Listening on 127.0.0.1:53633
+1656339846461	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "53634" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileL8tNvr"
+*** You are running in headless mode.
+1656339848402	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:53634
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1656339852919	Marionette	INFO	Listening on port 53750
+Read port: 53750
+1656339853004	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:53634/devtools/browser/6ad2346c-0ce7-4f8a-a4ae-56d7c240206e
+1656339856841	Marionette	INFO	Stopped listening on port 53750
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileL8tNvr\protections.sqlite
+1656339896788	geckodriver	INFO	Listening on 127.0.0.1:53868
+1656339902247	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "53869" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofiley8W6vC"
+*** You are running in headless mode.
+1656339903949	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:53869
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1656339909076	Marionette	INFO	Listening on port 53987
+Read port: 53987
+1656339909163	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:53869/devtools/browser/542f446d-ff0d-4e20-9a97-901610a7cf14
+1656339913459	Marionette	INFO	Stopped listening on port 53987
+1660656132687	geckodriver	INFO	Listening on 127.0.0.1:65477
+1660656137262	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "65478" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileyxiBpU"
+*** You are running in headless mode.
+1660656139718	Marionette	INFO	Marionette enabled
+1660656139728	Marionette	INFO	Listening on port 65499
+WebDriver BiDi listening on ws://localhost:65478
+Read port: 65499
+1660656140086	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:65478/devtools/browser/71a5bf6d-3683-40f5-82af-147bc4174c70
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 108: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileyxiBpU\thumbnails) because it does not exist
+1660656170678	Marionette	INFO	Stopped listening on port 65499
+1660656176758	geckodriver	INFO	Listening on 127.0.0.1:49313
+1660656182140	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "49314" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileRsN4ZN"
+*** You are running in headless mode.
+1660656185073	Marionette	INFO	Marionette enabled
+1660656185084	Marionette	INFO	Listening on port 49413
+WebDriver BiDi listening on ws://localhost:49314
+Read port: 49413
+1660656185304	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:49314/devtools/browser/82e9ec4d-7d57-4eca-a009-993a63b6a63a
+1660656212319	Marionette	INFO	Stopped listening on port 49413
+1660656214009	geckodriver	INFO	Listening on 127.0.0.1:49529
+1660656217761	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "49530" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileyIjm3B"
+*** You are running in headless mode.
+1660656219314	Marionette	INFO	Marionette enabled
+1660656219326	Marionette	INFO	Listening on port 49577
+WebDriver BiDi listening on ws://localhost:49530
+Read port: 49577
+1660656219506	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:49530/devtools/browser/31d533de-91fd-4c10-8067-10859149714e
+1660656244699	Marionette	INFO	Stopped listening on port 49577
+1660656528029	geckodriver	INFO	Listening on 127.0.0.1:49943
+1660656532460	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "49944" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilevFQf1A"
+*** You are running in headless mode.
+1660656534526	Marionette	INFO	Marionette enabled
+1660656534543	Marionette	INFO	Listening on port 49963
+WebDriver BiDi listening on ws://localhost:49944
+Read port: 49963
+1660656534938	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:49944/devtools/browser/88029162-05f0-41a4-868b-9699cd207abc
+1660656563090	Marionette	INFO	Stopped listening on port 49963
+1660656568383	geckodriver	INFO	Listening on 127.0.0.1:50155
+1660656573281	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "50156" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile1VfdCF"
+*** You are running in headless mode.
+1660656576542	Marionette	INFO	Marionette enabled
+1660656576554	Marionette	INFO	Listening on port 50193
+WebDriver BiDi listening on ws://localhost:50156
+Read port: 50193
+1660656576873	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:50156/devtools/browser/70d6f273-2290-4e30-bf22-ad1d18f9dd1c
+1660656606275	Marionette	INFO	Stopped listening on port 50193
+1660656608520	geckodriver	INFO	Listening on 127.0.0.1:50421
+1660656612834	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "50422" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilefOrjh5"
+*** You are running in headless mode.
+1660656614160	Marionette	INFO	Marionette enabled
+1660656614170	Marionette	INFO	Listening on port 50434
+WebDriver BiDi listening on ws://localhost:50422
+Read port: 50434
+1660656614385	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:50422/devtools/browser/0ec8cff4-eedb-46a4-ac6d-f5fc322f42f1
+1660656640034	Marionette	INFO	Stopped listening on port 50434
+1660742180300	geckodriver	INFO	Listening on 127.0.0.1:56088
+1660742184551	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56089" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilemczxM0"
+*** You are running in headless mode.
+1660742186018	Marionette	INFO	Marionette enabled
+1660742186028	Marionette	INFO	Listening on port 56123
+WebDriver BiDi listening on ws://localhost:56089
+Read port: 56123
+1660742186306	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:56089/devtools/browser/7c0aad10-1462-4f5b-b860-f7969636ce14
+1660742215583	Marionette	INFO	Stopped listening on port 56123
+1660742219934	geckodriver	INFO	Listening on 127.0.0.1:56389
+1660742224237	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56390" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileZkz7Tn"
+*** You are running in headless mode.
+1660742225534	Marionette	INFO	Marionette enabled
+1660742225543	Marionette	INFO	Listening on port 56412
+WebDriver BiDi listening on ws://localhost:56390
+Read port: 56412
+1660742225727	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:56390/devtools/browser/8b80f15e-55b0-427d-ac1d-90912c423cb8
+1660742251394	Marionette	INFO	Stopped listening on port 56412
+1660742252743	geckodriver	INFO	Listening on 127.0.0.1:56512
+1660742256229	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "56513" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileaYOyY8"
+*** You are running in headless mode.
+1660742257092	Marionette	INFO	Marionette enabled
+1660742257098	Marionette	INFO	Listening on port 56523
+WebDriver BiDi listening on ws://localhost:56513
+Read port: 56523
+1660742257213	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:56513/devtools/browser/48ee4abc-8bc7-4ef6-abea-12715424a9f3
+1660742282337	Marionette	INFO	Stopped listening on port 56523
+1660742998906	geckodriver	INFO	Listening on 127.0.0.1:57917
+1660743004573	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "57918" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileEOD5Ss"
+*** You are running in headless mode.
+1660743007804	Marionette	INFO	Marionette enabled
+1660743007815	Marionette	INFO	Listening on port 57998
+WebDriver BiDi listening on ws://localhost:57918
+Read port: 57998
+1660743008224	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:57918/devtools/browser/1bbe6cae-df32-4161-aaf9-49e5011410d2
+1660743072636	geckodriver	INFO	Listening on 127.0.0.1:58143
+1660743077434	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "58144" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileXzWpNs"
+*** You are running in headless mode.
+1660743081449	Marionette	INFO	Marionette enabled
+1660743081481	Marionette	INFO	Listening on port 58222
+WebDriver BiDi listening on ws://localhost:58144
+Read port: 58222
+1660743081816	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:58144/devtools/browser/014fcc48-fc46-424f-87f8-2d12f66bf422
+1660743110505	Marionette	INFO	Stopped listening on port 58222
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 108: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileXzWpNs\thumbnails) because it does not exist
+1660743895459	geckodriver	INFO	Listening on 127.0.0.1:59178
+1660743900045	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "59179" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileEqyogj"
+*** You are running in headless mode.
+1660743902647	Marionette	INFO	Marionette enabled
+1660743902661	Marionette	INFO	Listening on port 59243
+WebDriver BiDi listening on ws://localhost:59179
+Read port: 59243
+1660743902909	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:59179/devtools/browser/feb13327-c3ee-44cc-9720-68110758821d
+1660743930859	Marionette	INFO	Stopped listening on port 59243
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 108: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileEqyogj\thumbnails) because it does not exist
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.jsm", 381))
+1660743956535	geckodriver	INFO	Listening on 127.0.0.1:59616
+1660743960697	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "59617" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofiled1jNr3"
+*** You are running in headless mode.
+1660743962053	Marionette	INFO	Marionette enabled
+1660743962063	Marionette	INFO	Listening on port 59631
+Read port: 59631
+WebDriver BiDi listening on ws://localhost:59617
+1660743962338	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:59617/devtools/browser/47d3689b-6b19-498e-b214-06edacbefa64
+1660743988574	Marionette	INFO	Stopped listening on port 59631
+1660743990595	geckodriver	INFO	Listening on 127.0.0.1:59757
+1660743994833	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "59758" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileQIPLud"
+*** You are running in headless mode.
+1660743996264	Marionette	INFO	Marionette enabled
+1660743996271	Marionette	INFO	Listening on port 59824
+WebDriver BiDi listening on ws://localhost:59758
+Read port: 59824
+1660743996505	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:59758/devtools/browser/8b541cb6-4fad-4bfc-8f52-2600a9e0d2b0
+1660744023184	Marionette	INFO	Stopped listening on port 59824
+1660745597896	geckodriver	INFO	Listening on 127.0.0.1:61375
+1660745602252	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "61376" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileFw8t54"
+*** You are running in headless mode.
+1660745604475	Marionette	INFO	Marionette enabled
+1660745604488	Marionette	INFO	Listening on port 61441
+WebDriver BiDi listening on ws://localhost:61376
+Read port: 61441
+1660745604774	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:61376/devtools/browser/d7d1d4a6-1f0c-4577-9b95-29954e2f1c7d
+1660745632190	Marionette	INFO	Stopped listening on port 61441
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 108: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofileFw8t54\thumbnails) because it does not exist
+1660745641305	geckodriver	INFO	Listening on 127.0.0.1:61663
+1660745646106	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "61664" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofileZkp0u6"
+*** You are running in headless mode.
+1660745648139	Marionette	INFO	Marionette enabled
+1660745648154	Marionette	INFO	Listening on port 61762
+WebDriver BiDi listening on ws://localhost:61664
+Read port: 61762
+1660745648509	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:61664/devtools/browser/91f554ee-00f7-4f6c-8c98-86f16e38f548
+1660745674467	Marionette	INFO	Stopped listening on port 61762
+1660745675827	geckodriver	INFO	Listening on 127.0.0.1:61866
+1660745679615	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "61867" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilec91wmP"
+*** You are running in headless mode.
+1660745681018	Marionette	INFO	Marionette enabled
+1660745681033	Marionette	INFO	Listening on port 61898
+WebDriver BiDi listening on ws://localhost:61867
+Read port: 61898
+1660745681298	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:61867/devtools/browser/0479fb5c-979b-416c-bcbf-193b69220278
+1660745708260	Marionette	INFO	Stopped listening on port 61898
+1660747369372	geckodriver	INFO	Listening on 127.0.0.1:63552
+1660747372742	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "63553" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofile4iTQwE"
+*** You are running in headless mode.
+1660747376707	Marionette	INFO	Marionette enabled
+1660747376719	Marionette	INFO	Listening on port 63610
+WebDriver BiDi listening on ws://localhost:63553
+Read port: 63610
+1660747377014	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:63553/devtools/browser/5d8d2583-ff9a-44f9-910d-390bb745ab7e
+1660747403993	Marionette	INFO	Stopped listening on port 63610
+JavaScript error: resource://gre/modules/PromiseWorker.jsm, line 108: Error: Could not get children of file(C:\Users\JMATTI~1\AppData\Local\Temp\rust_mozprofile4iTQwE\thumbnails) because it does not exist
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.jsm", 381))
+1660747426000	geckodriver	INFO	Listening on 127.0.0.1:63884
+1660747430536	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "63885" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilecfjxxU"
+*** You are running in headless mode.
+1660747432587	Marionette	INFO	Marionette enabled
+1660747432599	Marionette	INFO	Listening on port 63972
+WebDriver BiDi listening on ws://localhost:63885
+Read port: 63972
+1660747432859	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:63885/devtools/browser/fc2c36d3-e375-40fe-b63a-bc763e2348dc
+1660747459710	Marionette	INFO	Stopped listening on port 63972
+1660747461544	geckodriver	INFO	Listening on 127.0.0.1:64087
+1660747465262	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "--remote-debugging-port" "64088" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\JMATTI~1\\AppData\\Local\\Temp\\rust_mozprofilevI6tC1"
+*** You are running in headless mode.
+1660747466489	Marionette	INFO	Marionette enabled
+1660747466499	Marionette	INFO	Listening on port 64100
+Read port: 64100
+WebDriver BiDi listening on ws://localhost:64088
+1660747466718	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+DevTools listening on ws://localhost:64088/devtools/browser/c49d82b1-3736-482f-8326-d089d4ef182e
+1660747494988	Marionette	INFO	Stopped listening on port 64100
