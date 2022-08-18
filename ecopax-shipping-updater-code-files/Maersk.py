@@ -1,3 +1,4 @@
+import traceback
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,13 +25,9 @@ class MaerskSearch(object):
         return self._db_changes
 
     def get_options(self, options_obj):
-        '''
         options_obj.add_experimental_option('excludeSwitches', ['enable-logging'])
         options_obj.add_argument('--disable-gpu')
         options_obj.add_argument("--incognito")
-        options_obj.add_argument("--headless")
-        options_obj.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
-        '''
 
     def connect(self, driver):
         try: 
@@ -50,18 +47,19 @@ class MaerskSearch(object):
         try:
             try:
                 WebDriverWait(driver, 7).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div/div[1]/div[2]/button[3]'))).click()
-            except:
+            except Exception:
                 driver.find_element(By.CLASS_NAME, 'coi-banner__accept--fixed-margin').click()
     
         except Exception:
             print('\n==============================================================================================')
             print('                                Maersk TOS Bypass Failed')
             print('==============================================================================================\n')
-            self.error_list.append('ERROR')
 
 
     def pull_date(self, driver):
         try:
+            driver.find_element(By.XPATH, '/html/body/main/div/div/form/div/div[2]/mc-button').click()
+
             str_text = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '/html/body/main/div/div/div[3]/dl/dd[1]'))).get_attribute('textContent')
 
             year = str(str_text[-5:-1].strip())
@@ -78,6 +76,7 @@ class MaerskSearch(object):
             self._db_changes += 1
 
         except Exception:
+            traceback.print_exc()
             db_update_container(self.container_num[0], 'Date Error')
             print('\n==============================================================================================')
             print('                              Failed to find/process date Maersk')
@@ -90,25 +89,10 @@ class MaerskSearch(object):
         '''
         This function searches the Cosco site for the estimated arrival date of a list of crate numbers
         '''
-        '''
         options = webdriver.ChromeOptions()
         self.get_options(options)
-        '''
-        profile = webdriver.FirefoxProfile(r'C:\Users\jmattison\AppData\Roaming\Mozilla\Firefox\Profiles\pu0y31p7.default-release')
-        options = FirefoxOptions()
-        options.add_argument('--headless')
-        profile.set_preference("dom.webdriver.enabled", False)
-        profile.set_preference('useAutomationExtension', False)
-        profile.update_preferences()
-        desired = DesiredCapabilities.FIREFOX
 
-        driver = 0
-
-        try:
-            driver = webdriver.Firefox(firefox_profile=profile, desired_capabilities=desired, options=options)
-        except:
-            db_add_error('Please download Firefox to search the Maersk Site')
-
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
         self.connect(driver)
 
         self.bypass_tos(driver)

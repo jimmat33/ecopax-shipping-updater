@@ -24,14 +24,7 @@ class CMASearch(object):
         self.error_list = []
         self._db_changes = 0
 
-        if os.path.exists(os.path.abspath
-                      ('Ecopax-Shipping-Updater-Program-Files\\ecopax-shipping-updater')):
-            abs_path = os.path.abspath(
-            'Ecopax-Shipping-Updater-Program-Files\\ecopax-shipping-updater')
-        else:
-            abs_path = os.path.abspath('ecopax-shipping-updater')
-
-        self.use_path = abs_path + '\\' + 'Audio Captcha Files'
+        self.use_path = os.path.abspath('Audio Captcha Files')
 
     @property
     def db_changes(self):
@@ -66,7 +59,7 @@ class CMASearch(object):
     def bypass_audio_captcha(self, driver):
         try:
             time.sleep(2)
-            frame = driver.find_element_by_css_selector('body > iframe')
+            frame = driver.find_element(By.CSS_SELECTOR, 'body > iframe')
             driver.switch_to.frame(frame)
 
             time.sleep(2)
@@ -112,7 +105,7 @@ class CMASearch(object):
 
             time.sleep(5)
                 
-            root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
+            root = driver.find_element(By.ID, 'root').find_elements(By.CLASS_NAME, 'dropzone _container _container_large')
             btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
 
             send_keys_str = self.use_path + '\\' + audio_file_name
@@ -123,7 +116,7 @@ class CMASearch(object):
             #btn.send_keys(path)
 
             # Audio to text is processing
-            text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+            text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements(By.TAG_NAME, 'span')
 
             result = " ".join( [ each.text for each in text ] )
             key_str = result[33:-1]
@@ -132,11 +125,11 @@ class CMASearch(object):
 
             random_sleep()
 
-            frame = driver.find_element_by_css_selector('body > iframe')
+            frame = driver.find_element(By.CSS_SELECTOR, 'body > iframe')
             driver.switch_to.frame(frame)
             time.sleep(2)
 
-            textbox = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
+            textbox = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div/div/div[2]/div[3]/input')
 
             for num in key_str:
                 random_sleep()
@@ -308,9 +301,3 @@ def cma_search(cma_search_list):
                 db_remove_container(cont)
 
             db_add_error('Part of CMA CGM Search Failed')
-
-
-
-
-
-

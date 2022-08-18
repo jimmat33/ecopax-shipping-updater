@@ -45,7 +45,7 @@ class HapagSearch(object):
             try:
                 WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="accept-recommended-btn-handler"]'))).click()
 
-            except:
+            except Exception:
                  WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.CLASS_NAME, "save-preference-btn-handler onetrust-close-btn-handler"))).click()
 
             time.sleep(0.5)

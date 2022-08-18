@@ -209,7 +209,7 @@ class ShippingUpdaterGUI(object):
 
         cont_len = len(cont_num_list)
         self.cont_num_label['text'] = f'Total Containers: {cont_len}'
-
+        
 
     def remove_spreadsheet_btn_click(self):
         
@@ -245,7 +245,7 @@ class ShippingUpdaterGUI(object):
             self.cont_num_label['text'] = f'Total Containers: {cont_len}'
 
 
-        except:
+        except Exception:
             listOfEntriesInTreeView = self.cont_frame.get_children()
 
             self.excel_sheet_frame.delete(selected_item_index)
@@ -402,18 +402,6 @@ class ShippingUpdaterGUI(object):
             'Ecopax-Shipping-Updater-Program-Files\\Audio Captcha Files')
         else:
             dir = os.path.abspath('Audio Captcha Files')
-
-        for f in os.listdir(dir):
-            if f != '.gitkeep':
-                os.remove(os.path.join(dir, f))
-        
-
-        if os.path.exists(os.path.abspath
-                      ('Ecopax-Shipping-Updater-Program-Files\\Excel File Cache')):
-            dir = os.path.abspath(
-            'Ecopax-Shipping-Updater-Program-Files\\Excel File Cache')
-        else:
-            dir = os.path.abspath('Excel File Cache')
 
         for f in os.listdir(dir):
             if f != '.gitkeep':
